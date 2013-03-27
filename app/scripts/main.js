@@ -18,7 +18,7 @@ sn_visualization.main = (function(){
 			$.get("http://cmu-sds.herokuapp.com/get_devices", function(data){
 				console.log(data);
 
-				/* Try parse the data */
+				/* Parse the data */
 				var deviceCount = data.length;
 				for(var i=0; i< deviceCount; ++i){
 
@@ -31,7 +31,7 @@ sn_visualization.main = (function(){
 					for(var j=0; j<sensorCount; ++j){
 						for( var key in data[i].sensors[j]){
 							deviceNode.children.push({
-								type : "Sensor", d_uri : data[i].uri,	s_id : key, name : data[i].sensors[j][key],
+								type : "Sensor", d_uri : data[i].uri, s_id : key, d_name : data[i].location.print_name, name : data[i].sensors[j][key],
 								data : {}, children : []
 							});
 						}
@@ -56,4 +56,5 @@ sn_visualization.main = (function(){
 
 $(document).on('ready', function(){
 	sn_visualization.main.initialize();
+	$( ".timeseriesView" ).draggable();
 });

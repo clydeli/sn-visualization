@@ -1,0 +1,21 @@
+
+.timeseriesView svg {
+  font: 10px sans-serif;
+}
+
+.timeseriesView path {
+  fill: steelblue;
+}
+
+.timeseriesView .axis path,
+.timeseriesView .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.timeseriesView .brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
