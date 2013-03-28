@@ -1,0 +1,60 @@
+var sn_visualization = sn_visualization || {};
+
+sn_visualization.main = (function(){
+	
+	var
+		buildSensorsObj = function(callback){
+			var snArch = {
+				id : "root", name : "CMUSV",
+				children : [
+					{ id: "gateway1", name: "Bob's Office", data: {}, children: [] },
+					{ id: "gateway2", name: "Gateway for Ted", data: {}, children: [] },
+					{ id: "gateway3", name: "Jeenet_1", data: {}, children: [] }
+				]
+			};
+
+			var gatewayHash = { "Bob's Office": 0, "Gateway for Ted": 1, "Jeenet_1" : 2	}
+
+			$.get("http://cmu-sds.herokuapp.com/get_devices", function(data){
+				console.log(data);
+
+				/* Parse the data */
+				var deviceCount = data.length;
+				for(var i=0; i< deviceCount; ++i){
+
+					var deviceNode = {
+						type : "Device", d_uri : data[i].uri,	name : data[i].location.print_name,
+						data : {}, children : []
+					};
+
+					var sensorCount = data[i].sensors.length;
+					for(var j=0; j<sensorCount; ++j){
+						for( var key in data[i].sensors[j]){
+							deviceNode.children.push({
+								type : "Sensor", d_uri : data[i].uri, s_id : key, d_name : data[i].location.print_name, name : data[i].sensors[j][key],
+								data : {}, children : []
+							});
+						}
+					}
+
+					var deviceGateway = snArch.children[ gatewayHash[data[i].device_agent[0].print_name]];
+					deviceGateway.children.push(deviceNode);
+				}
+
+				if(callback){ callback(snArch); }
+			});
+		};
+
+	return {
+		initialize : function(){
+			buildSensorsObj(sn_visualization.topologicalView.initialize);
+		}
+	};
+
+})();
+
+
+$(document).on('ready', function(){
+	sn_visualization.main.initialize();
+	$( ".timeseriesView" ).draggable();
+});
