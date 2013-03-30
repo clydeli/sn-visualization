@@ -24,10 +24,10 @@ body {
 	position: relative;
 	float: left;
 	background-color: #fff;
-	background-image: url("http://jeenetgw01.sv.cmu.edu/floorplan.png");
-	background-size: 100%;
-	background-repeat: no-repeat;
-	width: 69%; height: 800px;
+	width: 69%;
+}
+#geographicalView img {
+	width: 100%;
 }
 
 .timeseriesView {
