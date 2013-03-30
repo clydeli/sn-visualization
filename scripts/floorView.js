@@ -22,7 +22,9 @@ sn_visualization.floorView = function(selector, bgGeo, ugTable){
 	this.uriGeoTable = ugTable || { 
 		10170204 : { print_name : "214", geo : [37.410489,-122.059905] },
 		10170203 : { print_name : "213", geo : [37.410484,-122.059986] },
-		10170202 : { print_name : "216", geo : [37.410465,-122.059986] }
+		10170202 : { print_name : "216", geo : [37.410465,-122.059986] },
+		10170105 : { print_name : "228", geo : [37.410406,-122.059430] },
+		10170104 : { print_name : "230", geo : [37.410381,-122.059430] }
 	};
 	this.initNodes();
 };
