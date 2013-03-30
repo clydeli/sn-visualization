@@ -21,6 +21,7 @@ body {
 }
 
 #geographicalView {
+	position: relative;
 	float: left;
 	background-color: #fff;
 	background-image: url("http://jeenetgw01.sv.cmu.edu/floorplan.png");
@@ -44,4 +45,13 @@ body {
 	position: absolute; right: 3px; top: 3px;
 	color : #fff; background-color: #222; 
 	opacity : 0.8;
+}
+
+.floorNode {
+	position: absolute;
+	display: inline-block;
+}
+.floorNode.highlighted {
+	border: 1px solid #111;
+	background-color: steelBlue
 }

@@ -45,6 +45,8 @@ sn_visualization.topologicalView = (function(){
 					.attr("class", "node")
 					.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
 					.on("click", function(d) { 
+						
+						// If the node is a sensor
 						if($(this).find('text').attr('data-type') == "Sensor"){
 							var 
 								d_uri = $(this).find('text').attr('data-d_uri'),
@@ -58,7 +60,13 @@ sn_visualization.topologicalView = (function(){
 							else {
 								sn_visualization.timeseriesView.insert( d_uri, s_id, d_name, name );
 							}
-						}
+						} else if($(this).find('text').attr('data-type') == "Device"){
+							console.log("test");
+							var view = sn_visualization.floorViews.getView("cmusvSecondFloor");
+							view.toggleHighlight($(this).find('text').attr('data-d_uri'));
+						} 
+
+
 						toggle(d);
 						update(d);
 					});

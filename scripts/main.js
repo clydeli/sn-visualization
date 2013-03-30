@@ -56,5 +56,6 @@ sn_visualization.main = (function(){
 
 $(document).on('ready', function(){
 	sn_visualization.main.initialize();
-	$( ".timeseriesView" ).draggable();
+	var cmusvSecondFloor = new sn_visualization.floorView();
+	sn_visualization.floorViews.insertView("cmusvSecondFloor", cmusvSecondFloor);
 });
