@@ -83,6 +83,7 @@ sn_visualization.timeseriesView = (function(){
 
 			$("body").append(
 				'<div class="timeseriesView" data-d_uri="'+deviceURI+'" data-s_id="'+metricId+'">'+
+				'<img class="loading" src="images/loading.gif">'+
 				'<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
 				'</div>'
 			);
@@ -96,7 +97,10 @@ sn_visualization.timeseriesView = (function(){
   					start_time : (now.getTime()-3*3600*1000),
   					end_time : now.getTime()
   				},
-  				success: function(data){ drawData(data, metricId, selector); }
+  				success: function(data){ 
+  					$(selector+' img.loading').remove();
+  					drawData(data, metricId, selector);
+  				}
 			});
 
 		}

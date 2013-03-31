@@ -19,8 +19,9 @@ sn_visualization.floorView = function(selector, bgGeo, ugTable){
 	// temporary use cmusv second floor as default
 	this.selector = selector || "#geographicalView";
 	this.backgroundGeo = bgGeo || [[37.410504,-122.060152], [37.410276,-122.059239]];
-	this.uriGeoTable = ugTable || { 
-		10170204 : { print_name : "214", geo : [37.410489,-122.059905] },
+	this.uriGeoTable = ugTable || {
+		10170205 : { print_name : "214B", geo : [37.410489,-122.059893] },
+		10170204 : { print_name : "214", geo : [37.410489,-122.059915] },
 		10170203 : { print_name : "213", geo : [37.410484,-122.059986] },
 		10170202 : { print_name : "216", geo : [37.410465,-122.059986] },
 		10170105 : { print_name : "228", geo : [37.410406,-122.059430] },

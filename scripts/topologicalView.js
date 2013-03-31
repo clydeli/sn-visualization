@@ -9,7 +9,7 @@ sn_visualization.topologicalView = (function(){
 			var 
 				m = [20, 120, 20, 120],
 				w = 1280 - m[1] - m[3],
-				h = 800 - m[0] - m[2],
+				h = $('#topologicalView').height() - m[0] - m[2],
 				i = 0;
 
 			var tree = d3.layout.tree()
@@ -60,12 +60,12 @@ sn_visualization.topologicalView = (function(){
 							else {
 								sn_visualization.timeseriesView.insert( d_uri, s_id, d_name, name );
 							}
+						// else if the node is a device
 						} else if($(this).find('text').attr('data-type') == "Device"){
 							console.log("test");
 							var view = sn_visualization.floorViews.getView("cmusvSecondFloor");
 							view.toggleHighlight($(this).find('text').attr('data-d_uri'));
 						} 
-
 
 						toggle(d);
 						update(d);
@@ -146,8 +146,13 @@ sn_visualization.topologicalView = (function(){
 
 			// Toggle children.
 			function toggle(d) {
-				if (d.children) { d._children = d.children;	d.children = null;
-				} else { d.children = d._children; d._children = null; }
+				if (d.children) { 
+					d._children = d.children;	d.children = null;
+					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()-160); }
+				} else { 
+					d.children = d._children; d._children = null;
+					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()+160); }
+				}
 			}
 
 			function toggleAll(d) {
