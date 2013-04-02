@@ -8,7 +8,7 @@ sn_visualization.topologicalView = (function(){
 		d3Init = function(svgBody){
 			var 
 				m = [20, 120, 20, 120],
-				w = 1280 - m[1] - m[3],
+				w = 800 - m[1] - m[3],
 				h = $('#topologicalView').height() - m[0] - m[2],
 				i = 0;
 
