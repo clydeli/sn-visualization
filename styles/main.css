@@ -14,19 +14,6 @@ body {
 
 .hidden { opacity: 0; }
 
-#topologicalView {
-	float: left;
-	background-color: #eee;
-	width: 30%; height: 100%;
-	border-right: 1px solid #666;
-	box-shadow: 1px 0px 5px 2px #666;
-	transition : width 390ms ease;
-	overflow-x: scroll; overflow-y: hidden;
-}
-#topologicalView.hidden {
-	width: 0;
-}
-
 #geographicalView {
 	position: relative;
 	float: left;
@@ -41,29 +28,6 @@ body {
 	width: 20px; height: 16px; text-align: center;
 	background-color: #777; color: #fff;
 	cursor: pointer;
-}
-
-
-.timeseriesView {
-	padding: 3px;
-	position : absolute; right: 3px; top: 3px;
-	background-color: #fff;
-	border-radius: 1px;
-	box-shadow: 1px 1px 5px 2px #666;
-	width: 300px; height: 250px;
-}
-
-.timeseriesView img.loading {
-	position: absolute; left: 138px; top:113px;
-	width : 24px; height: 24px;
-	margin: auto auto;
-}
-
-.timeseriesLabel {
-	padding: 3px 5px;
-	position: absolute; right: 3px; top: 3px;
-	color : #fff; background-color: #222; 
-	opacity : 0.8;
 }
 
 .floorNode {
