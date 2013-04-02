@@ -1,4 +1,4 @@
-
+/* Provided by d3 example */
 #topologicalView .node circle {
   cursor: pointer;
   fill: #fff;
@@ -14,4 +14,18 @@
   fill: none;
   stroke: #ccc;
   stroke-width: 1.5px;
+}
+
+/* Self added stylings */
+#topologicalView {
+	float: left;
+	background-color: #eee;
+	width: 30%; height: 100%;
+	border-right: 1px solid #666;
+	box-shadow: 1px 0px 5px 2px #666;
+	transition : width 390ms ease;
+	overflow-x: scroll; overflow-y: hidden;
+}
+#topologicalView.hidden {
+	width: 0;
 }
