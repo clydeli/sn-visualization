@@ -58,4 +58,10 @@ $(document).on('ready', function(){
 	sn_visualization.main.initialize();
 	var cmusvSecondFloor = new sn_visualization.floorView();
 	sn_visualization.floorViews.insertView("cmusvSecondFloor", cmusvSecondFloor);
+
+	$('#geographicalView .hideBar').click(function(){
+		$('#topologicalView').toggleClass('hidden');
+		if($(this).html() == '&lt;') { $(this).html('&gt;'); }
+		else { $(this).html('&lt;'); }
+	});
 });
