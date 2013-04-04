@@ -62,7 +62,6 @@ sn_visualization.topologicalView = (function(){
 							}
 						// else if the node is a device
 						} else if($(this).find('text').attr('data-type') == "Device"){
-							console.log("test");
 							var view = sn_visualization.floorViews.getView("cmusvSecondFloor");
 							view.toggleHighlight($(this).find('text').attr('data-d_uri'));
 						} 

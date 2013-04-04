@@ -2,8 +2,24 @@ var sn_visualization = sn_visualization || {};
 
 sn_visualization.timeseriesView = (function(){
 
+	var
+	// some static variables
+		timeLength = 10*60, //seconds
+		dataCache = {},
+		dataWorkers = {},
 
-	var 
+	// internal functions
+		updateCache = function(deviceURI, data, updateTime){
+			dataCache[deviceURI] = dataCache[deviceURI] || {};
+			dataCache[deviceURI].updateTime = updateTime;
+			dataCache[deviceURI].data = dataCache[deviceURI].data || [];
+			dataCache[deviceURI].data = dataCache[deviceURI].data.concat(data);
+			while(dataCache[deviceURI].data[0].timestamp<updateTime-timeLength*1000){
+				dataCache[deviceURI].data.shift();
+			}
+		},
+
+	// Modified from d3 example (http://bl.ocks.org/mbostock/1667367) 
 		margin = {top: 10, right: 10, bottom: 70, left: 40},
 		margin2 = {top: 215, right: 10, bottom: 20, left: 40},
 		width = 300 - margin.left - margin.right,
@@ -75,10 +91,11 @@ sn_visualization.timeseriesView = (function(){
 			context.append("g").attr("class", "x axis").attr("transform", "translate(0," + height2 + ")").call(xAxis2);
 			context.append("g").attr("class", "x brush").call(brush).selectAll("rect").attr("y", -6).attr("height", height2 + 7);
 
-		}
+		};
 
 
 	return {
+
 		insert : function(deviceURI, metricId, deviceName, metricName){
 
 			$("body").append(
@@ -91,14 +108,32 @@ sn_visualization.timeseriesView = (function(){
 			$(selector).draggable();
 
 			var now = new Date();
+			var fetchTime = now.getTime();
+
+			/*dataWorkers[deviceURI] = new Worker('workers/timeSeriesWorker.js');
+			dataWorkers[deviceURI].addEventListener(
+				'message', function(e){
+					var data = JSON.parse(e.data);
+					console.log(data);
+				}, false
+		    );
+		    dataWorkers[deviceURI].postMessage({
+		    	type: "START",
+		    	url: "http://cmu-sds.herokuapp.com/sensor_readings/"+deviceURI,
+		    	init_time: (fetchTime-timeLength*1000),
+		    	update_time: fetchTime
+		    });*/ 
+
+
 			$.ajax({
   				url: "http://cmu-sds.herokuapp.com/sensor_readings/"+deviceURI,
   				data: {
-  					start_time : (now.getTime()-3*3600*1000),
-  					end_time : now.getTime()
+  					start_time : (fetchTime-timeLength*1000),
+  					end_time : fetchTime
   				},
-  				success: function(data){ 
+  				success: function(data){
   					$(selector+' img.loading').remove();
+  					updateCache(deviceURI, data, fetchTime);
   					drawData(data, metricId, selector);
   				}
 			});
