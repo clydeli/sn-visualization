@@ -15,7 +15,7 @@ sn_visualization.main = (function(){
 
 			var gatewayHash = { "Bob's Office": 0, "Gateway for Ted": 1, "Jeenet_1" : 2	}
 
-			$.get("http://cmu-sds.herokuapp.com/get_devices", function(data){
+			$.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
 				console.log(data);
 
 				/* Parse the data */
@@ -23,7 +23,8 @@ sn_visualization.main = (function(){
 				for(var i=0; i< deviceCount; ++i){
 
 					var deviceNode = {
-						type : "Device", d_uri : data[i].uri,	name : data[i].location.print_name,
+						type : "Device", d_uri : data[i].uri,
+						name : data[i].location.print_name,
 						data : {}, children : []
 					};
 
@@ -39,6 +40,15 @@ sn_visualization.main = (function(){
 
 					var deviceGateway = snArch.children[ gatewayHash[data[i].device_agent[0].print_name]];
 					deviceGateway.children.push(deviceNode);
+				}
+
+				// Sort the 
+				for(var key in gatewayHash){
+					var compareName = function(a, b){
+						if (a.name < b.name){ return -1; }
+						return 1;
+					};
+					snArch.children[ gatewayHash[key] ].children.sort(compareName);
 				}
 
 				if(callback){ callback(snArch); }

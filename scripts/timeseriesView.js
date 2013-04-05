@@ -4,7 +4,7 @@ sn_visualization.timeseriesView = (function(){
 
 	var
 	// some static variables
-		timeLength = 10*60, //seconds
+		timeLength = 5*60, //seconds
 		dataCache = {},
 		dataWorkers = {},
 
@@ -17,6 +17,40 @@ sn_visualization.timeseriesView = (function(){
 			while(dataCache[deviceURI].data[0].timestamp<updateTime-timeLength*1000){
 				dataCache[deviceURI].data.shift();
 			}
+		},
+		insertWorker = function(deviceURI){
+			var 
+				now = new Date(),
+				fetchTime = now.getTime()
+				selector = '.timeseriesView[data-d_uri="'+deviceURI+'"]';
+
+			dataWorkers[deviceURI].worker = new Worker('scripts/workers/timeSeriesWorker.js');
+			dataWorkers[deviceURI].worker.addEventListener(
+				'message', function(e){
+					var data = JSON.parse(e.data);
+					$(selector+' img.loading').remove();
+					$(selector+' svg').remove();
+					updateCache(deviceURI, data, (new Date()).getTime());
+					for(var i=0; i<dataWorkers[deviceURI].metrics.length; ++i){
+						drawData(
+							dataCache[deviceURI].data,
+							dataWorkers[deviceURI].metrics[i],
+							selector+'[data-s_id="'+dataWorkers[deviceURI].metrics[i]+'"]'
+						);
+					}
+					console.log(data);
+				}, false
+			);
+		    dataWorkers[deviceURI].worker.postMessage({
+			   	type: "START",
+			   	url: "http://cmu-sds.herokuapp.com/sensor_readings/"+deviceURI,
+		    	init_time: (fetchTime-timeLength*1000),
+		    	update_time: fetchTime
+		    });
+		},
+		removeWorker = function(deviceURI){
+			dataWorkers[deviceURI].worker.postMessage({ type: "STOP"});
+			delete dataWorkers[deviceURI];
 		},
 
 	// Modified from d3 example (http://bl.ocks.org/mbostock/1667367) 
@@ -63,8 +97,8 @@ sn_visualization.timeseriesView = (function(){
 			}
 
 			var svg = d3.select(selector).append("svg")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom);
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom);
 
 			svg.append("defs").append("clipPath")
 				.attr("id", "clip")
@@ -104,40 +138,27 @@ sn_visualization.timeseriesView = (function(){
 				'<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
 				'</div>'
 			);
-			var selector = '.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]';
-			$(selector).draggable();
 
-			var now = new Date();
-			var fetchTime = now.getTime();
+			var selector = '.timeseriesView[data-d_uri="'+deviceURI+'"]';
+			$(selector+'[data-s_id="'+metricId+'"]').draggable();
 
-			/*dataWorkers[deviceURI] = new Worker('workers/timeSeriesWorker.js');
-			dataWorkers[deviceURI].addEventListener(
-				'message', function(e){
-					var data = JSON.parse(e.data);
-					console.log(data);
-				}, false
-		    );
-		    dataWorkers[deviceURI].postMessage({
-		    	type: "START",
-		    	url: "http://cmu-sds.herokuapp.com/sensor_readings/"+deviceURI,
-		    	init_time: (fetchTime-timeLength*1000),
-		    	update_time: fetchTime
-		    });*/ 
+			if(dataWorkers[deviceURI] === undefined){
+				dataWorkers[deviceURI] = {};
+				dataWorkers[deviceURI].metrics = [metricId];
+				insertWorker(deviceURI);
+			} else {
+				dataWorkers[deviceURI].metrics.push(metricId);
+			}
 
-
-			$.ajax({
-  				url: "http://cmu-sds.herokuapp.com/sensor_readings/"+deviceURI,
-  				data: {
-  					start_time : (fetchTime-timeLength*1000),
-  					end_time : fetchTime
-  				},
-  				success: function(data){
-  					$(selector+' img.loading').remove();
-  					updateCache(deviceURI, data, fetchTime);
-  					drawData(data, metricId, selector);
-  				}
-			});
-
+		},
+		remove: function(deviceURI, metricId){
+			$('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').remove();
+			var metricIndex = dataWorkers[deviceURI].metrics.indexOf(metricId);
+			dataWorkers[deviceURI].metrics.splice(metricIndex, 1);
+			console.log(dataWorkers[deviceURI].metrics.length);
+			if(dataWorkers[deviceURI].metrics.length === 0){
+				removeWorker(deviceURI);
+			}
 		}
 	};
 

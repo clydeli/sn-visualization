@@ -6,7 +6,7 @@ sn_visualization.topologicalView = (function(){
 		_root = {},
 
 		d3Init = function(svgBody){
-			var 
+			var
 				m = [20, 120, 20, 120],
 				w = 800 - m[1] - m[3],
 				h = $('#topologicalView').height() - m[0] - m[2],
@@ -28,13 +28,13 @@ sn_visualization.topologicalView = (function(){
 			_root.x0 = h / 2;
 			_root.y0 = 0;
 
-			_root.children.forEach(toggleAll);			
+			_root.children.forEach(toggleAll);
 			update(_root);
 
 			function update(source) {
 				var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
-				
+
 				var nodes = tree.nodes(_root).reverse(); // Compute the new tree layout.
 				nodes.forEach(function(d) { d.y = d.depth * 180; }); // Normalize for fixed-depth.
 
@@ -44,27 +44,24 @@ sn_visualization.topologicalView = (function(){
 				var nodeEnter = node.enter().append("svg:g") // Enter any new nodes at the parent's previous position.
 					.attr("class", "node")
 					.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-					.on("click", function(d) { 
-						
+					.on("click", function(d) {
+
 						// If the node is a sensor
 						if($(this).find('text').attr('data-type') == "Sensor"){
-							var 
+							var
 								d_uri = $(this).find('text').attr('data-d_uri'),
 								s_id = $(this).find('text').attr('data-s_id');
 								d_name = $(this).find('text').attr('data-d_name');
 								name = $(this).find('text').attr('data-name');
 
-							if (d.children){ 
-								$('.timeseriesView[data-d_uri="'+d_uri+'"][data-s_id="'+s_id+'"]').remove();
-							}
-							else {
-								sn_visualization.timeseriesView.insert( d_uri, s_id, d_name, name );
-							}
+							if (d.children){ sn_visualization.timeseriesView.remove( d_uri, s_id); }
+							else { sn_visualization.timeseriesView.insert( d_uri, s_id, d_name, name );	}
+
 						// else if the node is a device
 						} else if($(this).find('text').attr('data-type') == "Device"){
 							var view = sn_visualization.floorViews.getView("cmusvSecondFloor");
 							view.toggleHighlight($(this).find('text').attr('data-d_uri'));
-						} 
+						}
 
 						toggle(d);
 						update(d);
@@ -145,10 +142,10 @@ sn_visualization.topologicalView = (function(){
 
 			// Toggle children.
 			function toggle(d) {
-				if (d.children) { 
+				if (d.children) {
 					d._children = d.children;	d.children = null;
 					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()-160); }
-				} else { 
+				} else {
 					d.children = d._children; d._children = null;
 					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()+160); }
 				}

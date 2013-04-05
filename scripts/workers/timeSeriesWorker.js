@@ -1,6 +1,6 @@
 var
   url = "", 
-  interval = 2000,
+  interval = 3000,
   updateTime = 0;
 
 function pollData(start_time, end_time){
@@ -29,7 +29,7 @@ self.addEventListener('message', function(e) {
     case "START":
       url = e.data.url;
       updateTime = e.data.update_time;
-      poll_data(e.data.init_time, update_time);
+      pollData(e.data.init_time, updateTime);
       break;
     case "STOP":
       self.close();
