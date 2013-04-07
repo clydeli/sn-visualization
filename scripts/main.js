@@ -1,15 +1,15 @@
 var sn_visualization = sn_visualization || {};
 
 sn_visualization.main = (function(){
-	
+
 	var
 		buildSensorsObj = function(callback){
 			var snArch = {
 				id : "root", name : "CMUSV",
 				children : [
-					{ id: "gateway1", name: "Bob's Office", data: {}, children: [] },
-					{ id: "gateway2", name: "Gateway for Ted", data: {}, children: [] },
-					{ id: "gateway3", name: "Jeenet_1", data: {}, children: [] }
+					{ type: "Gateway", id: "gateway1", name: "Bob's Office", data: {}, children: [] },
+					{ type: "Gateway", id: "gateway2", name: "Gateway for Ted", data: {}, children: [] },
+					{ type: "Gateway", id: "gateway3", name: "Jeenet_1", data: {}, children: [] }
 				]
 			};
 
@@ -42,7 +42,7 @@ sn_visualization.main = (function(){
 					deviceGateway.children.push(deviceNode);
 				}
 
-				// Sort the 
+				// Sort the
 				for(var key in gatewayHash){
 					var compareName = function(a, b){
 						if (a.name < b.name){ return -1; }
@@ -66,12 +66,19 @@ sn_visualization.main = (function(){
 
 $(document).on('ready', function(){
 	sn_visualization.main.initialize();
-	var cmusvSecondFloor = new sn_visualization.floorView();
-	sn_visualization.floorViews.insertView("cmusvSecondFloor", cmusvSecondFloor);
+	var cmusvFloors = new sn_visualization.floorView();
+	sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
 
 	$('#geographicalView .hideBar').click(function(){
 		$('#topologicalView').toggleClass('hidden');
 		if($(this).html() == '&lt;') { $(this).html('&gt;'); }
 		else { $(this).html('&lt;'); }
 	});
+
+	$('#geographicalView .floorNode').click(function(){
+		var deviceURI = $(this).attr("data-d_uri");
+		sn_visualization.topologicalView.openDevice(deviceURI);
+		$(this).addClass("highlighted");
+	});
+
 });

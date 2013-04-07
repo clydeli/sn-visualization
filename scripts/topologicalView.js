@@ -4,6 +4,7 @@ sn_visualization.topologicalView = (function(){
 
 	var
 		_root = {},
+		d3Update = {},
 
 		d3Init = function(svgBody){
 			var
@@ -24,11 +25,16 @@ sn_visualization.topologicalView = (function(){
 				.append("svg:g")
 				.attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-			_root;
 			_root.x0 = h / 2;
 			_root.y0 = 0;
 
 			_root.children.forEach(toggleAll);
+
+			//toggle(_root.children[1]);
+			//toggle(_root.children[1].children[2]);
+			//toggle(_root.children[9]);
+			//toggle(_root.children[9].children[0]);
+
 			update(_root);
 
 			function update(source) {
@@ -59,7 +65,7 @@ sn_visualization.topologicalView = (function(){
 
 						// else if the node is a device
 						} else if($(this).find('text').attr('data-type') == "Device"){
-							var view = sn_visualization.floorViews.getView("cmusvSecondFloor");
+							var view = sn_visualization.floorViews.getView("cmusvFloors");
 							view.toggleHighlight($(this).find('text').attr('data-d_uri'));
 						}
 
@@ -149,18 +155,57 @@ sn_visualization.topologicalView = (function(){
 					d.children = d._children; d._children = null;
 					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()+160); }
 				}
+				/*switch(d.type){
+					case 'Gateway' :
+						$(svgBody).scrollLeft(160);
+						break;
+					case 'Device' :
+						$(svgBody).scrollLeft(320);
+						break;
+					case 'Sensor' :
+						$(svgBody).scrollLeft(480);
+						break;
+				}*/
 			}
 
 			function toggleAll(d) {
 				if (d.children) {	d.children.forEach(toggleAll); toggle(d);	}
 			}
 
+			// Expose the update function
+			d3Update = update;
+		},
+
+		// Helper functions
+		openChildren = function(d){
+			if (d.children == null){
+				d.children = d._children; d._children = null;
+				d3Update(d);
+			}
+		},
+		findAndOpenDevice = function(node, uri){
+			if(node.type == "Device"){
+				if(node.d_uri == uri){ openChildren(node); return true;	}
+				else { return false; }
+			}
+
+			var currentChildren = node.children || node._children;
+			for(childrenKey in currentChildren){
+				if(findAndOpenDevice(currentChildren[childrenKey], uri) ){
+					openChildren(node);	return true;
+				}
+			}
+			return false;
 		};
 
 	return {
 		initialize : function(root){
 			_root = root;
 			d3Init("#topologicalView");
+		},
+		openDevice : function(uri){
+			findAndOpenDevice(_root, uri);
+			$("#topologicalView")[0].scrollLeft = 320;
 		}
 	};
 

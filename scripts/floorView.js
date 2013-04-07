@@ -1,7 +1,7 @@
 var sn_visualization = sn_visualization || {};
 
 sn_visualization.floorViews = (function(){
-	var 
+	var
 		viewsTable = {},
 		insertView = function(viewId, view){
 			viewsTable[viewId] = view;
@@ -11,27 +11,39 @@ sn_visualization.floorViews = (function(){
 		};
 	return {
 		insertView : insertView,
-		getView : getView 
+		getView : getView
 	};
 }());
 
-sn_visualization.floorView = function(selector, bgGeo, ugTable){
+sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs){
 	// temporary use cmusv second floor as default
-	this.selector = selector || "#geographicalView";
-	this.backgroundGeo = bgGeo || [[37.410504,-122.060152], [37.410276,-122.059239]];
+	this.selector = selector || "#geographicalView #geographicalContainer";
+	this.backgroundGeo = bgGeo || [[37.410118,-122.059129], [37.410516,-122.060205]];
+	this.elevations = elevations || 1;
 	this.uriGeoTable = ugTable || {
-		10170205 : { print_name : "214B", geo : [37.410489,-122.059893] },
-		10170204 : { print_name : "214", geo : [37.410489,-122.059915] },
-		10170203 : { print_name : "213", geo : [37.410484,-122.059986] },
-		10170202 : { print_name : "216", geo : [37.410465,-122.059986] },
-		10170208 : { print_name : "217A", geo : [37.410464,-122.059800] },
-		10170209 : { print_name : "217B", geo : [37.410464,-122.059780] },
-		10170105 : { print_name : "228", geo : [37.410406,-122.059430] },
-		10170104 : { print_name : "230", geo : [37.410381,-122.059430] },
-		10170008 : { print_name : "212", geo : [37.410302,-122.059950] },
-		10170207 : { print_name : "215", geo : [37.410489,-122.059730] },
-		10170206 : { print_name : "215B", geo : [37.410489,-122.059790] }
+		'10170205' : { print_name : "214B", geo : [37.410457,-122.059826, 1] },
+		'10170204' : { print_name : "214", geo : [37.410459,-122.059886, 1] },
+		'10170203' : { print_name : "213", geo : [37.410452,-122.059966, 1] },
+		'10170202' : { print_name : "216", geo : [37.410422,-122.059966, 1] },
+		'10170208' : { print_name : "217A", geo : [37.410417,-122.059768, 1] },
+		'10170209' : { print_name : "217B", geo : [37.410417,-122.059708, 1] },
+		'10170105' : { print_name : "228", geo : [37.410328,-122.059400, 1] },
+		'10170104' : { print_name : "230", geo : [37.410291,-122.059400, 1] },
+		'10170008' : { print_name : "212", geo : [37.410168,-122.059920, 1] },
+		'10170207' : { print_name : "215", geo : [37.410459,-122.059710, 1] },
+		'10170206' : { print_name : "215B", geo : [37.410457,-122.059766, 1] },
+		'10170102' : { print_name : "129A", geo : [37.410330,-122.059490, 0] },
+		'10170005' : { print_name : "109", geo : [37.410172,-122.059920, 0] }
+		//'23-03' : { print_name : "213J", geo : [37.410484,-122.059966, 1] }
 	};
+	this.imgs = imgs || [
+		//"http://jeenetgw01.sv.cmu.edu/floorplan.png",
+		//"http://jeenetgw01.sv.cmu.edu/floorplan.png"
+		"images/floor1blank.png", "images/floor2blank.png"
+	];
+	for(var i=0; i<this.imgs.length; ++i){
+		$(this.selector).append('<img src="'+this.imgs[i]+'">');
+	}
 	this.initNodes();
 };
 
@@ -39,9 +51,11 @@ sn_visualization.floorView.prototype = {
 	getPosition : function(uri){
 		if(this.uriGeoTable.hasOwnProperty(uri)){
 			var uriGeo = this.uriGeoTable[uri].geo;
-			var position = 
+			var position =
 			[ (uriGeo[0]-this.backgroundGeo[0][0])*100 / (this.backgroundGeo[1][0]-this.backgroundGeo[0][0]),
-			  (uriGeo[1]-this.backgroundGeo[0][1])*100 / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1]) ];
+			  ((uriGeo[1]-this.backgroundGeo[0][1])*100/(this.elevations+1)) / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1])
+			  + 100*(uriGeo[2]/(this.elevations+1))
+			];
 			return position;
 		} else {return [0, 0]; }
 	},
@@ -56,7 +70,10 @@ sn_visualization.floorView.prototype = {
 		}
 	},
 	toggleHighlight : function(uri){
-		console.log(uri);
-		$(this.selector+" .floorNode[data-d_uri='"+uri+"']").toggleClass("highlighted");
+		if(this.uriGeoTable.hasOwnProperty(uri)){
+			$(this.selector+" .floorNode[data-d_uri='"+uri+"']").toggleClass("highlighted");
+			var heightPercentage = $(this.selector).height() * (this.uriGeoTable[uri].geo[2]/(this.elevations+1));
+			$(this.selector).parent().animate({scrollTop: heightPercentage}, 600);
+		}
 	}
 };

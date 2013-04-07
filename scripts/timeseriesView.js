@@ -14,7 +14,7 @@ sn_visualization.timeseriesView = (function(){
 			dataCache[deviceURI].updateTime = updateTime;
 			dataCache[deviceURI].data = dataCache[deviceURI].data || [];
 			dataCache[deviceURI].data = dataCache[deviceURI].data.concat(data);
-			while(dataCache[deviceURI].data[0].timestamp<updateTime-timeLength*1000){
+			while( dataCache[deviceURI].data.length > 0 && dataCache[deviceURI].data[0].timestamp<updateTime-timeLength*1000){
 				dataCache[deviceURI].data.shift();
 			}
 		},

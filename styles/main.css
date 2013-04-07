@@ -15,10 +15,12 @@ body {
 .hidden { opacity: 0; }
 
 #geographicalView {
+	height: 100%;
 	position: relative;
 	float: left;
 	width: 69%;
 	z-index: 1;
+	overflow-y : scroll;
 }
 #geographicalView img {
 	width: 100%;
@@ -30,9 +32,15 @@ body {
 	cursor: pointer;
 }
 
+#geographicalContainer {
+	position: relative;
+}
+
 .floorNode {
 	position: absolute;
 	display: inline-block;
+	cursor: pointer;
+	font-weight: 700;
 }
 .floorNode.highlighted {
 	border: 1px solid #111;
