@@ -19,23 +19,22 @@ sn_visualization.timeseriesView = (function(){
 			}
 		},
 		insertWorker = function(deviceURI){
-			var 
+			var
 				now = new Date(),
 				fetchTime = now.getTime()
-				selector = '.timeseriesView[data-d_uri="'+deviceURI+'"]';
 
 			dataWorkers[deviceURI].worker = new Worker('scripts/workers/timeSeriesWorker.js');
 			dataWorkers[deviceURI].worker.addEventListener(
 				'message', function(e){
 					var data = JSON.parse(e.data);
-					$(selector+' img.loading').remove();
-					$(selector+' svg').remove();
+					$('.timeseriesView[data-d_uri="'+deviceURI+'"] img.loading').remove();
+					$('.timeseriesView[data-d_uri="'+deviceURI+'"] svg').remove();
 					updateCache(deviceURI, data, (new Date()).getTime());
 					for(var i=0; i<dataWorkers[deviceURI].metrics.length; ++i){
 						drawData(
 							dataCache[deviceURI].data,
 							dataWorkers[deviceURI].metrics[i],
-							selector+'[data-s_id="'+dataWorkers[deviceURI].metrics[i]+'"]'
+							'.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+dataWorkers[deviceURI].metrics[i]+'"]'
 						);
 					}
 					console.log(data);
@@ -53,7 +52,7 @@ sn_visualization.timeseriesView = (function(){
 			delete dataWorkers[deviceURI];
 		},
 
-	// Modified from d3 example (http://bl.ocks.org/mbostock/1667367) 
+	// Modified from d3 example (http://bl.ocks.org/mbostock/1667367)
 		margin = {top: 10, right: 10, bottom: 70, left: 40},
 		margin2 = {top: 215, right: 10, bottom: 20, left: 40},
 		width = 300 - margin.left - margin.right,
@@ -88,7 +87,7 @@ sn_visualization.timeseriesView = (function(){
 				d.value = d[metric];
 			});
 
-			var brush = d3.svg.brush().x(x2).on("brush", brush);	
+			var brush = d3.svg.brush().x(x2).on("brush", brush);
 
 			function brush() {
 				x.domain(brush.empty() ? x2.domain() : brush.extent());
