@@ -18,9 +18,9 @@ body {
 	height: 100%;
 	position: relative;
 	float: left;
-	width: 69%;
-	z-index: 1;
+	width: 68%;
 	overflow-y : scroll;
+	padding-left: 6px;
 }
 #geographicalView img {
 	width: 100%;
@@ -30,6 +30,7 @@ body {
 	width: 20px; height: 16px; text-align: center;
 	background-color: #777; color: #fff;
 	cursor: pointer;
+	z-index: 2;
 }
 
 #geographicalContainer {
