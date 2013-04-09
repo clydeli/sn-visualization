@@ -7,13 +7,13 @@ sn_visualization.main = (function(){
 			var snArch = {
 				id : "root", name : "CMUSV",
 				children : [
-					{ type: "Gateway", id: "gateway1", name: "Bob's Office", data: {}, children: [] },
+					{ type: "Gateway", id: "gateway1", name: "SensorAndrew", data: {}, children: [] },
 					{ type: "Gateway", id: "gateway2", name: "Gateway for Ted", data: {}, children: [] },
 					{ type: "Gateway", id: "gateway3", name: "Jeenet_1", data: {}, children: [] }
 				]
 			};
 
-			var gatewayHash = { "Bob's Office": 0, "Gateway for Ted": 1, "Jeenet_1" : 2	}
+			var gatewayHash = { "SensorAndrew": 0, "Gateway for Ted": 1, "Jeenet_1" : 2	}
 
 			$.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
 				console.log(data);
