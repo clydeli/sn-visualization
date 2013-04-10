@@ -178,15 +178,33 @@ sn_visualization.topologicalView = (function(){
 
 		// Helper functions
 		openChildren = function(d){
-			if (d.children == null){
+			if (d.children === null){
 				d.children = d._children; d._children = null;
 				d3Update(d);
 			}
 		},
+		closeChildren = function(d){
+			if (d.children !== null){
+				d._children = d.children; d.children = null;
+				d3Update(d);
+			}
+		},
+		findChildren = function(node, attr, attrValue, type){
+			if(node.type == type){
+				if(node[attr] == attrValue){ return node; }
+				return false;
+			}
+			var currentChildren = node.children || node._children;
+			for(childrenKey in currentChildren){
+				var findNext = findChildren(currentChildren[childrenKey], attr, attrValue, type);
+				if(findNext){ return findNext; }
+			}
+			return false;
+		},
 		findAndOpenDevice = function(node, uri){
 			if(node.type == "Device"){
 				if(node.d_uri == uri){ openChildren(node); return true;	}
-				else { return false; }
+				return false;
 			}
 
 			var currentChildren = node.children || node._children;

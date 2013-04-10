@@ -4,16 +4,8 @@ sn_visualization.main = (function(){
 
 	var
 		buildSensorsObj = function(callback){
-			var snArch = {
-				id : "root", name : "CMUSV",
-				children : [
-					{ type: "Gateway", id: "gateway1", name: "SensorAndrew", data: {}, children: [] },
-					{ type: "Gateway", id: "gateway2", name: "Gateway for Ted", data: {}, children: [] },
-					{ type: "Gateway", id: "gateway3", name: "Jeenet_1", data: {}, children: [] }
-				]
-			};
-
-			var gatewayHash = { "SensorAndrew": 0, "Gateway for Ted": 1, "Jeenet_1" : 2	}
+			var snArch = { id : "root", name : "CMUSV", children : [] };
+			var gatewayHash = {};
 
 			$.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
 				console.log(data);
@@ -21,6 +13,12 @@ sn_visualization.main = (function(){
 				/* Parse the data */
 				var deviceCount = data.length;
 				for(var i=0; i< deviceCount; ++i){
+
+					var gatewayName = data[i].device_agent[0].print_name;
+					if(!gatewayHash.hasOwnProperty(gatewayName)){
+						snArch.children.push({ type: "Gateway", id: "gateway"+String(i), name: gatewayName, data: {}, children: [] });
+						gatewayHash[gatewayName] = snArch.children.length-1;
+					}
 
 					var deviceNode = {
 						type : "Device", d_uri : data[i].uri,
@@ -38,8 +36,8 @@ sn_visualization.main = (function(){
 						}
 					}
 
-					var deviceGateway = snArch.children[ gatewayHash[data[i].device_agent[0].print_name]];
-					deviceGateway.children.push(deviceNode);
+					//var deviceGateway = snArch.children[ gatewayHash[data[i].device_agent[0].print_name]];
+					snArch.children[ gatewayHash[gatewayName]].children.push(deviceNode);
 				}
 
 				// Sort the
@@ -76,9 +74,13 @@ $(document).on('ready', function(){
 	});
 
 	$('#geographicalView .floorNode').click(function(){
-		var deviceURI = $(this).attr("data-d_uri");
-		sn_visualization.topologicalView.openDevice(deviceURI);
-		$(this).addClass("highlighted");
+		if($(this).hasClass("highlighted")){
+
+		} else {
+			var deviceURI = $(this).attr("data-d_uri");
+			sn_visualization.topologicalView.openDevice(deviceURI);
+			$(this).addClass("highlighted");
+		}
 	});
 
 });

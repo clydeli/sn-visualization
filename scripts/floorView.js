@@ -37,9 +37,7 @@ sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs
 		//'23-03' : { print_name : "213J", geo : [37.410484,-122.059966, 1] }
 	};
 	this.imgs = imgs || [
-		//"http://jeenetgw01.sv.cmu.edu/floorplan.png",
-		//"http://jeenetgw01.sv.cmu.edu/floorplan.png"
-		"images/floor1blank.png", "images/floor2blank.png"
+		"images/floor1blankbw.png", "images/floor2blankbw.png"
 	];
 	for(var i=0; i<this.imgs.length; ++i){
 		$(this.selector).append('<img src="'+this.imgs[i]+'">');
