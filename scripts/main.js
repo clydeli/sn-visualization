@@ -36,7 +36,6 @@ sn_visualization.main = (function(){
 						}
 					}
 
-					//var deviceGateway = snArch.children[ gatewayHash[data[i].device_agent[0].print_name]];
 					snArch.children[ gatewayHash[gatewayName]].children.push(deviceNode);
 				}
 
@@ -67,6 +66,10 @@ $(document).on('ready', function(){
 	var cmusvFloors = new sn_visualization.floorView();
 	sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
 
+	//$("#topologicalView").resizable({ handles: "e" });
+
+	//$('#geographicalView image').height($('#geographicalView').height()/2);
+
 	$('#geographicalView .hideBar').click(function(){
 		$('#topologicalView').toggleClass('hidden');
 		if($(this).html() == '&lt;') { $(this).html('&gt;'); }
@@ -74,13 +77,23 @@ $(document).on('ready', function(){
 	});
 
 	$('#geographicalView .floorNode').click(function(){
+		var deviceURI = $(this).attr("data-d_uri");
 		if($(this).hasClass("highlighted")){
-
+			sn_visualization.topologicalView.closeDevice(deviceURI);
 		} else {
-			var deviceURI = $(this).attr("data-d_uri");
 			sn_visualization.topologicalView.openDevice(deviceURI);
-			$(this).addClass("highlighted");
 		}
+		$(this).toggleClass("highlighted");
+	});
+
+	$('body').on('click', '.timeseriesClose', function(){
+		var
+			deviceURI = $(this).parent().attr('data-d_uri');
+			metricId = $(this).parent().attr('data-s_id');
+		console.log(deviceURI);
+		console.log(metricId);
+		sn_visualization.timeseriesView.remove(deviceURI, metricId);
+		sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
 	});
 
 });

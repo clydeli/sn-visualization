@@ -40,7 +40,20 @@
 
 .timeseriesLabel {
 	padding: 3px 5px;
-	position: absolute; right: 3px; top: 3px;
-	color : #fff; background-color: #222; 
+	position: absolute; left: 3px; top: 3px;
+	color : #fff; background-color: #222;
 	opacity : 0.8;
+}
+
+
+.timeseriesClose {
+	padding: 3px 5px;
+	position: absolute; right: 3px; top: 3px;
+	color : #000;
+	font-weight: 700;
+	opacity : 0.6;
+}
+
+.timeseriesClose:hover {
+	opacity : 1;
 }

@@ -42,6 +42,7 @@ sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs
 	for(var i=0; i<this.imgs.length; ++i){
 		$(this.selector).append('<img src="'+this.imgs[i]+'">');
 	}
+
 	this.initNodes();
 };
 

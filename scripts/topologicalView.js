@@ -5,11 +5,12 @@ sn_visualization.topologicalView = (function(){
 	var
 		_root = {},
 		d3Update = {},
+		scrollLeft = 0,
 
 		d3Init = function(svgBody){
 			var
 				m = [20, 120, 20, 120],
-				w = 800 - m[1] - m[3],
+				w = 760 - m[1] - m[3],
 				h = $('#topologicalView').height() - m[0] - m[2],
 				i = 0;
 
@@ -150,10 +151,10 @@ sn_visualization.topologicalView = (function(){
 			function toggle(d) {
 				if (d.children) {
 					d._children = d.children;	d.children = null;
-					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()-160); }
+					//if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()-160); }
 				} else {
 					d.children = d._children; d._children = null;
-					if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()+160); }
+					//if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()+160); }
 				}
 				/*switch(d.type){
 					case 'Gateway' :
@@ -191,8 +192,11 @@ sn_visualization.topologicalView = (function(){
 		},
 		findChildren = function(node, attr, attrValue, type){
 			if(node.type == type){
-				if(node[attr] == attrValue){ return node; }
-				return false;
+				for(var i=0; i<attr.length; ++i){
+					if(node[attr[i]] !== attrValue[i]){ return false; }
+				}
+				//if(node[attr] == attrValue){ return node; }
+				return node;
 			}
 			var currentChildren = node.children || node._children;
 			for(childrenKey in currentChildren){
@@ -220,10 +224,25 @@ sn_visualization.topologicalView = (function(){
 		initialize : function(root){
 			_root = root;
 			d3Init("#topologicalView");
+			$("#topologicalView").on('mouseover', function(){
+				$(this).addClass('expanded');
+			}).on('mouseout', function(){
+				$(this).removeClass('expanded');
+			});
 		},
 		openDevice : function(uri){
 			findAndOpenDevice(_root, uri);
 			$("#topologicalView")[0].scrollLeft = 320;
+		},
+		closeDevice : function(uri){
+			var device = findChildren(_root, ["d_uri"], [uri], "Device");
+			if(device) { closeChildren(device);	}
+			$("#topologicalView")[0].scrollLeft = 320;
+		},
+		closeSensor : function(uri, s_id){
+			var sensor = findChildren(_root, ["d_uri", "s_id"], [uri, s_id], "Sensor");
+			if(sensor) { closeChildren(sensor);	}
+			$("#topologicalView")[0].scrollLeft = 480;
 		}
 	};
 

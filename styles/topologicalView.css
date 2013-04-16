@@ -18,14 +18,20 @@
 
 /* Self added stylings */
 #topologicalView {
-	float: left;
+	position: absolute; left: 0; top: 4%;
 	background-color: #eee;
-	width: 30%; height: 100%;
+	width: 2%; height: 96%;
 	border-right: 1px solid #666;
-	box-shadow: 1px 0px 5px 2px #666;
-	transition : width 390ms ease;
+	border-top: 1px solid #666;
+	/*box-shadow: 1px 0px 5px 2px #666;*/
 	overflow-x: scroll; overflow-y: hidden;
+	transition: width 390ms ease;
+	z-index: 2;
+	opacity: 0.92;
 }
+#topologicalView.expanded { width: 60%; }
+
+
 #topologicalView.hidden {
 	width: 0;
 }

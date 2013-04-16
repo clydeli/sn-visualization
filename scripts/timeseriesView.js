@@ -135,6 +135,7 @@ sn_visualization.timeseriesView = (function(){
 				'<div class="timeseriesView" data-d_uri="'+deviceURI+'" data-s_id="'+metricId+'">'+
 				'<img class="loading" src="images/loading.gif">'+
 				'<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
+				'<div class="timeseriesClose">X</div>'+
 				'</div>'
 			);
 
@@ -142,12 +143,12 @@ sn_visualization.timeseriesView = (function(){
 			$(selector+'[data-s_id="'+metricId+'"]').draggable();
 
 			if(dataWorkers[deviceURI] === undefined){
-				dataWorkers[deviceURI] = {};
-				dataWorkers[deviceURI].metrics = [metricId];
+				dataWorkers[deviceURI] = { metrics : [] };
+				//dataWorkers[deviceURI].metrics = [];
 				insertWorker(deviceURI);
-			} else {
+			}// else {
 				dataWorkers[deviceURI].metrics.push(metricId);
-			}
+			//}
 
 		},
 		remove: function(deviceURI, metricId){
