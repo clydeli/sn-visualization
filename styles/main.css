@@ -27,6 +27,7 @@ body {
 }
 
 #geographicalView {
+	background-image: url(../images/bedge_grunge.png);
 	position: relative;
 	height: 96%%; width: 100%;
 	overflow-y : auto;
@@ -34,13 +35,16 @@ body {
 
 #geographicalContainer {
 	display: inline-block;
-	width: 76%;
+	width: 76%; margin: 0.3em 0;
 	position: absolute; left: 14%; top: 0;
 }
 
 #geographicalContainer img{
 	width : 100%;
-	border-radius: 5px;
+	border-radius: 2px;
+	border: 1px solid #888;
+	opacity: 0.85;
+	/*box-shadow: 1px 0px 6px 1px #888;*/
 	/*border: 2px solid #000;*/
 }
 
