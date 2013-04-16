@@ -22,9 +22,9 @@ sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs
 	this.elevations = elevations || 1;
 	this.uriGeoTable = ugTable || {
 		'10170205' : { print_name : "214B", geo : [37.410457,-122.059826, 1] },
-		'10170204' : { print_name : "214", geo : [37.410459,-122.059886, 1] },
-		'10170203' : { print_name : "213", geo : [37.410452,-122.059966, 1] },
-		'10170202' : { print_name : "216", geo : [37.410422,-122.059966, 1] },
+		'10170204' : { print_name : "214", geo : [37.410459,-122.059878, 1] },
+		'10170203' : { print_name : "213", geo : [37.410452,-122.059956, 1] },
+		'10170202' : { print_name : "216", geo : [37.410422,-122.059956, 1] },
 		'10170208' : { print_name : "217A", geo : [37.410418,-122.059768, 1] },
 		'10170209' : { print_name : "217B", geo : [37.410418,-122.059708, 1] },
 		'10170105' : { print_name : "228", geo : [37.410328,-122.059400, 1] },
@@ -41,13 +41,16 @@ sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs
 		'10170004' : { print_name : "110", geo : [37.410172,-122.059750, 0] },
 		'10170002' : { print_name : "115", geo : [37.410185,-122.059550, 0] },
 		'10170003' : { print_name : "116", geo : [37.410206,-122.059550, 0] },
-		'10170308' : { print_name : "120", geo : [37.410402,-122.059940, 0] },
+		'10170308' : { print_name : "120", geo : [37.410402,-122.059930, 0] },
 		'10170307' : { print_name : "122", geo : [37.410385,-122.059940, 0] },
 		'10170306' : { print_name : "124", geo : [37.410370,-122.059940, 0] },
 		'10170305' : { print_name : "126", geo : [37.410350,-122.059940, 0] },
 		'10170103' : { print_name : "129", geo : [37.410312,-122.059650, 0] },
-		'10170102' : { print_name : "129A", geo : [37.410330,-122.059490, 0] }
-		//'23-03' : { print_name : "213J", geo : [37.410484,-122.059966, 1] }
+		'10170102' : { print_name : "129A", geo : [37.410330,-122.059490, 0] },
+		'23-03' : { print_name : "213J", geo : [37.410452,-122.059976, 1] },
+		'23-05' : { print_name : "214J", geo : [37.410459,-122.059898, 1] },
+		'23-01' : { print_name : "216J", geo : [37.410422,-122.059976, 1] },
+		'Sweetfeedback_device_3' : { print_name : "120T", geo : [37.410402,-122.059950, 0] }
 	};
 	this.imgs = imgs || [
 		"images/floor1blankbw.png", "images/floor2blankbw.png"

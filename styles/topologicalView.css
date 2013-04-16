@@ -31,7 +31,6 @@
 }
 #topologicalView.expanded { width: 60%; }
 
-
 #topologicalView.hidden {
 	width: 0;
 }
