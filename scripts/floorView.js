@@ -56,7 +56,7 @@ sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs
 		"images/floor1blankbw.png", "images/floor2blankbw.png"
 	];
 	for(var i=0; i<this.imgs.length; ++i){
-		$(this.selector).append('<img src="'+this.imgs[i]+'">');
+		$(this.selector).append('<img src="'+this.imgs[i]+'" class="floorPic" data-elevation="'+i+'">');
 	}
 
 	this.initNodes();
@@ -67,6 +67,9 @@ sn_visualization.floorView.prototype = {
 		if(this.uriGeoTable.hasOwnProperty(uri)){
 			var uriGeo = this.uriGeoTable[uri].geo;
 			var position =
+			/*[ (uriGeo[0]-this.backgroundGeo[0][0])*100 / (this.backgroundGeo[1][0]-this.backgroundGeo[0][0]),
+			  (uriGeo[1]-this.backgroundGeo[0][1])*100 / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1])
+			];*/
 			[ (uriGeo[0]-this.backgroundGeo[0][0])*100 / (this.backgroundGeo[1][0]-this.backgroundGeo[0][0]),
 			  ((uriGeo[1]-this.backgroundGeo[0][1])*100/(this.elevations+1)) / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1])
 			  + 100*(uriGeo[2]/(this.elevations+1))
@@ -78,11 +81,13 @@ sn_visualization.floorView.prototype = {
 		for(var nodeKey in this.uriGeoTable){
 			var uriGeo = this.getPosition(nodeKey);
 			var nodeHtml =
-				"<div class='floorNode' data-d_uri='"+nodeKey+
-				"' style='left:"+uriGeo[0]+"%; top:"+uriGeo[1]+"%;'>"+
-				this.uriGeoTable[nodeKey].print_name+"</div>";
+				"<div class='floorNode' data-elevation='"+this.uriGeoTable[nodeKey].geo[2]+"' data-d_uri='"+nodeKey+
+				"' style='left:"+uriGeo[0]+"%; top:"+uriGeo[1]+"%;'><div class='nodeBlock'></div>"+
+				/*this.uriGeoTable[nodeKey].print_name*/"</div>";
 			$(this.selector).append(nodeHtml);
 		}
+		//$('.floorNode, .floorPic').hide();
+		//$('.floorNode[data-elevation="0"], .floorPic[data-elevation="0"]').show();
 	},
 	toggleHighlight : function(uri){
 		if(this.uriGeoTable.hasOwnProperty(uri)){

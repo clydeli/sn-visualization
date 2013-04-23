@@ -155,7 +155,7 @@ sn_visualization.timeseriesView = (function(){
 			$('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').remove();
 			var metricIndex = dataWorkers[deviceURI].metrics.indexOf(metricId);
 			dataWorkers[deviceURI].metrics.splice(metricIndex, 1);
-			console.log(dataWorkers[deviceURI].metrics.length);
+			//console.log(dataWorkers[deviceURI].metrics.length);
 			if(dataWorkers[deviceURI].metrics.length === 0){
 				removeWorker(deviceURI);
 			}

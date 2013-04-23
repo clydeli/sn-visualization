@@ -5,13 +5,12 @@ sn_visualization.topologicalView = (function(){
 	var
 		_root = {},
 		d3Update = {},
-		scrollLeft = 0,
 
-		d3Init = function(svgBody){
+		d3Init = function(svgBody, width, height, isResize){
 			var
 				m = [20, 120, 20, 120],
-				w = 760 - m[1] - m[3],
-				h = $('#topologicalView').height() - m[0] - m[2],
+				w = width - m[1] - m[3],
+				h = height - m[0] - m[2],
 				i = 0;
 
 			var tree = d3.layout.tree()
@@ -29,7 +28,7 @@ sn_visualization.topologicalView = (function(){
 			_root.x0 = h / 2;
 			_root.y0 = 0;
 
-			_root.children.forEach(toggleAll);
+			if(!isResize){ _root.children.forEach(toggleAll); }
 
 			//toggle(_root.children[1]);
 			//toggle(_root.children[1].children[2]);
@@ -223,12 +222,20 @@ sn_visualization.topologicalView = (function(){
 	return {
 		initialize : function(root){
 			_root = root;
-			d3Init("#topologicalView");
+			d3Init("#topologicalView", 760, $('#topologicalView').height()*0.95);
 			$("#topologicalView").on('mouseover', function(){
 				$(this).addClass('expanded');
 			}).on('mouseout', function(){
 				$(this).removeClass('expanded');
 			});
+
+			$( "#topologicalSlider" ).slider({
+				orientation: "vertical",
+				range: "min", min: 0, max: 100,
+				slide: function( event, ui ) {
+					sn_visualization.topologicalView.resize(1+ui.value/100);
+				}
+			 });
 		},
 		openDevice : function(uri){
 			findAndOpenDevice(_root, uri);
@@ -243,6 +250,10 @@ sn_visualization.topologicalView = (function(){
 			var sensor = findChildren(_root, ["d_uri", "s_id"], [uri, s_id], "Sensor");
 			if(sensor) { closeChildren(sensor);	}
 			$("#topologicalView")[0].scrollLeft = 480;
+		},
+		resize : function(zoom){
+			$('#topologicalView svg').remove();
+			d3Init("#topologicalView", 760*zoom, $('#topologicalView').height()*0.95*zoom, true);
 		}
 	};
 

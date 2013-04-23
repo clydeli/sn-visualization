@@ -16,6 +16,7 @@ body {
 .hidden { opacity: 0; }
 
 #menuBar {
+	position: relative;
 	background-color: #990000;
 	width: 100%; height: 4%;
 	border-bottom: 1px solid #555;
@@ -25,6 +26,14 @@ body {
 #menuBar img{
 	height: 100%;
 }
+
+#menuBar nav {
+	position: absolute; right:0; bottom: 0;
+	color: #eee; font-weight: 700;
+}
+
+#menuBar ol { margin: 0; }
+#menuBar ol li { display: inline-block; }
 
 #geographicalView {
 	background-image: url(../images/bedge_grunge.png);
@@ -53,8 +62,23 @@ body {
 	display: inline-block;
 	cursor: pointer;
 	font-weight: 700;
+	width: 1em; height: 1em;
+
 }
 .floorNode.highlighted {
 	border: 1px solid #111;
-	background-color: steelBlue
+	background-color: steelBlue;
 }
+
+.nodeBlock {
+	width: 1em; height: 1em;
+	background-color: steelBlue;
+}
+
+/*
+#logWindow {
+	position: absolute; right: 0; bottom: 0;
+	width : 500px; height : 200px; z-index: 3;
+	background-color: #fff; opacity: 0.5;
+}
+*/
