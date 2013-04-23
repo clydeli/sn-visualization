@@ -96,4 +96,17 @@ $(document).on('ready', function(){
 		sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
 	});
 
+	$('#menuBar nav li').click( function(){
+		switch($(this).html()){
+			/*case "FloorView":
+				$('.view').hide();
+				$('#geographicalView, #topologicalView').show();
+				break;*/
+			case "Log":
+				$('#logView').toggleClass('hidden');
+				break;
+		}
+		//console.log($(this).html());
+	})
+
 });

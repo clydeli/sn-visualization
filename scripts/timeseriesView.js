@@ -38,6 +38,15 @@ sn_visualization.timeseriesView = (function(){
 						);
 					}
 					console.log(data);
+
+					$('#logView').append(data.length+' updates received at '+(new Date())+'<br>');
+					for(var j=0; j<data.length; ++j){
+						$('#logView').append('{');
+						for(var key in data[j]){
+							$('#logView').append(key+' : '+data[j][key]+' ');
+						}
+						$('#logView').append('}<br>');
+					}
 				}, false
 			);
 		    dataWorkers[deviceURI].worker.postMessage({
