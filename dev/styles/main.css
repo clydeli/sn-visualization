@@ -1,0 +1,96 @@
+/*html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+}*/
+html { overflow: hidden; width: 100%; height: 100%;}
+body {
+	position: relative;
+	width: 100%; height: 100%;
+	background-color: #fff;
+	overflow: hidden;
+	margin: 0;
+	font-size: 14px;
+	font-family: "Helvetica Neue", Helvetica;
+}
+
+.hidden { opacity: 0; }
+
+#menuBar {
+	position: relative;
+	background-color: #990000;
+	width: 100%; height: 4%;
+	border-bottom: 1px solid #555;
+	z-index: 3;
+}
+
+#menuBar img{
+	height: 100%;
+}
+
+#menuBar nav {
+	position: absolute; right:0.2em; bottom: 0;
+	color: #eee; font-weight: 700;
+}
+
+#menuBar nav li {
+	cursor: pointer;
+}
+
+#menuBar nav li:hover {
+	text-decoration: underline;
+}
+
+#menuBar ol { margin: 0; }
+#menuBar ol li { display: inline-block; }
+
+#geographicalView {
+	background-image: url(../images/bedge_grunge.png);
+	position: relative;
+	height: 96%; width: 100%;
+	overflow-y : auto;
+}
+
+#geographicalContainer {
+	display: inline-block;
+	width: 76%; margin: 0.3em 0;
+	position: absolute; left: 14%; top: 0;
+}
+
+#geographicalContainer img{
+	width : 100%;
+	border-radius: 2px;
+	border: 1px solid #888;
+	opacity: 0.85;
+	/*box-shadow: 1px 0px 6px 1px #888;*/
+	/*border: 2px solid #000;*/
+}
+
+.floorNode {
+	position: absolute;
+	display: inline-block;
+	cursor: pointer;
+	font-weight: 700;
+	width: 1em; height: 1em;
+
+}
+.floorNode.highlighted {
+	border: 1px solid #111;
+	background-color: steelBlue;
+}
+
+.nodeBlock {
+	width: 1em; height: 1em;
+	background-color: steelBlue;
+}
+.nodeBlock.goodBlock { background-color: steelBlue; }
+.nodeBlock.avgBlock { background-color: khaki; }
+.nodeBlock.badBlock { background-color: red; }
+
+#logView {
+	position: absolute; right: 0; bottom: 0;
+	width : 100%; height : 200px; z-index: 3;
+	color: #fff; background-color: #000; opacity: 0.8;
+	overflow-y: auto;
+}
+
+#logView.hidden { display: none; }

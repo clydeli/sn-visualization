@@ -1,0 +1,43 @@
+/* Provided by d3 example */
+#topologicalView .node circle {
+  cursor: pointer;
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+#topologicalView .node text {
+  font-size: 11px;
+}
+
+#topologicalView path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+/* Self added stylings */
+#topologicalView {
+	position: absolute; left: 0; top: 4%;
+	background-color: #eee;
+	width: 2%; height: 96%;
+	border-right: 1px solid #666;
+	border-top: 1px solid #666;
+	/*box-shadow: 1px 0px 5px 2px #666;*/
+	overflow-x: auto; overflow-y: auto;
+	transition: width 390ms ease;
+	z-index: 2;
+	opacity: 0.92;
+}
+#topologicalView.expanded { width: 60%; }
+
+#topologicalSlider {
+	position: absolute; left: 0; top: 0;
+	margin: 1.2em; font-size: 0.65em; opacity: 0;
+}
+
+#topologicalView.expanded #topologicalSlider { opacity: 1; }
+
+#topologicalView.hidden {
+	width: 0;
+}

@@ -1,0 +1,59 @@
+/* Provided by d3 example */
+.timeseriesView svg {
+  font: 10px sans-serif;
+}
+
+.timeseriesView path {
+  fill: steelblue;
+}
+
+.timeseriesView .axis path,
+.timeseriesView .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.timeseriesView .brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+/* Self added stylings */
+.timeseriesView {
+	padding: 3px;
+	position : absolute; right: 3px; top: 3px;
+	background-color: #fff;
+	border-radius: 1px;
+	box-shadow: 1px 1px 5px 2px #666;
+	width: 300px; height: 250px;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.timeseriesView img.loading {
+	position: absolute; left: 138px; top:113px;
+	width : 24px; height: 24px;
+	margin: auto auto;
+}
+
+.timeseriesLabel {
+	padding: 3px 5px;
+	position: absolute; left: 3px; top: 3px;
+	color : #fff; background-color: #222;
+	opacity : 0.8;
+}
+
+
+.timeseriesClose {
+	padding: 3px 5px;
+	position: absolute; right: 3px; top: 3px;
+	color : #000;
+	font-weight: 700;
+	opacity : 0.6;
+}
+
+.timeseriesClose:hover {
+	opacity : 1;
+}
