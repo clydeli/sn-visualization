@@ -80,7 +80,8 @@ body {
 
 .nodeBlock {
 	width: 1em; height: 1em;
-	background-color: steelBlue;
+  border: 1px solid #111;
+	background-color: #666;
 }
 .nodeBlock.goodBlock { background-color: steelBlue; }
 .nodeBlock.avgBlock { background-color: khaki; }
