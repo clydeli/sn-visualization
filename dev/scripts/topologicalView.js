@@ -229,13 +229,18 @@ sn_visualization.topologicalView = (function(){
 				$(this).removeClass('expanded');
 			});
 
-			$( "#topologicalSlider" ).slider({
+			$("#topologicalSlider").slider({
 				orientation: "vertical",
 				range: "min", min: 0, max: 100,
 				slide: function( event, ui ) {
 					sn_visualization.topologicalView.resize(1+ui.value/100);
 				}
 			 });
+
+      $("#topologicalPin").click(function(){
+        $("#topologicalView").toggleClass("pinned");
+      });
+
 		},
 		openDevice : function(uri){
 			findAndOpenDevice(_root, uri);

@@ -20,7 +20,7 @@
 #topologicalView {
 	position: absolute; left: 0; top: 4%;
 	background-color: #eee;
-	width: 2%; height: 96%;
+	width: 1%; height: 96%;
 	border-right: 1px solid #666;
 	border-top: 1px solid #666;
 	/*box-shadow: 1px 0px 5px 2px #666;*/
@@ -30,13 +30,23 @@
 	opacity: 0.92;
 }
 #topologicalView.expanded { width: 60%; }
+#topologicalView.pinned { width: 60%; }
 
 #topologicalSlider {
+  height: 160px;
 	position: absolute; left: 0; top: 0;
 	margin: 1.2em; font-size: 0.65em; opacity: 0;
 }
 
+#topologicalPin {
+  position: absolute; right: 0; top: 0;
+  margin: 0.8em;  opacity: 0;
+}
+
 #topologicalView.expanded #topologicalSlider { opacity: 1; }
+#topologicalView.expanded #topologicalPin { opacity: 1; }
+#topologicalView.pinned #topologicalSlider { opacity: 1; }
+#topologicalView.pinned #topologicalPin { opacity: 1; border-style: inset;}
 
 #topologicalView.hidden {
 	width: 0;
