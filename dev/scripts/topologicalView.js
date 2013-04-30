@@ -211,11 +211,6 @@ sn_visualization.topologicalView = (function(){
 		initialize : function(root){
 			_root = root;
 			d3Init("#topologicalView", 760, $('#topologicalView').height()*0.95);
-			$("#topologicalView").on('mouseover', function(){
-				$(this).addClass('expanded');
-			}).on('mouseout', function(){
-				$(this).removeClass('expanded');
-			});
 
 			$("#topologicalSlider").slider({
 				orientation: "vertical",

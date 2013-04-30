@@ -70,8 +70,7 @@ body {
 	display: inline-block;
 	cursor: pointer;
 	font-weight: 700;
-	width: 1em; height: 1em;
-
+	/*width: 1em; height: 1em;*/
 }
 .floorNode.highlighted .nodeBlock{
   border: 2px solid #111;
@@ -86,6 +85,12 @@ body {
 .nodeBlock.goodBlock { background-color: steelBlue; }
 .nodeBlock.avgBlock { background-color: khaki; }
 .nodeBlock.badBlock { background-color: red; }
+
+.floorNode .hoverBlock {
+  background-color: #111; color:#fff;
+  padding: 0.1em; margin-top: 0.1em; opacity: 0;
+}
+.floorNode:hover .hoverBlock { opacity: 0.85; }
 
 #logView {
 	position: absolute; right: 0; bottom: 0;

@@ -29,7 +29,7 @@
 	z-index: 2;
 	opacity: 0.92;
 }
-#topologicalView.expanded { width: 60%; }
+#topologicalView:hover { width: 60%; }
 #topologicalView.pinned { width: 60%; }
 
 #topologicalSlider {
@@ -43,8 +43,8 @@
   margin: 0.8em;  opacity: 0;
 }
 
-#topologicalView.expanded #topologicalSlider { opacity: 1; }
-#topologicalView.expanded #topologicalPin { opacity: 1; }
+#topologicalView:hover #topologicalSlider { opacity: 1; }
+#topologicalView:hover #topologicalPin { opacity: 1; }
 #topologicalView.pinned #topologicalSlider { opacity: 1; }
 #topologicalView.pinned #topologicalPin { opacity: 1; border-style: inset;}
 
