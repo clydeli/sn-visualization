@@ -39,13 +39,15 @@ sn_visualization.timeseriesView = (function(){
           }
           console.log(data);
 
-          $('#logView').append(data.length+' updates received at '+(new Date())+'<br>');
+          // Log received data into logView
+          $('#logView').append(data.length+' updates received for device '+deviceURI+' at '+(new Date())+'<br>');
           for(var j=0; j<data.length; ++j){
-            $('#logView').append('{');
+            var logText = '{';
             for(var key in data[j]){
-              $('#logView').append(key+' : '+data[j][key]+' ');
+              logText += key+' : '+data[j][key]+' ';
             }
-            $('#logView').append('}<br>');
+            logText += '}<br>';
+            $('#logView').append(logText);
           }
         }, false
       );

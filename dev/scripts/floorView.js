@@ -117,6 +117,15 @@ sn_visualization.floorView.prototype = {
         }
         console.log(data);
 
+        // Log received data into logView
+        $('#logView').append('Update received for device status at '+(new Date())+'<br>');
+        var logText = '{';
+        for(var key in data){
+          logText += key+' : '+data[key]+' ';
+        }
+        logText += '}<br>';
+        $('#logView').append(logText);
+
       }, false
     );
     this.worker.postMessage({
