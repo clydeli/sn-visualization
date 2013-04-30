@@ -39,13 +39,11 @@ sn_visualization.main = (function(){
 					snArch.children[ gatewayHash[gatewayName]].children.push(deviceNode);
 				}
 
-				// Sort the
+				// Sort the devices by their names
 				for(var key in gatewayHash){
-					var compareName = function(a, b){
-						if (a.name < b.name){ return -1; }
-						return 1;
-					};
-					snArch.children[ gatewayHash[key] ].children.sort(compareName);
+					snArch.children[ gatewayHash[key] ].children.sort(
+            function(a, b){ return (a.name < b.name)? -1:1 ; }
+          );
 				}
 
 				if(callback){ callback(snArch); }

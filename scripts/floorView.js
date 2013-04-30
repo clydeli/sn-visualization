@@ -109,11 +109,14 @@ sn_visualization.floorView.prototype = {
           now = new Date();
 
         for(var key in data){
-          var offset = now.getTime()-data[key]*1000;
-          $('.floorNode[data-d_uri="'+key+'"] .nodeBlock').removeClass('badBlock avgBlock goodBlock');
-          if(offset > 3*60*1000){ $('.floorNode[data-d_uri="'+key+'"] .nodeBlock').addClass('badBlock'); }
-          else if(offset > 15*1000){ $('.floorNode[data-d_uri="'+key+'"] .nodeBlock').addClass('avgBlock'); }
-          else { $('.floorNode[data-d_uri="'+key+'"] .nodeBlock').addClass('goodBlock'); }
+          var
+            offset = now.getTime()-data[key]*1000,
+            targetBlock = $('.floorNode[data-d_uri="'+key+'"] .nodeBlock');
+
+          targetBlock.removeClass('badBlock avgBlock goodBlock');
+          if(offset > 3*60*1000){ targetBlock.addClass('badBlock'); }
+          else if(offset > 15*1000){ targetBlock.addClass('avgBlock'); }
+          else { targetBlock.addClass('goodBlock'); }
         }
         console.log(data);
 
