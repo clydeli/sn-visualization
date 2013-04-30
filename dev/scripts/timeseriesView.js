@@ -120,9 +120,10 @@ sn_visualization.timeseriesView = (function(){
       var context = svg.append("g").attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
       x.domain(d3.extent(data.map(function(d) { return d.date; })));
+
       y.domain(
-        [d3.min(data.map(function(d) { return d.value; })),
-         d3.max(data.map(function(d) { return d.value; }))]
+        [0.9*d3.min(data.map(function(d) { return d.value; })),
+         1.1*d3.max(data.map(function(d) { return d.value; }))]
       );
       x2.domain(x.domain());
       y2.domain(y.domain());
