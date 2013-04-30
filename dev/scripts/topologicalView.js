@@ -150,22 +150,9 @@ sn_visualization.topologicalView = (function(){
 			function toggle(d) {
 				if (d.children) {
 					d._children = d.children;	d.children = null;
-					//if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()-160); }
 				} else {
 					d.children = d._children; d._children = null;
-					//if(d.type !== 'Sensor'){ $(svgBody).scrollLeft($(svgBody).scrollLeft()+160); }
 				}
-				/*switch(d.type){
-					case 'Gateway' :
-						$(svgBody).scrollLeft(160);
-						break;
-					case 'Device' :
-						$(svgBody).scrollLeft(320);
-						break;
-					case 'Sensor' :
-						$(svgBody).scrollLeft(480);
-						break;
-				}*/
 			}
 
 			function toggleAll(d) {
@@ -213,7 +200,8 @@ sn_visualization.topologicalView = (function(){
 			var currentChildren = node.children || node._children;
 			for(childrenKey in currentChildren){
 				if(findAndOpenDevice(currentChildren[childrenKey], uri) ){
-					openChildren(node);	return true;
+					openChildren(node);
+          return true;
 				}
 			}
 			return false;
