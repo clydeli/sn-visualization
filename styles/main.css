@@ -73,14 +73,15 @@ body {
 	width: 1em; height: 1em;
 
 }
-.floorNode.highlighted {
-	border: 1px solid #111;
-	background-color: steelBlue;
+.floorNode.highlighted .nodeBlock{
+  border: 2px solid #111;
+  box-shadow: 0 0 6px 1px #666;
 }
 
 .nodeBlock {
 	width: 1em; height: 1em;
-	background-color: steelBlue;
+  border: 1px solid #111;
+	background-color: #666;
 }
 .nodeBlock.goodBlock { background-color: steelBlue; }
 .nodeBlock.avgBlock { background-color: khaki; }
