@@ -87,10 +87,10 @@ body {
 .nodeBlock.badBlock { background-color: red; }
 
 .floorNode .hoverBlock {
-  background-color: #111; color:#fff;
+  background-color: #111; color:#fff; width: 0;
   padding: 0.1em; margin-top: 0.1em; opacity: 0;
 }
-.floorNode:hover .hoverBlock { opacity: 0.85; }
+.floorNode:hover .hoverBlock { opacity: 0.85; width: auto;}
 
 #logView {
 	position: absolute; right: 0; bottom: 0;
