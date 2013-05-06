@@ -5,6 +5,7 @@ sn_visualization.topologicalView = (function(){
 	var
 		_root = {},
 		d3Update = {},
+    statusColorTable = {},
 
 		d3Init = function(svgBody, width, height, isResize){
 			var
@@ -54,15 +55,8 @@ sn_visualization.topologicalView = (function(){
 
 						// If the node is a sensor
 						if($(this).find('text').attr('data-type') == "Sensor"){
-							var
-								d_uri = $(this).find('text').attr('data-d_uri'),
-								s_id = $(this).find('text').attr('data-s_id');
-								d_name = $(this).find('text').attr('data-d_name');
-								name = $(this).find('text').attr('data-name');
-
-							if (d.children){ sn_visualization.timeseriesView.remove( d_uri, s_id); }
-							else { sn_visualization.timeseriesView.insert( d_uri, s_id, d_name, name );	}
-
+  						if (d.children){ sn_visualization.timeseriesView.remove( d.d_uri, d.s_id); }
+  						else { sn_visualization.timeseriesView.insert( d.d_uri, d.s_id, d.d_name, d.name );	}
 						// else if the node is a device
 						} else if($(this).find('text').attr('data-type') == "Device"){
 							var view = sn_visualization.floorViews.getView("cmusvFloors");
@@ -75,7 +69,12 @@ sn_visualization.topologicalView = (function(){
 
 				nodeEnter.append("svg:circle")
 					.attr("r", 1e-6)
-					.style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+					.style("fill", function(d) {
+            if(statusColorTable.hasOwnProperty(d.d_uri)){
+              return statusColorTable[d.d_uri];
+            }
+            return d._children ? "lightsteelblue" : "#fff";
+          });
 
 				nodeEnter.append("svg:text")
 					.attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -96,7 +95,12 @@ sn_visualization.topologicalView = (function(){
 
 				nodeUpdate.select("circle")
 					.attr("r", 4.5)
-					.style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+					.style("fill", function(d) {
+            if(statusColorTable.hasOwnProperty(d.d_uri)){
+              return statusColorTable[d.d_uri];
+            }
+            return d._children ? "lightsteelblue" : "#fff";
+          });
 
 				nodeUpdate.select("text")
 					.style("fill-opacity", 1);
@@ -242,7 +246,21 @@ sn_visualization.topologicalView = (function(){
 		resize : function(zoom){
 			$('#topologicalView svg').remove();
 			d3Init("#topologicalView", 760*zoom, $('#topologicalView').height()*0.95*zoom, true);
-		}
+		},
+    updateStatus : function(data){
+      var now = new Date();
+
+      for(var key in data){
+        var
+          offset = now.getTime()-data[key]*1000,
+          targetCircle = $('#topologicalView svg text[data-d_uri="'+key+'"]').parent().find('circle');
+
+        if(offset > 3*60*1000){ statusColorTable[key] = "red"; }
+        else if(offset > 15*1000){ statusColorTable[key] = "khaki"; }
+        else { statusColorTable[key] = "steelBlue"; }
+        targetCircle.css('fill', statusColorTable[key]);
+      }
+    }
 	};
 
 })();

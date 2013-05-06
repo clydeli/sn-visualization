@@ -3,6 +3,34 @@ var sn_visualization = sn_visualization || {};
 sn_visualization.main = (function(){
 
 	var
+    pollingWorker = {},
+
+    pollingSensorStatus = function(){
+      pollingWorker = new Worker('scripts/workers/floorViewWorker.js');
+      pollingWorker.addEventListener(
+        'message', function(e){
+          var data = JSON.parse(e.data);
+          console.log(data);
+
+          sn_visualization.topologicalView.updateStatus(data);
+          sn_visualization.floorViews.getView("cmusvFloors").updateStatus(data);
+
+          // Log received data into logView
+          $('#logView').append('Update received for device status at '+(new Date())+'<br>');
+          var logText = '{';
+          for(var key in data){
+            logText += key+' : '+data[key]+' ';
+          }
+          logText += '}<br>';
+          $('#logView').append(logText);
+
+        }, false
+      );
+      pollingWorker.postMessage({
+        type: "START",
+        url: "http://cmu-sds.herokuapp.com/get_last_reading_time_for_all_devices",
+      });
+    },
 		buildSensorsObj = function(callback){
 			var snArch = { id : "root", name : "CMUSV", children : [] };
 			var gatewayHash = {};
@@ -51,8 +79,10 @@ sn_visualization.main = (function(){
 		};
 
 	return {
+
 		initialize : function(){
 			buildSensorsObj(sn_visualization.topologicalView.initialize);
+      pollingSensorStatus();
 		}
 	};
 
@@ -65,8 +95,6 @@ $(document).on('ready', function(){
 	sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
 
 	//$("#topologicalView").resizable({ handles: "e" });
-
-	//$('#geographicalView image').height($('#geographicalView').height()/2);
 
 	$('#geographicalView .hideBar').click(function(){
 		$('#topologicalView').toggleClass('hidden');
@@ -96,7 +124,7 @@ $(document).on('ready', function(){
 
 	$('#menuBar nav li').click( function(){
 		switch($(this).html()){
-			/*case "FloorView":
+			/*case "Dashboard":
 				$('.view').hide();
 				$('#geographicalView, #topologicalView').show();
 				break;*/

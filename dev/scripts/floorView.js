@@ -17,7 +17,7 @@ sn_visualization.floorViews = (function(){
 
 sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs){
   // temporary use cmusv second floor as default
-  this.worker = {};
+  //this.worker = {};
   this.selector = selector || "#geographicalView #geographicalContainer";
   this.backgroundGeo = bgGeo || [[37.410326,-122.059208], [37.410490,-122.060227]];
   this.elevations = elevations || 1;
@@ -87,7 +87,7 @@ sn_visualization.floorView.prototype = {
         "<div class='hoverBlock'>"+this.uriGeoTable[nodeKey].print_name+"</div></div>";
       $(this.selector).append(nodeHtml);
     }
-    this.pollingStatus();
+    //this.pollingStatus();
     //$('.floorNode, .floorPic').hide();
     //$('.floorNode[data-elevation="0"], .floorPic[data-elevation="0"]').show();
   },
@@ -98,42 +98,20 @@ sn_visualization.floorView.prototype = {
       $(this.selector).parent().animate({scrollTop: heightPercentage}, 600);
     }
   },
-  // Inner Functions
-  pollingStatus : function(){
+  updateStatus : function(data){
 
-    this.worker = new Worker('scripts/workers/floorViewWorker.js');
-    this.worker.addEventListener(
-      'message', function(e){
-        var
-          data = JSON.parse(e.data),
-          now = new Date();
+    var now = new Date();
 
-        for(var key in data){
-          var
-            offset = now.getTime()-data[key]*1000,
-            targetBlock = $('.floorNode[data-d_uri="'+key+'"] .nodeBlock');
+    for(var key in data){
+      var
+        offset = now.getTime()-data[key]*1000,
+        targetBlock = $('.floorNode[data-d_uri="'+key+'"] .nodeBlock');
 
-          targetBlock.removeClass('badBlock avgBlock goodBlock');
-          if(offset > 3*60*1000){ targetBlock.addClass('badBlock'); }
-          else if(offset > 15*1000){ targetBlock.addClass('avgBlock'); }
-          else { targetBlock.addClass('goodBlock'); }
-        }
-        console.log(data);
+      targetBlock.removeClass('badBlock avgBlock goodBlock');
+      if(offset > 3*60*1000){ targetBlock.addClass('badBlock'); }
+      else if(offset > 15*1000){ targetBlock.addClass('avgBlock'); }
+      else { targetBlock.addClass('goodBlock'); }
+    }
 
-        // Log received data into logView
-        $('#logView').append('Update received for device status at '+(new Date())+'<br>');
-        var logText = '{';
-        for(var key in data){
-          logText += key+' : '+data[key]+' ';
-        }
-        logText += '}<br>';
-        $('#logView').append(logText);
-
-      }, false
-    );
-    this.worker.postMessage({
-      type: "START",
-      url: "http://cmu-sds.herokuapp.com/get_last_reading_time_for_all_devices",
-    });
   }
 };
