@@ -132,7 +132,6 @@ $(document).on('ready', function(){
 				$('#logView').toggleClass('hidden');
 				break;
 		}
-		//console.log($(this).html());
 	})
 
 });

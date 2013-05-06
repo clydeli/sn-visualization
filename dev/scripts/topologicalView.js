@@ -54,13 +54,13 @@ sn_visualization.topologicalView = (function(){
 					.on("click", function(d) {
 
 						// If the node is a sensor
-						if($(this).find('text').attr('data-type') == "Sensor"){
+						if(d.type == "Sensor"){
   						if (d.children){ sn_visualization.timeseriesView.remove( d.d_uri, d.s_id); }
   						else { sn_visualization.timeseriesView.insert( d.d_uri, d.s_id, d.d_name, d.name );	}
 						// else if the node is a device
-						} else if($(this).find('text').attr('data-type') == "Device"){
+						} else if(d.type == "Device"){
 							var view = sn_visualization.floorViews.getView("cmusvFloors");
-							view.toggleHighlight($(this).find('text').attr('data-d_uri'));
+							view.toggleHighlight(d.d_uri);
 						}
 
 						toggle(d);
