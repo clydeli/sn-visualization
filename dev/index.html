@@ -22,23 +22,30 @@
 
     </head>
     <body>
-    	<header id="menuBar"><img src="images/cmu_wordmark.gif">
-    		<nav><ol>
-    			<li>Dashboard</li>
-    			<li>Log</li>
-    		</ol></nav>
-    	</header>
+        <header id="menuBar"><img src="images/cmu_wordmark.gif">
+            <nav><ol>
+                <li>Dashboard</li>
+                <li>Log</li>
+            </ol></nav>
+        </header>
         <div id="topologicalView" class="view">
-        	<div id="topologicalSlider" style="height: 160px;"></div>
-          <button id="topologicalPin">pin</button>
+            <div id="topologicalSlider" style="height: 160px;"></div>
+            <button id="topologicalPin">pin</button>
         </div>
         <div id="geographicalView" class="view">
-        	<!--<div class="hideBar">&lt;</div>-->
-        	<div id="geographicalContainer"></div>
+            <div id="geographicalContainer"></div>
         </div>
 
-        <div id="logView" class="view hidden">
+        <div id="dashboardView" class="view hidden">
+            <ol id="dashFilter">
+                <li>bad</li>
+                <li>avg</li>
+                <li>good</li>
+                <li class="active">all</li>
+            </ol>
         </div>
+
+        <div id="logView" class="view hidden"> </div>
 
     </body>
 </html>

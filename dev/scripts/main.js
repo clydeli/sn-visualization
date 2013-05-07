@@ -12,14 +12,38 @@ sn_visualization.main = (function(){
           var data = JSON.parse(e.data);
           console.log(data);
 
+          // Update data in topologicalView and floorView
           sn_visualization.topologicalView.updateStatus(data);
           sn_visualization.floorViews.getView("cmusvFloors").updateDeviceStatus(data);
+
+          // Update data in dashboardView
+          var now = new Date();
+
+          for(var key in data){
+            var
+              offset = now.getTime()-data[key]*1000,
+              targetCard = $('#dashboardView .deviceCard[data-d_uri='+key+']');
+
+            if(targetCard.length == 0){
+              var cardHTML =
+                '<div class="deviceCard" data-d_uri="'+key+'">'+
+                key+
+                '</div>';
+              $('#dashboardView').append(cardHTML);
+              targetCard = $('#dashboardView .deviceCard[data-d_uri='+key+']');
+            }
+
+            targetCard.removeClass('badBlock avgBlock goodBlock');
+            if(offset > 3*60*1000){ targetCard.addClass('badBlock'); }
+            else if(offset > 15*1000){ targetCard.addClass('avgBlock'); }
+            else { targetCard.addClass('goodBlock'); }
+          }
 
           // Log received data into logView
           $('#logView').append('Update received for device status at '+(new Date())+'<br>');
           var logText = '{';
-          for(var key in data){
-            logText += key+' : '+data[key]+' ';
+          for(var key2 in data){
+            logText += key2+' : '+data[key2]+' ';
           }
           logText += '}<br>';
           $('#logView').append(logText);
@@ -122,12 +146,38 @@ $(document).on('ready', function(){
 		sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
 	});
 
+  $('#dashFilter li').click( function(){
+    $('#dashFilter li').removeClass('active');
+    $(this).addClass('active');
+    switch($(this).html()){
+      case "all":
+        $('.deviceCard').removeClass('hidden');
+        break;
+      case "good":
+        $('.deviceCard').addClass('hidden');
+        $('.deviceCard.goodBlock').removeClass('hidden');
+        break;
+      case "avg":
+        $('.deviceCard').addClass('hidden');
+        $('.deviceCard.avgBlock').removeClass('hidden');
+        break;
+      case "bad":
+        $('.deviceCard').addClass('hidden');
+        $('.deviceCard.badBlock').removeClass('hidden');
+        break;
+    }
+  })
+
+
 	$('#menuBar nav li').click( function(){
 		switch($(this).html()){
-			/*case "Dashboard":
-				$('.view').hide();
-				$('#geographicalView, #topologicalView').show();
-				break;*/
+			case "Dashboard":
+				$('#dashboardView').toggleClass('hidden');
+				break;
+      /*case "FloorView":
+        $('.view').hide();
+        $('#geographicalView, #geographicalView').show();
+        break;*/
 			case "Log":
 				$('#logView').toggleClass('hidden');
 				break;

@@ -17,7 +17,7 @@ sn_visualization.floorViews = (function(){
 
 sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs){
   // temporary use cmusv second floor as default
-  //this.worker = {};
+  this.heatmaps = [],
   this.selector = selector || "#geographicalView #geographicalContainer";
   this.backgroundGeo = bgGeo || [[37.410326,-122.059208], [37.410490,-122.060227]];
   this.elevations = elevations || 1;
@@ -94,7 +94,7 @@ sn_visualization.floorView.prototype = {
     // Init Heatmap
     var heatmapHtml = '';
     for(var i=0; i<=this.elevations; ++i){
-      heatmapHtml += '<div class="heatmap"></div>';
+      heatmapHtml += '<div class="heatmap" style="height: '+100/(this.elevations+1)+'%;"></div>';
     }
     $(this.selector).append(heatmapHtml);
 
