@@ -60,7 +60,7 @@ sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs
     $(this.selector).append('<img src="'+this.imgs[i]+'" class="floorPic" data-elevation="'+i+'">');
   }
 
-  this.initNodes();
+  this.initView();
 };
 
 sn_visualization.floorView.prototype = {
@@ -78,16 +78,26 @@ sn_visualization.floorView.prototype = {
       return position;
     } else {return [0, 0]; }
   },
-  initNodes : function(){
+  initView : function(){
+    // Init device map
+    var deviceMapHtml = '<div class="deviceMap">';
     for(var nodeKey in this.uriGeoTable){
       var uriGeo = this.getPosition(nodeKey);
-      var nodeHtml =
+      deviceMapHtml +=
         "<div class='floorNode' data-elevation='"+this.uriGeoTable[nodeKey].geo[2]+"' data-d_uri='"+nodeKey+
         "' style='left:"+uriGeo[0]+"%; top:"+uriGeo[1]+"%;'><div class='nodeBlock'></div>"+
         "<div class='hoverBlock'>"+this.uriGeoTable[nodeKey].print_name+"</div></div>";
-      $(this.selector).append(nodeHtml);
     }
-    //this.pollingStatus();
+    deviceMapHtml += '</div>';
+    $(this.selector).append(deviceMapHtml);
+
+    // Init Heatmap
+    var heatmapHtml = '';
+    for(var i=0; i<=this.elevations; ++i){
+      heatmapHtml += '<div class="heatmap"></div>';
+    }
+    $(this.selector).append(heatmapHtml);
+
     //$('.floorNode, .floorPic').hide();
     //$('.floorNode[data-elevation="0"], .floorPic[data-elevation="0"]').show();
   },
@@ -98,7 +108,7 @@ sn_visualization.floorView.prototype = {
       $(this.selector).parent().animate({scrollTop: heightPercentage}, 600);
     }
   },
-  updateStatus : function(data){
+  updateDeviceStatus : function(data){
 
     var now = new Date();
 

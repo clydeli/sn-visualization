@@ -13,7 +13,7 @@ sn_visualization.main = (function(){
           console.log(data);
 
           sn_visualization.topologicalView.updateStatus(data);
-          sn_visualization.floorViews.getView("cmusvFloors").updateStatus(data);
+          sn_visualization.floorViews.getView("cmusvFloors").updateDeviceStatus(data);
 
           // Log received data into logView
           $('#logView').append('Update received for device status at '+(new Date())+'<br>');
