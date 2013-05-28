@@ -18,7 +18,7 @@ sn_visualization.floorViews = (function(){
 sn_visualization.floorView = function(bgGeo, elevations, ugTable, selector, imgs){
   // temporary use cmusv second floor as default
   this.heatmaps = [],
-  this.selector = selector || "#geographicalView #geographicalContainer";
+  this.selector = selector || "#geographicalView #floorContainer";
   this.backgroundGeo = bgGeo || [[37.410326,-122.059208], [37.410490,-122.060227]];
   this.elevations = elevations || 1;
   this.uriGeoTable = ugTable || {

@@ -50,17 +50,37 @@ body {
 	overflow-y : auto;
 }
 
-#geographicalContainer {
-	display: inline-block;
-	width: 76%; margin: 0.3em 0;
-	position: absolute; left: 14%; top: 0;
+#gmapOverlay {
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 100%;
+}
+#gmapOverlay.suppressed {
+  z-index: -1;
 }
 
-#geographicalContainer img{
+
+#geographicalContainer {
+	display: inline-block;
+	width: 76%; height: 99%; margin: 0.3em 0;
+	position: absolute; left: 14%; top: 0;
+  overflow: auto;
+  /*display: none;*/
+
+}
+
+#floorContainer {
+  position: relative; width: 99%;
+}
+
+#geographicalContainer.hidden {
+  opacity: 0; display: none;
+}
+
+#floorContainer img{
 	width : 100%;
 	border-radius: 2px;
 	border: 1px solid #888;
-	opacity: 0.85;
+	opacity: 0.95;
 	/*box-shadow: 1px 0px 6px 1px #888;*/
 	/*border: 2px solid #000;*/
 }

@@ -10,22 +10,13 @@
         <link rel="stylesheet" href="styles/timeseriesView.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-        <script src="scripts/jquery/jquery.ui.touch-punch.min.js"></script>
-        <script src="scripts/d3/d3.v3.min.js"></script>
-        <script src="scripts/d3/d3.layout.js"></script>
-        <script src="scripts/cubism/cubism.v1.min.js"></script>
-        <script src="scripts/heatmap/heatmap.js"></script>
-        <script src="scripts/topologicalView.js"></script>
-        <script src="scripts/timeseriesView.js"></script>
-        <script src="scripts/floorView.js"></script>
-        <script src="scripts/main.js"></script>
+
 
     </head>
     <body>
         <header id="menuBar"><img src="images/cmu_wordmark.gif">
             <nav><ol>
+                <li>Map</li>
                 <li>Dashboard</li>
                 <li>Log</li>
             </ol></nav>
@@ -35,19 +26,33 @@
             <button id="topologicalPin">pin</button>
         </div>
         <div id="geographicalView" class="view">
-            <div id="geographicalContainer"></div>
+            <div id="gmapOverlay"></div>
+            <div id="geographicalContainer" class="hidden">
+              <div id="floorContainer"></div>
+            </div>
+
         </div>
 
         <div id="dashboardView" class="view hidden">
             <ol id="dashFilter">
-                <li>bad</li>
-                <li>avg</li>
-                <li>good</li>
-                <li class="active">all</li>
+                <li>bad</li> <li>avg</li> <li>good</li> <li class="active">all</li>
             </ol>
         </div>
 
         <div id="logView" class="view hidden"> </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        <script src="scripts/jquery/jquery.ui.touch-punch.min.js"></script>
+        <script src="scripts/d3/d3.v3.min.js"></script>
+        <script src="scripts/d3/d3.layout.js"></script>
+        <script src="scripts/cubism/cubism.v1.min.js"></script>
+        <script src="scripts/heatmap/heatmap.js"></script>
+        <script src="scripts/topologicalView.js"></script>
+        <script src="scripts/timeseriesView.js"></script>
+        <script src="scripts/floorView.js"></script>
+        <script src="scripts/main.js"></script>
 
     </body>
 </html>

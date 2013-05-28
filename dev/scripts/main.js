@@ -2,7 +2,9 @@ var sn_visualization = sn_visualization || {};
 
 sn_visualization.main = (function(){
 
-	var
+  var
+    mapOverlay = {},
+    mapHandlers = {},
     pollingWorker = {},
 
     pollingSensorStatus = function(){
@@ -55,133 +57,165 @@ sn_visualization.main = (function(){
         url: "http://cmu-sds.herokuapp.com/get_last_reading_time_for_all_devices",
       });
     },
-		buildSensorsObj = function(callback){
-			var snArch = { id : "root", name : "CMUSV", children : [] };
-			var gatewayHash = {};
+    buildSensorsObj = function(callback){
+      var snArch = { id : "root", name : "CMUSV", children : [] };
+      var gatewayHash = {};
 
-			$.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
-				console.log(data);
+      $.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
+        console.log(data);
 
-				/* Parse the data */
-				var deviceCount = data.length;
-				for(var i=0; i< deviceCount; ++i){
+        /* Parse the data */
+        var deviceCount = data.length;
+        for(var i=0; i< deviceCount; ++i){
 
-					var gatewayName = data[i].device_agent[0].print_name;
-					if(!gatewayHash.hasOwnProperty(gatewayName)){
-						snArch.children.push({ type: "Gateway", id: "gateway"+String(i), name: gatewayName, data: {}, children: [] });
-						gatewayHash[gatewayName] = snArch.children.length-1;
-					}
+          var gatewayName = data[i].device_agent[0].print_name;
+          if(!gatewayHash.hasOwnProperty(gatewayName)){
+            snArch.children.push({ type: "Gateway", id: "gateway"+String(i), name: gatewayName, data: {}, children: [] });
+            gatewayHash[gatewayName] = snArch.children.length-1;
+          }
 
-					var deviceNode = {
-						type : "Device", d_uri : data[i].uri,
-						name : data[i].location.print_name,
-						data : {}, children : []
-					};
+          var deviceNode = {
+            type : "Device", d_uri : data[i].uri,
+            name : data[i].location.print_name,
+            data : {}, children : []
+          };
 
-					var sensorCount = data[i].sensors.length;
-					for(var j=0; j<sensorCount; ++j){
-						for( var key in data[i].sensors[j]){
-							deviceNode.children.push({
-								type : "Sensor", d_uri : data[i].uri, s_id : key, d_name : data[i].location.print_name, name : data[i].sensors[j][key],
-								data : {}, children : []
-							});
-						}
-					}
+          var sensorCount = data[i].sensors.length;
+          for(var j=0; j<sensorCount; ++j){
+            for( var key in data[i].sensors[j]){
+              deviceNode.children.push({
+                type : "Sensor", d_uri : data[i].uri, s_id : key, d_name : data[i].location.print_name, name : data[i].sensors[j][key],
+                data : {}, children : []
+              });
+            }
+          }
 
-					snArch.children[ gatewayHash[gatewayName]].children.push(deviceNode);
-				}
+          snArch.children[ gatewayHash[gatewayName]].children.push(deviceNode);
+        }
 
-				// Sort the devices by their names
-				for(var key in gatewayHash){
-					snArch.children[ gatewayHash[key] ].children.sort(
+        // Sort the devices by their names
+        for(var key in gatewayHash){
+          snArch.children[ gatewayHash[key] ].children.sort(
             function(a, b){ return (a.name < b.name)? -1:1 ; }
           );
-				}
+        }
 
-				if(callback){ callback(snArch); }
-			});
-		};
+        if(callback){ callback(snArch); }
+      });
+    },
 
-	return {
+    addFloorToMap = function(coords, clickHandler){
+      // Construct the polygon
+      var floorPolygon = new google.maps.Polygon({
+        clickable: true,
+        paths: [
+          new google.maps.LatLng(coords[0][0], coords[0][1]),
+          new google.maps.LatLng(coords[1][0], coords[1][1]),
+          new google.maps.LatLng(coords[2][0], coords[2][1]),
+          new google.maps.LatLng(coords[3][0], coords[3][1])
+        ],
+        strokeColor: '#0000ff', strokeOpacity: 0.8, strokeWeight: 2,
+        fillColor: '#0000ff', fillOpacity: 0.35
+      });
 
-		initialize : function(){
-			buildSensorsObj(sn_visualization.topologicalView.initialize);
+      floorPolygon.setMap(mapOverlay);
+      /*var listener = google.maps.event.addListener(floorPolygon, "mouseover", function (){
+        this.setOptions({ strokeColor: '#000' });
+      });*/
+      var listener2 = google.maps.event.addListener(floorPolygon, "click", function (){
+        $('#geographicalContainer').removeClass('hidden');
+        $('#gmapOverlay').addClass('supressed');
+      });
+    },
+    initGMapOverlay = function(){
+      var mapOptions = {
+        zoom: 18,
+        center: new google.maps.LatLng(37.411082,-122.059489),
+        mapTypeId: google.maps.MapTypeId.SATELLITE
+      };
+      mapOverlay = new google.maps.Map(document.getElementById('gmapOverlay'), mapOptions);
+    };
+
+  return {
+    initialize : function(){
+      buildSensorsObj(sn_visualization.topologicalView.initialize);
       pollingSensorStatus();
-		}
-	};
+      initGMapOverlay();
+    },
+    addFloorToMap : addFloorToMap
+  };
 
 })();
 
 
 $(document).on('ready', function(){
-	sn_visualization.main.initialize();
-	var cmusvFloors = new sn_visualization.floorView();
-	sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
+  sn_visualization.main.initialize();
 
-	//$("#topologicalView").resizable({ handles: "e" });
+  var cmusvFloors = new sn_visualization.floorView();
+  sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
+  sn_visualization.main.addFloorToMap(
+    [ [37.410326,-122.059208],
+      [37.410750,-122.059420],
+      [37.410490,-122.060227],
+      [37.410080,-122.060037] ]
+  );
 
-	$('#geographicalView .hideBar').click(function(){
-		$('#topologicalView').toggleClass('hidden');
-		if($(this).html() == '&lt;') { $(this).html('&gt;'); }
-		else { $(this).html('&lt;'); }
-	});
+  //$("#topologicalView").resizable({ handles: "e" });
 
-	$('#geographicalView .floorNode').click(function(){
-		var deviceURI = $(this).attr("data-d_uri");
-		if($(this).hasClass("highlighted")){
-			sn_visualization.topologicalView.closeDevice(deviceURI);
-		} else {
-			sn_visualization.topologicalView.openDevice(deviceURI);
-		}
-		$(this).toggleClass("highlighted");
-	});
+  $('#floorContainer .floorNode').click(function(){
+    var deviceURI = $(this).attr("data-d_uri");
+    if($(this).hasClass("highlighted")){
+      sn_visualization.topologicalView.closeDevice(deviceURI);
+    } else {
+      sn_visualization.topologicalView.openDevice(deviceURI);
+    }
+    $(this).toggleClass("highlighted");
+  });
 
-	$('body').on('click', '.timeseriesClose', function(){
-		var
-			deviceURI = $(this).parent().attr('data-d_uri');
-			metricId = $(this).parent().attr('data-s_id');
-		console.log(deviceURI);
-		console.log(metricId);
-		sn_visualization.timeseriesView.remove(deviceURI, metricId);
-		sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
-	});
+  $('body').on('click', '.timeseriesClose', function(){
+    var
+      deviceURI = $(this).parent().attr('data-d_uri');
+      metricId = $(this).parent().attr('data-s_id');
+    console.log(deviceURI);
+    console.log(metricId);
+    sn_visualization.timeseriesView.remove(deviceURI, metricId);
+    sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
+  });
 
   $('#dashFilter li').click( function(){
     $('#dashFilter li').removeClass('active');
     $(this).addClass('active');
+    $('.deviceCard').addClass('hidden');
     switch($(this).html()){
       case "all":
         $('.deviceCard').removeClass('hidden');
         break;
       case "good":
-        $('.deviceCard').addClass('hidden');
         $('.deviceCard.goodBlock').removeClass('hidden');
         break;
       case "avg":
-        $('.deviceCard').addClass('hidden');
         $('.deviceCard.avgBlock').removeClass('hidden');
         break;
       case "bad":
-        $('.deviceCard').addClass('hidden');
         $('.deviceCard.badBlock').removeClass('hidden');
         break;
     }
   })
 
 
-	$('#menuBar nav li').click( function(){
-		switch($(this).html()){
-			case "Dashboard":
-				$('#dashboardView').toggleClass('hidden');
-				break;
-      /*case "FloorView":
-        $('.view').hide();
-        $('#geographicalView, #geographicalView').show();
-        break;*/
-			case "Log":
-				$('#logView').toggleClass('hidden');
-				break;
-		}
-	})
+  $('#menuBar nav li').click( function(){
+    switch($(this).html()){
+      case "Map":
+        $('#geographicalContainer').addClass('hidden');
+        $('#gmapOverlay').removeClass('hidden');
+        break;
+      case "Dashboard":
+        $('#dashboardView').toggleClass('hidden');
+        break;
+      case "Log":
+        $('#logView').toggleClass('hidden');
+        break;
+    }
+  })
 
 });

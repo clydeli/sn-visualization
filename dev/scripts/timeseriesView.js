@@ -18,6 +18,9 @@ sn_visualization.timeseriesView = (function(){
         dataCache[deviceURI].data.shift();
       }
     },
+    getData = function(deviceURI, metric){
+
+    },
     insertWorker = function(deviceURI){
       var
         now = new Date(),
@@ -27,7 +30,10 @@ sn_visualization.timeseriesView = (function(){
       dataWorkers[deviceURI].worker.addEventListener(
         'message', function(e){
           var data = JSON.parse(e.data);
+
+
           $('.timeseriesView[data-d_uri="'+deviceURI+'"] img.loading').remove();
+          /*
           $('.timeseriesView[data-d_uri="'+deviceURI+'"] svg').remove();
           updateCache(deviceURI, data, (new Date()).getTime());
           for(var i=0; i<dataWorkers[deviceURI].metrics.length; ++i){
@@ -36,16 +42,15 @@ sn_visualization.timeseriesView = (function(){
               dataWorkers[deviceURI].metrics[i],
               '.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+dataWorkers[deviceURI].metrics[i]+'"]'
             );
-          }
-          console.log(data);
+          }*/
 
+
+          console.log(data);
           // Log received data into logView
           $('#logView').append(data.length+' updates received for device '+deviceURI+' at '+(new Date())+'<br>');
           for(var j=0; j<data.length; ++j){
             var logText = '{';
-            for(var key in data[j]){
-              logText += key+' : '+data[j][key]+' ';
-            }
+            for(var key in data[j]){ logText += key+' : '+data[j][key]+' '; }
             logText += '}<br>';
             $('#logView').append(logText);
           }
@@ -61,10 +66,11 @@ sn_visualization.timeseriesView = (function(){
     removeWorker = function(deviceURI){
       dataWorkers[deviceURI].worker.postMessage({ type: "STOP"});
       delete dataWorkers[deviceURI];
-    },
+    };
 
   // Modified from d3 example (http://bl.ocks.org/mbostock/1667367)
-    margin = {top: 10, right: 10, bottom: 70, left: 40},
+
+/*    margin = {top: 10, right: 10, bottom: 70, left: 40},
     margin2 = {top: 215, right: 10, bottom: 20, left: 40},
     width = 300 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom,
@@ -136,7 +142,7 @@ sn_visualization.timeseriesView = (function(){
       context.append("g").attr("class", "x axis").attr("transform", "translate(0," + height2 + ")").call(xAxis2);
       context.append("g").attr("class", "x brush").call(brush).selectAll("rect").attr("y", -6).attr("height", height2 + 7);
 
-    };
+    };*/
 
 
   return {
@@ -156,21 +162,16 @@ sn_visualization.timeseriesView = (function(){
 
       if(dataWorkers[deviceURI] === undefined){
         dataWorkers[deviceURI] = { metrics : [] };
-        //dataWorkers[deviceURI].metrics = [];
         insertWorker(deviceURI);
-      }// else {
-        dataWorkers[deviceURI].metrics.push(metricId);
-      //}
+      }
+      dataWorkers[deviceURI].metrics.push(metricId);
 
     },
     remove: function(deviceURI, metricId){
       $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').remove();
       var metricIndex = dataWorkers[deviceURI].metrics.indexOf(metricId);
       dataWorkers[deviceURI].metrics.splice(metricIndex, 1);
-      //console.log(dataWorkers[deviceURI].metrics.length);
-      if(dataWorkers[deviceURI].metrics.length === 0){
-        removeWorker(deviceURI);
-      }
+      if(dataWorkers[deviceURI].metrics.length === 0){ removeWorker(deviceURI); }
     }
   };
 
