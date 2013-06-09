@@ -1,6 +1,7 @@
 var
   url = "",
-  interval = 5000;
+  metricId = "",
+  interval = 3000;
 
 function pollData(){
   try {
@@ -12,7 +13,7 @@ function pollData(){
         setTimeout( function(){ pollData(); }, interval);
       }
     };
-    xhr.open("GET", url+(new Date()).getTime()+"/temp/json", true);
+    xhr.open("GET", url+(new Date()).getTime()+"/"+metricId+"/json", true);
     xhr.send();
   } catch(e){ postMessage("ERROR:"+e.message);}
 }
@@ -21,6 +22,7 @@ self.addEventListener('message', function(e) {
   switch(e.data.type){
     case "START":
       url = e.data.url;
+      metricId = e.data.metricId;
       pollData();
       break;
     case "STOP":

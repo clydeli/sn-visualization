@@ -12,7 +12,7 @@ function pollData(){
         setTimeout( function(){ pollData(); }, interval);
       }
     };
-    xhr.open("GET", url, true);
+    xhr.open("GET", "http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/"+(new Date()).getTime()+"/temp/json", true);
     xhr.send();
   } catch(e){ postMessage("ERROR:"+e.message);}
 }
@@ -20,7 +20,7 @@ function pollData(){
 self.addEventListener('message', function(e) {
   switch(e.data.type){
     case "START":
-      url = e.data.url;
+      //url = e.data.url;
       pollData();
       break;
     case "STOP":

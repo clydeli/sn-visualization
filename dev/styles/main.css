@@ -85,6 +85,23 @@ body {
 	/*border: 2px solid #000;*/
 }
 
+.devicemap, .heatmap {
+  width: 100%;
+  position: absolute;
+}
+
+.devicemap {
+  z-index : 3;
+}
+
+.heatmap {
+  z-index : 20;
+}
+
+.heatmap canvas {
+  width: 100%; height: 100%;
+}
+
 .floorNode {
 	position: absolute;
 	display: inline-block;
@@ -153,6 +170,6 @@ body {
 	width : 100%; height : 200px; z-index: 3;
 	color: #fff; background-color: #000; opacity: 0.8;
 	overflow-y: auto;
-  transition: opacity 300ms ease;
+  transition: all 300ms ease;
 }
 #logView.hidden { opacity: 0; height: 0;}

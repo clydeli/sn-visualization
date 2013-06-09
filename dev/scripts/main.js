@@ -12,7 +12,7 @@ sn_visualization.main = (function(){
       pollingWorker.addEventListener(
         'message', function(e){
           var data = JSON.parse(e.data);
-          console.log(data);
+          console.log("device (temp) last update time update", data);
 
           // Update data in topologicalView and floorView
           sn_visualization.topologicalView.updateStatus(data);
@@ -54,15 +54,16 @@ sn_visualization.main = (function(){
       );
       pollingWorker.postMessage({
         type: "START",
-        url: "http://cmu-sds.herokuapp.com/get_last_reading_time_for_all_devices",
+        url: "http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/",
       });
     },
+
     buildSensorsObj = function(callback){
       var snArch = { id : "root", name : "CMUSV", children : [] };
       var gatewayHash = {};
 
       $.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
-        console.log(data);
+        console.log("get all devices (should be deprecated though...)", data);
 
         /* Parse the data */
         var deviceCount = data.length;
@@ -127,6 +128,7 @@ sn_visualization.main = (function(){
         $('#gmapOverlay').addClass('supressed');
       });
     },
+
     initGMapOverlay = function(){
       var mapOptions = {
         zoom: 18,
@@ -151,7 +153,9 @@ sn_visualization.main = (function(){
 $(document).on('ready', function(){
   sn_visualization.main.initialize();
 
-  var cmusvFloors = new sn_visualization.floorView();
+  var cmusvFloors = new sn_visualization.floorView(
+    sn_visualization.prestoredData.cmusvFloorB23
+  );
   sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
   sn_visualization.main.addFloorToMap(
     [ [37.410326,-122.059208],
@@ -174,8 +178,9 @@ $(document).on('ready', function(){
 
   $('body').on('click', '.timeseriesClose', function(){
     var
-      deviceURI = $(this).parent().attr('data-d_uri');
+      deviceURI = $(this).parent().attr('data-d_uri'),
       metricId = $(this).parent().attr('data-s_id');
+
     console.log(deviceURI);
     console.log(metricId);
     sn_visualization.timeseriesView.remove(deviceURI, metricId);

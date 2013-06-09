@@ -250,7 +250,18 @@ sn_visualization.topologicalView = (function(){
     updateStatus : function(data){
       var now = new Date();
 
-      for(var key in data){
+      for(var i=0; i<data.length; ++i){
+        var
+          offset = now.getTime()-data[i].timestamp,
+          targetCircle = $('#topologicalView svg text[data-d_uri="'+data[i].device_id+'"]').parent().find('circle');
+
+        if(offset > 3*60*1000){ statusColorTable[key] = "red"; }
+        else if(offset > 15*1000){ statusColorTable[key] = "khaki"; }
+        else { statusColorTable[key] = "steelBlue"; }
+        targetCircle.css('fill', statusColorTable[key]);
+      }
+
+      /*for(var key in data){
         var
           offset = now.getTime()-data[key]*1000,
           targetCircle = $('#topologicalView svg text[data-d_uri="'+key+'"]').parent().find('circle');
@@ -259,7 +270,7 @@ sn_visualization.topologicalView = (function(){
         else if(offset > 15*1000){ statusColorTable[key] = "khaki"; }
         else { statusColorTable[key] = "steelBlue"; }
         targetCircle.css('fill', statusColorTable[key]);
-      }
+      }*/
     }
 	};
 
