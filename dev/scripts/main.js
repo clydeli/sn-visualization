@@ -17,6 +17,7 @@ sn_visualization.main = (function(){
           // Update data in topologicalView and floorView
           sn_visualization.topologicalView.updateStatus(data);
           sn_visualization.floorViews.getView("cmusvFloors").updateDeviceStatus(data);
+	    sn_visualization.floorViews.getView("nasaFloors").updateDeviceStatus(data);
 
           // Update data in dashboardView
           var now = new Date();
@@ -124,8 +125,14 @@ sn_visualization.main = (function(){
         this.setOptions({ strokeColor: '#000' });
       });*/
       var listener2 = google.maps.event.addListener(floorPolygon, "click", function (){
-        $('#geographicalContainer').removeClass('hidden');
-        $('#gmapOverlay').addClass('supressed');
+	  if (coords[0][0] == 37.410555 && coords[0][1] == -122.062342) {
+	      $('#nasaGeographicalContainer').removeClass('hidden');
+              $('#gmapOverlay').addClass('supressed');
+	  }
+	  else {
+              $('#cmuGeographicalContainer').removeClass('hidden');
+              $('#gmapOverlay').addClass('supressed');
+	  }
       });
     },
 
@@ -153,8 +160,8 @@ sn_visualization.main = (function(){
 $(document).on('ready', function(){
   sn_visualization.main.initialize();
 
-  var cmusvFloors = new sn_visualization.floorView(
-    sn_visualization.prestoredData.cmusvFloorB23
+ var cmusvFloors = new sn_visualization.floorView(
+     sn_visualization.prestoredData.cmusvFloorB23
   );
   sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
   sn_visualization.main.addFloorToMap(
@@ -162,6 +169,16 @@ $(document).on('ready', function(){
       [37.410750,-122.059420],
       [37.410490,-122.060227],
       [37.410080,-122.060037] ]
+  );
+  var nasaFloors = new sn_visualization.floorView(
+      sn_visualization.prestoredNasaData.nasaFloor
+  );
+  sn_visualization.floorViews.insertView("nasaFloors", nasaFloors);
+  sn_visualization.main.addFloorToMap( 
+    [ [37.410555,-122.062342], //make x smaller "lowers" a corner, make y quantity smaller moves corner to right  "bottom left corner"
+      [37.411050,-122.061070], //make x larger "raises" a corner, make y quantity larger moves corner to left, "bottom right corner"
+      [37.411600,-122.061380], //make x larger "raises" a corner, "top right corner"
+      [37.411180,-122.062600] ] //"top left corner"
   );
 
   //$("#topologicalView").resizable({ handles: "e" });
@@ -211,7 +228,8 @@ $(document).on('ready', function(){
   $('#menuBar nav li').click( function(){
     switch($(this).html()){
       case "Map":
-        $('#geographicalContainer').addClass('hidden');
+        $('#cmuGeographicalContainer').addClass('hidden');
+	$('#nasaGeographicalContainer').addClass('hidden');
         $('#gmapOverlay').removeClass('hidden');
         break;
       case "Dashboard":
