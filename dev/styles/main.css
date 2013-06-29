@@ -59,20 +59,31 @@ body {
 }
 
 
-#geographicalContainer {
+#cmuGeographicalContainer {
 	display: inline-block;
 	width: 76%; height: 99%; margin: 0.3em 0;
 	position: absolute; left: 14%; top: 0;
   overflow: auto;
   /*display: none;*/
+}
 
+#nasaGeographicalContainer {
+	display: inline-block;
+	width: 95%; height: 99%; margin: 0.1em 0;
+	position: absolute; left: 3%; top: 0;
+  overflow: auto;
+  /*display: none;*/
 }
 
 #floorContainer {
   position: relative; width: 99%;
 }
 
-#geographicalContainer.hidden {
+#cmuGeographicalContainer.hidden {
+  opacity: 0; display: none;
+}
+
+#nasaGeographicalContainer.hidden {
   opacity: 0; display: none;
 }
 

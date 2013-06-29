@@ -25,7 +25,7 @@ sn_visualization.floorView = function(floorPlan){
   this.backgroundGeo = floorPlan.bgGeo;
   this.elevations = floorPlan.elevations;
   this.uriGeoTable = floorPlan.ugTable;
-  this.imgs = floorPlan.imgs;
+  this.imgs = floorPlan.imgs; //imgs is referenced in prestoredData.js
   for(var i=0; i<this.imgs.length; ++i){
     $(this.selector).append('<img src="'+this.imgs[i]+'" class="floorPic" data-elevation="'+i+'">');
   }

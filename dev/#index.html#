@@ -15,7 +15,6 @@
     <body>
         <header id="menuBar"><img src="images/cmu_wordmark.gif">
             <nav><ol>
-                <li>Heatmap</li>
                 <li>Map</li>
                 <li>Dashboard</li>
                 <li>Log</li>
@@ -25,7 +24,8 @@
             <div id="topologicalSlider" style="height: 160px;"></div>
             <button id="topologicalPin">pin</button>
         </div>
-        <div id="geographicalView" class="view">
+        <div :q
+	     id="geographicalView" class="view">
 
 	  <div id="gmapOverlay"></div>
           <div id="cmuGeographicalContainer" class="hidden">
