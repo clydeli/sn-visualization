@@ -77,7 +77,7 @@ sn_visualization.floorView.prototype = {
       );
       $('.heatmap[data-elevation="'+i+'"]').html(this.heatmaps[i].canvas);
     }
-    this.addHeatmapWorker("temp"); // temporay only temp heatmap
+    // this.addHeatmapWorker("temp"); // temporary only temp heatmap
 
   },
 
@@ -113,15 +113,6 @@ sn_visualization.floorView.prototype = {
             //self.heatmaps[i].blur();
             //self.heatmaps[i].clamp(0.0, 1.0);
           }
-
-          /*for(var i=0; i<=self.elevations; ++i){
-            console.log(self.heatmaps[i]);
-            console.log(heatmapData[i]);
-            //self.heatmaps[i].store.setDataSet(heatmapData[i]);
-            //self.heatmaps[i].resize();
-            //console.log(self.heatmaps[i].store.exportDataSet());
-          }*/
-
 
           // Log received data into logView
           /*$('#logView').append('Update received for device status at '+(new Date())+'<br>');

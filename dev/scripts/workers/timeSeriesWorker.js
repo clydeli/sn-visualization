@@ -15,6 +15,7 @@ function pollData(start_time, end_time){
           var lastUpdateTime = updateTime;
           updateTime = (new Date()).getTime();
           pollData(lastUpdateTime, updateTime);
+          //pollData(updateTime-300*1000, updateTime);
         }, interval);
       }
     };
@@ -32,6 +33,7 @@ self.addEventListener('message', function(e) {
       metricId = e.data.metric_id;
       updateTime = e.data.update_time;
       pollData(e.data.init_time, updateTime);
+      //pollData(updateTime-300*1000, updateTime);
       break;
     case "STOP":
       self.close();

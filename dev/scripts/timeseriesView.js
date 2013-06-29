@@ -10,7 +10,7 @@ sn_visualization.timeseriesView = (function(){
     context = cubism.context()
         .serverDelay(0)
         .clientDelay(0)
-        .step(1e3)
+        .step(3e3) // update interval
         .size(timeLength)
     ,
 
@@ -25,7 +25,11 @@ sn_visualization.timeseriesView = (function(){
           value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
           values.push(value);
         }*/
-        var values = [];
+        var values = dataCache[deviceURI][metricId].values.slice(-timeLength);
+        /*for(var i=0; i<dataCache[deviceURI][metricId].length; ++i){
+          values.push(dataCache[deviceURI][metricId][i].value);
+        }*/
+
         /*for(var i=0; i<dataCache[deviceURI].data.length; ++i){
           values.push(parseInt(dataCache[deviceURI].data[i][metricId], 10));
         }
@@ -37,12 +41,26 @@ sn_visualization.timeseriesView = (function(){
     updateCache = function(deviceURI, metricId, data, updateTime){
       console.log(data);
       dataCache[deviceURI] = dataCache[deviceURI] || {};
-      dataCache[deviceURI].updateTime = updateTime;
+      dataCache[deviceURI][metricId] =
+        dataCache[deviceURI][metricId] || {
+          updateTime : updateTime-timeLength*1000,
+          values : []
+        };
+      var lastUpdateTime = dataCache[deviceURI][metricId].updateTime;
+      for(var i=0;i < data.length;++i){
+        var duration = (data[i].timestamp - lastUpdateTime) / 1000;
+        for(var j=0; j<duration; ++j){
+          dataCache[deviceURI][metricId].values.push(data[i].value);
+        }
+        lastUpdateTime = data[i].timestamp;
+      }
+      //dataCache[deviceURI].updateTime = updateTime;
       //dataCache[deviceURI].data = dataCache[deviceURI].data || [];
       /*dataCache[deviceURI].data = dataCache[deviceURI].data.concat(data);
       while( dataCache[deviceURI].data.length > 0 && dataCache[deviceURI].data[0].timestamp<updateTime-timeLength*1000){
         dataCache[deviceURI].data.shift();
       }*/
+      dataCache[deviceURI][metricId].updateTime = lastUpdateTime;
     },
 
     insertWorker = function(deviceURI, metricId){
@@ -54,11 +72,10 @@ sn_visualization.timeseriesView = (function(){
       dataWorkers[deviceURI][metricId].worker.addEventListener(
         'message', function(e){
           var data = JSON.parse(e.data);
-
+          console.log(data);
           $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] img.loading').remove();
           updateCache(deviceURI, metricId, data, (new Date()).getTime());
 
-          console.log(data);
           // Log received data into logView
           /*$('#logView').append(data.length+' updates received for device '+deviceURI+' at '+(new Date())+'<br>');
           for(var j=0; j<data.length; ++j){
@@ -69,6 +86,7 @@ sn_visualization.timeseriesView = (function(){
           }*/
         }, false
       );
+
       dataWorkers[deviceURI][metricId].worker.postMessage({
         type: "START",
         url: "http://cmu-sensor-network.herokuapp.com/sensors/"+deviceURI,
@@ -84,7 +102,8 @@ sn_visualization.timeseriesView = (function(){
 
   // Modified from d3 example (http://bl.ocks.org/mbostock/1667367)
 
-/*    margin = {top: 10, right: 10, bottom: 70, left: 40},
+/*
+    margin = {top: 10, right: 10, bottom: 70, left: 40},
     margin2 = {top: 215, right: 10, bottom: 20, left: 40},
     width = 300 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom,
@@ -158,9 +177,9 @@ sn_visualization.timeseriesView = (function(){
 
     };*/
 
-context.on("focus", function(i) {
-  d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-});
+  context.on("focus", function(i) {
+    d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+  });
 
   return {
 

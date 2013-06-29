@@ -1,6 +1,6 @@
 var
   url = "",
-  interval = 5000;
+  interval = 7000;
 
 function pollData(){
   try {

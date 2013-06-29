@@ -141,7 +141,7 @@ sn_visualization.main = (function(){
   return {
     initialize : function(){
       buildSensorsObj(sn_visualization.topologicalView.initialize);
-      pollingSensorStatus();
+      //pollingSensorStatus();
       initGMapOverlay();
     },
     addFloorToMap : addFloorToMap
@@ -210,6 +210,9 @@ $(document).on('ready', function(){
 
   $('#menuBar nav li').click( function(){
     switch($(this).html()){
+      case "Heatmap":
+        $('.heatmap').toggleClass('hidden');
+        break;
       case "Map":
         $('#geographicalContainer').addClass('hidden');
         $('#gmapOverlay').removeClass('hidden');

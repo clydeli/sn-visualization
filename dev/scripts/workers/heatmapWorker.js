@@ -1,7 +1,7 @@
 var
   url = "",
   metricId = "",
-  interval = 3000;
+  interval = 7000;
 
 function pollData(){
   try {
