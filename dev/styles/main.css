@@ -66,26 +66,15 @@ body {
   overflow: auto;
 }
 
-/*#nasaGeographicalContainer {
-	display: inline-block;
-	width: 95%; height: 99%; margin: 0.1em 0;
-	position: absolute; left: 3%; top: 0;
-  overflow: auto;
-}*/
-
-#buildingContainer {
-  position: relative; width: 99%;
-}
-
 #geographicalContainer.hidden {
   opacity: 0; display: none;
 }
 
-/*#nasaGeographicalContainer.hidden {
-  opacity: 0; display: none;
-}*/
+.buildingContainer {
+  position: relative; width: 99%;
+}
 
-#buildingContainer img{
+.buildingContainer img{
 	width : 100%;
 	border-radius: 2px;
 	border: 1px solid #888;

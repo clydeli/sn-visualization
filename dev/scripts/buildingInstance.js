@@ -1,13 +1,12 @@
 
-sn_visualization.buildingInstance = function(buildingData){
-  // temporary use cmusv second floor as default
+sn_visualization.buildingInstance = function(buildingData, selector){
   this.heatmaps = [],
   this.heatmapWorkers = {},
-  this.selector = buildingData.selector;
+  this.selector = selector;
   this.backgroundGeo = buildingData.bgGeo;
   this.elevations = buildingData.elevations;
   this.uriGeoTable = buildingData.ugTable;
-  this.imgs = buildingData.imgs; //imgs is referenced in prestoredData.js
+  this.imgs = buildingData.imgs;
   for(var i=0; i<this.imgs.length; ++i){
     $(this.selector).append('<img src="'+this.imgs[i]+'" class="floorPic" data-elevation="'+i+'">');
   }
@@ -17,15 +16,11 @@ sn_visualization.buildingInstance = function(buildingData){
 sn_visualization.buildingInstance.prototype = {
   getPosition : function(uri){
     if(this.uriGeoTable.hasOwnProperty(uri)){
-      var uriGeo = this.uriGeoTable[uri].geo;
-      var position =
-      [ (uriGeo[0]-this.backgroundGeo[0][0])*100 / (this.backgroundGeo[1][0]-this.backgroundGeo[0][0]),
-        (uriGeo[1]-this.backgroundGeo[0][1])*100 / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1])
-      ];
-      /*[ (uriGeo[0]-this.backgroundGeo[0][0])*100 / (this.backgroundGeo[1][0]-this.backgroundGeo[0][0]),
-        ((uriGeo[1]-this.backgroundGeo[0][1])*100/(this.elevations+1)) / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1])
-        + 100*(uriGeo[2]/(this.elevations+1))
-      ];*/
+      var
+        uriGeo = this.uriGeoTable[uri].geo,
+        position =
+          [ (uriGeo[0]-this.backgroundGeo[0][0])*100 / (this.backgroundGeo[1][0]-this.backgroundGeo[0][0]),
+            (uriGeo[1]-this.backgroundGeo[0][1])*100 / (this.backgroundGeo[1][1]-this.backgroundGeo[0][1]) ];
       return position;
     } else {return [0, 0]; }
   },
@@ -49,7 +44,7 @@ sn_visualization.buildingInstance.prototype = {
     for(var i=0; i<=this.elevations; ++i){
       var heatmapHtml = '';
       heatmapHtml +=
-        '<div class="heatmap" data-elevation="'+i+'" style="height: '+100/(this.elevations+1)+'%; top: '+i*100/(this.elevations+1)+'%;">'+
+        '<div class="heatmap hidden" data-elevation="'+i+'" style="height: '+100/(this.elevations+1)+'%; top: '+i*100/(this.elevations+1)+'%;">'+
           '<canvas style="width: 100%; height: 100%">'
         '</div>';
       $(this.selector).append(heatmapHtml);

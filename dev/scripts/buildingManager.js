@@ -33,9 +33,16 @@ sn_visualization.buildingManager = function(googleMapInstance, buildingContainer
         }
       );
 
+      //
+      $(buildingContainer).append("<div id='"+buildingId+"Building' class='buildingContainer'></div>");
+      buildingsTable[buildingId] = new sn_visualization.buildingInstance(buildingData, '#'+buildingId+'Building');
+
     },
     showBuilding = function(buildingId){
       console.log(buildingId);
+      $('#geographicalContainer').removeClass('hidden');
+      $('.buildingContainer').hide();
+      $('#'+buildingId+'Building').show();
     };
 
   return {

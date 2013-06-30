@@ -117,12 +117,13 @@ sn_visualization.main = (function(){
           center: new google.maps.LatLng(37.411082,-122.059489),
           zoom: 18, mapTypeId: google.maps.MapTypeId.SATELLITE
         }),
-        "#geographicalView #buildingContainer"
+        "#geographicalView #geographicalContainer"
       );
 
       // Insert Buildings
       buildingManager.insertBuilding("cmusvB23", sn_visualization.prestoredData.cmusvB23);
-      buildingManager.insertBuilding("nasaBuilding", sn_visualization.prestoredData.nasaBuilding);
+      buildingManager.insertBuilding("nasaBuildingN", sn_visualization.prestoredData.nasaBuildingN);
+      buildingManager.insertBuilding("nasaBuildingS", sn_visualization.prestoredData.nasaBuildingS);
 
       //pollingSensorStatus();
     }
@@ -183,8 +184,8 @@ $(document).on('ready', function(){
         $('.heatmap').toggleClass('hidden');
         break;
       case "Map":
-        //$('#cmuGeographicalContainer').addClass('hidden');
-        //$('#nasaGeographicalContainer').addClass('hidden');
+
+        $('#geographicalContainer').addClass('hidden');
         //$('#gmapOverlay').removeClass('hidden');
         break;
       case "Dashboard":

@@ -59,8 +59,8 @@ sn_visualization.topologicalView = (function(){
   						else { sn_visualization.timeseriesView.insert( d.d_uri, d.s_id, d.d_name, d.name );	}
 						// else if the node is a device
 						} else if(d.type == "Device"){
-							var view = sn_visualization.floorViews.getView("cmusvFloors");
-							view.toggleHighlight(d.d_uri);
+							//var view = sn_visualization.floorViews.getView("cmusvFloors");
+							//view.toggleHighlight(d.d_uri);
 						}
 
 						toggle(d);

@@ -25,7 +25,9 @@ sn_visualization.timeseriesView = (function(){
           value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
           values.push(value);
         }*/
-        var values = dataCache[deviceURI][metricId].values.slice(-timeLength);
+        if(dataCache[deviceURI]){
+          var values = dataCache[deviceURI][metricId].values.slice(-timeLength);
+        }
         /*for(var i=0; i<dataCache[deviceURI][metricId].length; ++i){
           values.push(dataCache[deviceURI][metricId][i].value);
         }*/
@@ -73,8 +75,8 @@ sn_visualization.timeseriesView = (function(){
         'message', function(e){
           var data = JSON.parse(e.data);
           console.log(data);
-          $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] img.loading').remove();
-          updateCache(deviceURI, metricId, data, (new Date()).getTime());
+          //$('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] img.loading').remove();
+          //updateCache(deviceURI, metricId, data, (new Date()).getTime());
 
           // Log received data into logView
           /*$('#logView').append(data.length+' updates received for device '+deviceURI+' at '+(new Date())+'<br>');
