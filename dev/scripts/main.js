@@ -3,8 +3,9 @@ var sn_visualization = sn_visualization || {};
 sn_visualization.main = (function(){
 
   var
-    mapOverlay = {},
-    mapHandlers = {},
+    buildingManager,
+    //mapOverlay = {},
+    //mapHandlers = {},
     pollingWorker = {},
 
     pollingSensorStatus = function(){
@@ -15,9 +16,9 @@ sn_visualization.main = (function(){
           console.log("device (temp) last update time update", data);
 
           // Update data in topologicalView and floorView
-          sn_visualization.topologicalView.updateStatus(data);
-          sn_visualization.floorViews.getView("cmusvFloors").updateDeviceStatus(data);
-	    sn_visualization.floorViews.getView("nasaFloors").updateDeviceStatus(data);
+          //sn_visualization.topologicalView.updateStatus(data);
+          //sn_visualization.floorViews.getView("cmusvFloors").updateDeviceStatus(data);
+	        //sn_visualization.floorViews.getView("nasaFloors").updateDeviceStatus(data);
 
           // Update data in dashboardView
           var now = new Date();
@@ -104,86 +105,37 @@ sn_visualization.main = (function(){
 
         if(callback){ callback(snArch); }
       });
-    },
-
-    addFloorToMap = function(coords, clickHandler){
-      // Construct the polygon
-      var floorPolygon = new google.maps.Polygon({
-        clickable: true,
-        paths: [
-          new google.maps.LatLng(coords[0][0], coords[0][1]),
-          new google.maps.LatLng(coords[1][0], coords[1][1]),
-          new google.maps.LatLng(coords[2][0], coords[2][1]),
-          new google.maps.LatLng(coords[3][0], coords[3][1])
-        ],
-        strokeColor: '#0000ff', strokeOpacity: 0.8, strokeWeight: 2,
-        fillColor: '#0000ff', fillOpacity: 0.35
-      });
-
-      floorPolygon.setMap(mapOverlay);
-      /*var listener = google.maps.event.addListener(floorPolygon, "mouseover", function (){
-        this.setOptions({ strokeColor: '#000' });
-      });*/
-      var listener2 = google.maps.event.addListener(floorPolygon, "click", function (){
-	  if (coords[0][0] == 37.410555 && coords[0][1] == -122.062342) {
-	      $('#nasaGeographicalContainer').removeClass('hidden');
-              $('#gmapOverlay').addClass('supressed');
-	  }
-	  else {
-              $('#cmuGeographicalContainer').removeClass('hidden');
-              $('#gmapOverlay').addClass('supressed');
-	  }
-      });
-    },
-
-    initGMapOverlay = function(){
-      var mapOptions = {
-        zoom: 18,
-        center: new google.maps.LatLng(37.411082,-122.059489),
-        mapTypeId: google.maps.MapTypeId.SATELLITE
-      };
-      mapOverlay = new google.maps.Map(document.getElementById('gmapOverlay'), mapOptions);
     };
 
   return {
     initialize : function(){
       buildSensorsObj(sn_visualization.topologicalView.initialize);
+
+      // Initialize buidling manager
+      buildingManager = sn_visualization.buildingManager(
+        new google.maps.Map(document.getElementById('gmapOverlay'), {
+          center: new google.maps.LatLng(37.411082,-122.059489),
+          zoom: 18, mapTypeId: google.maps.MapTypeId.SATELLITE
+        }),
+        "#geographicalView #buildingContainer"
+      );
+
+      // Insert Buildings
+      buildingManager.insertBuilding("cmusvB23", sn_visualization.prestoredData.cmusvB23);
+      buildingManager.insertBuilding("nasaBuilding", sn_visualization.prestoredData.nasaBuilding);
+
       //pollingSensorStatus();
-      initGMapOverlay();
-    },
-    addFloorToMap : addFloorToMap
+    }
   };
 
 })();
 
 
 $(document).on('ready', function(){
+
   sn_visualization.main.initialize();
 
- var cmusvFloors = new sn_visualization.floorView(
-     sn_visualization.prestoredData.cmusvFloorB23
-  );
-  sn_visualization.floorViews.insertView("cmusvFloors", cmusvFloors);
-  sn_visualization.main.addFloorToMap(
-    [ [37.410326,-122.059208],
-      [37.410750,-122.059420],
-      [37.410490,-122.060227],
-      [37.410080,-122.060037] ]
-  );
-  var nasaFloors = new sn_visualization.floorView(
-      sn_visualization.prestoredNasaData.nasaFloor
-  );
-  sn_visualization.floorViews.insertView("nasaFloors", nasaFloors);
-  sn_visualization.main.addFloorToMap( 
-    [ [37.410555,-122.062342], //make x smaller "lowers" a corner, make y quantity smaller moves corner to right  "bottom left corner"
-      [37.411050,-122.061070], //make x larger "raises" a corner, make y quantity larger moves corner to left, "bottom right corner"
-      [37.411600,-122.061380], //make x larger "raises" a corner, "top right corner"
-      [37.411180,-122.062600] ] //"top left corner"
-  );
-
-  //$("#topologicalView").resizable({ handles: "e" });
-
-  $('#floorContainer .floorNode').click(function(){
+  $('#buildingContainer .floorNode').click(function(){
     var deviceURI = $(this).attr("data-d_uri");
     if($(this).hasClass("highlighted")){
       sn_visualization.topologicalView.closeDevice(deviceURI);
@@ -231,9 +183,9 @@ $(document).on('ready', function(){
         $('.heatmap').toggleClass('hidden');
         break;
       case "Map":
-        $('#cmuGeographicalContainer').addClass('hidden');
-	$('#nasaGeographicalContainer').addClass('hidden');
-        $('#gmapOverlay').removeClass('hidden');
+        //$('#cmuGeographicalContainer').addClass('hidden');
+        //$('#nasaGeographicalContainer').addClass('hidden');
+        //$('#gmapOverlay').removeClass('hidden');
         break;
       case "Dashboard":
         $('#dashboardView').toggleClass('hidden');

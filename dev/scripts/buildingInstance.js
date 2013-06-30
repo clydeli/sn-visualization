@@ -1,39 +1,20 @@
-var sn_visualization = sn_visualization || {};
 
-sn_visualization.floorViews = (function(){
-  var
-    viewsTable = {},
-    insertView = function(viewId, view){
-      viewsTable[viewId] = view;
-    },
-    getView = function(viewId){
-      return viewsTable[viewId];
-    };
-  return {
-    insertView : insertView,
-    getView : getView
-  };
-}());
-
-
-
-sn_visualization.floorView = function(floorPlan){
+sn_visualization.buildingInstance = function(buildingData){
   // temporary use cmusv second floor as default
   this.heatmaps = [],
   this.heatmapWorkers = {},
-  this.selector = floorPlan.selector;
-  this.backgroundGeo = floorPlan.bgGeo;
-  this.elevations = floorPlan.elevations;
-  this.uriGeoTable = floorPlan.ugTable;
-  this.imgs = floorPlan.imgs; //imgs is referenced in prestoredData.js
+  this.selector = buildingData.selector;
+  this.backgroundGeo = buildingData.bgGeo;
+  this.elevations = buildingData.elevations;
+  this.uriGeoTable = buildingData.ugTable;
+  this.imgs = buildingData.imgs; //imgs is referenced in prestoredData.js
   for(var i=0; i<this.imgs.length; ++i){
     $(this.selector).append('<img src="'+this.imgs[i]+'" class="floorPic" data-elevation="'+i+'">');
   }
-
   this.initView();
 };
 
-sn_visualization.floorView.prototype = {
+sn_visualization.buildingInstance.prototype = {
   getPosition : function(uri){
     if(this.uriGeoTable.hasOwnProperty(uri)){
       var uriGeo = this.uriGeoTable[uri].geo;
@@ -63,8 +44,8 @@ sn_visualization.floorView.prototype = {
       deviceMapHtml += '</div>';
       $(this.selector).append(deviceMapHtml);
     }
-    // Init Heatmap
 
+    // Init Heatmap
     for(var i=0; i<=this.elevations; ++i){
       var heatmapHtml = '';
       heatmapHtml +=
