@@ -17,7 +17,7 @@ sn_visualization.main = (function(){
 
           // Update data in topologicalView and floorView
           //sn_visualization.topologicalView.updateStatus(data);
-          //sn_visualization.floorViews.getView("cmusvFloors").updateDeviceStatus(data);
+          buildingManager.getBuilding("cmusvB23").updateDeviceStatus(data);
 	        //sn_visualization.floorViews.getView("nasaFloors").updateDeviceStatus(data);
 
           // Update data in dashboardView
@@ -125,7 +125,7 @@ sn_visualization.main = (function(){
       buildingManager.insertBuilding("nasaBuildingN", sn_visualization.prestoredData.nasaBuildingN);
       buildingManager.insertBuilding("nasaBuildingS", sn_visualization.prestoredData.nasaBuildingS);
 
-      //pollingSensorStatus();
+      pollingSensorStatus();
     }
   };
 

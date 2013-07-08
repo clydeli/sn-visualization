@@ -25,6 +25,8 @@ self.addEventListener('message', function(e) {
       metricId = e.data.metricId;
       pollData();
       break;
+    case "PAUSE":
+      interval = 60*60*1000;
     case "STOP":
       self.close();
       break;

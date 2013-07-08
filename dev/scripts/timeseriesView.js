@@ -25,9 +25,9 @@ sn_visualization.timeseriesView = (function(){
           value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
           values.push(value);
         }*/
-        if(dataCache[deviceURI]){
-          var values = dataCache[deviceURI][metricId].values.slice(-timeLength);
-        }
+
+        var values = dataCache[deviceURI][metricId].values.slice(-timeLength);
+
         /*for(var i=0; i<dataCache[deviceURI][metricId].length; ++i){
           values.push(dataCache[deviceURI][metricId][i].value);
         }*/
@@ -187,6 +187,13 @@ sn_visualization.timeseriesView = (function(){
 
     insert : function(deviceURI, metricId, deviceName, metricName){
 
+      dataCache[deviceURI] = {};
+      dataCache[deviceURI][metricId] = dataCache[deviceURI][metricId] || {};
+
+      dataWorkers[deviceURI] = dataWorkers[deviceURI] || {};
+      dataWorkers[deviceURI][metricId] = dataWorkers[deviceURI][metricId] || {};
+      insertWorker(deviceURI, metricId);
+
       $("body").append(
         '<div class="timeseriesView" data-d_uri="'+deviceURI+'" data-s_id="'+metricId+'">'+
         '<img class="loading" src="images/loading.gif">'+
@@ -221,22 +228,10 @@ sn_visualization.timeseriesView = (function(){
 
       });
 
-
-      dataCache[deviceURI] = {};
-      dataCache[deviceURI].data = [];
-
-      dataWorkers[deviceURI] = dataWorkers[deviceURI] || {};
-      dataWorkers[deviceURI][metricId] = dataWorkers[deviceURI][metricId] || {};
-      insertWorker(deviceURI, metricId);
-
     },
 
     remove: function(deviceURI, metricId){
       $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').remove();
-      //var metricIndex = dataWorkers[deviceURI].metrics.indexOf(metricId);
-      //dataWorkers[deviceURI].metrics.splice(metricIndex, 1);
-      //dataWorkers[deviceURI][metricId] = dataWorkers[deviceURI][metricId] || {};
-      //if(dataWorkers[deviceURI].metrics.length === 0){ removeWorker(deviceURI); }
       removeWorker(deviceURI, metricId);
     }
   };

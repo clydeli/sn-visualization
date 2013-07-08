@@ -23,6 +23,8 @@ self.addEventListener('message', function(e) {
       url = e.data.url;
       pollData();
       break;
+    case "PAUSE":
+      interval = 60*60*1000;
     case "STOP":
       self.close();
       break;

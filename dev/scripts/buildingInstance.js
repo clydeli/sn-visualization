@@ -2,6 +2,7 @@
 sn_visualization.buildingInstance = function(buildingData, selector){
   this.heatmaps = [],
   this.heatmapWorkers = {},
+  this.statusWorker = {},
   this.selector = selector;
   this.backgroundGeo = buildingData.bgGeo;
   this.elevations = buildingData.elevations;
@@ -54,6 +55,18 @@ sn_visualization.buildingInstance.prototype = {
       $('.heatmap[data-elevation="'+i+'"]').html(this.heatmaps[i].canvas);
     }
     // this.addHeatmapWorker("temp"); // temporary only temp heatmap
+
+  },
+
+  initStatusWorker : function(){
+
+  },
+
+  startStatusWorker : function(){
+
+  },
+
+  pauseStatusWorker : function(){
 
   },
 

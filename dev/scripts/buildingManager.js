@@ -46,7 +46,10 @@ sn_visualization.buildingManager = function(googleMapInstance, buildingContainer
     };
 
   return {
-    insertBuilding : insertBuilding
+    insertBuilding : insertBuilding,
+    getBuilding : function(buildingId){
+      return buildingsTable[buildingId];
+    }
   };
 };
 
