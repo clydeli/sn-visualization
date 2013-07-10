@@ -136,6 +136,11 @@ $(document).on('ready', function(){
 
   sn_visualization.main.initialize();
 
+  $(window).resize(function () { 
+    $('.nodeBlock').css({'width' : (($(window).width() / 1250)+'em')});
+    $('.nodeBlock').css({'height' : (($(window).height() / 500)+'em')});
+  });
+
   $('#buildingContainer .floorNode').click(function(){
     var deviceURI = $(this).attr("data-d_uri");
     if($(this).hasClass("highlighted")){

@@ -118,7 +118,7 @@ body {
 
 .nodeBlock {
 	width: 1em; height: 1em;
-  border: 1px solid #111;
+    border: 1px solid #111;
 	background-color: #666;
 }
 .nodeBlock.goodBlock { background-color: steelBlue; }
