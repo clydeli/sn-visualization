@@ -138,7 +138,7 @@ $(document).on('ready', function(){
 
   $(window).resize(function () { 
     $('.nodeBlock').css({'width' : (($(window).width() / 1250)+'em')});
-    $('.nodeBlock').css({'height' : (($(window).height() / 500)+'em')});
+    $('.nodeBlock').css({'height' : (($(window).height() / 540)+'em')});
   });
 
   $('#buildingContainer .floorNode').click(function(){
