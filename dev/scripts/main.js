@@ -189,7 +189,6 @@ $(document).on('ready', function(){
         $('.heatmap').toggleClass('hidden');
         break;
       case "Map":
-
         $('#geographicalContainer').addClass('hidden');
         //$('#gmapOverlay').removeClass('hidden');
         break;
@@ -198,6 +197,9 @@ $(document).on('ready', function(){
         break;
       case "Log":
         $('#logView').toggleClass('hidden');
+        break;
+      case "API":
+        $('#apiView').toggleClass('hidden');
         break;
     }
   })
