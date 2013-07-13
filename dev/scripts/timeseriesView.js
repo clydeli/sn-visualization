@@ -75,8 +75,8 @@ sn_visualization.timeseriesView = (function(){
         'message', function(e){
           var data = JSON.parse(e.data);
           console.log(data);
-          //$('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] img.loading').remove();
-          //updateCache(deviceURI, metricId, data, (new Date()).getTime());
+          $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] img.loading').remove();
+          updateCache(deviceURI, metricId, data, (new Date()).getTime());
 
           // Log received data into logView
           /*$('#logView').append(data.length+' updates received for device '+deviceURI+' at '+(new Date())+'<br>');
@@ -91,7 +91,7 @@ sn_visualization.timeseriesView = (function(){
 
       dataWorkers[deviceURI][metricId].worker.postMessage({
         type: "START",
-        url: "http://cmu-sensor-network.herokuapp.com/sensors/"+deviceURI,
+        url: "http://"+sn_visualization.serverAddress+"/sensors/"+deviceURI,
         metric_id : metricId,
         init_time: (fetchTime-timeLength*1000),
         update_time: fetchTime
@@ -216,7 +216,7 @@ sn_visualization.timeseriesView = (function(){
         div.append("div")
           .attr("class", "horizon")
           .call(context.horizon()
-            .height(200)
+            .height(300)
             //.mode("mirror")
             .colors(["#bdd7e7","#bae4b3"])
             //.title("Area (120px)")

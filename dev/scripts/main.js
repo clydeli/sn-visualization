@@ -54,10 +54,10 @@ sn_visualization.main = (function(){
 
         }, false
       );
-      pollingWorker.postMessage({
-        type: "START",
-        url: "http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/",
-      });
+      // pollingWorker.postMessage({
+      //   type: "START",
+      //   url: "http://"+sn_visualization.serverAddress+"/last_readings_from_all_devices/",
+      // });
     },
 
     buildSensorsObj = function(callback){
@@ -103,7 +103,10 @@ sn_visualization.main = (function(){
           );
         }
 
-        if(callback){ callback(snArch); }
+        if(callback){
+          console.log(JSON.stringify(snArch));
+          callback(snArch);
+        }
       });
     };
 

@@ -54,7 +54,7 @@ sn_visualization.buildingInstance.prototype = {
       );
       $('.heatmap[data-elevation="'+i+'"]').html(this.heatmaps[i].canvas);
     }
-    // this.addHeatmapWorker("temp"); // temporary only temp heatmap
+    this.addHeatmapWorker("temp"); // temporary only temp heatmap
 
   },
 
@@ -117,7 +117,7 @@ sn_visualization.buildingInstance.prototype = {
       this.heatmapWorkers[metricId].postMessage({
         type: "START",
         metricId: metricId,
-        url: "http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/",
+        url: "http://"+sn_visualization.serverAddress+"/last_readings_from_all_devices/",
       });
   },
 
