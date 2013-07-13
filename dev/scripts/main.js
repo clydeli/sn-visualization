@@ -139,6 +139,11 @@ $(document).on('ready', function(){
 
   sn_visualization.main.initialize();
 
+  $(window).resize(function () { 
+    $('.nodeBlock').css({'width' : (($(window).width() / 1250)+'em')});
+    $('.nodeBlock').css({'height' : (($(window).height() / 540)+'em')});
+  });
+
   $('#buildingContainer .floorNode').click(function(){
     var deviceURI = $(this).attr("data-d_uri");
     if($(this).hasClass("highlighted")){
@@ -187,7 +192,6 @@ $(document).on('ready', function(){
         $('.heatmap').toggleClass('hidden');
         break;
       case "Map":
-
         $('#geographicalContainer').addClass('hidden');
         //$('#gmapOverlay').removeClass('hidden');
         break;
@@ -196,6 +200,9 @@ $(document).on('ready', function(){
         break;
       case "Log":
         $('#logView').toggleClass('hidden');
+        break;
+      case "API":
+        $('#apiView').toggleClass('hidden');
         break;
     }
   })
