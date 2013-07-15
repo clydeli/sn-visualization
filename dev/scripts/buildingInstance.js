@@ -93,24 +93,26 @@ sn_visualization.buildingInstance.prototype = {
           }
 
           // Insert new data into heatmap
-          var dataSum = 0, dataMax = 0, dataMin = Infinity;
+          var dataSum = 0, dataMax = 0, dataMin = Infinity, dataLength = 0;
           for(var i=0; i<data.length; ++i){
             if(self.uriGeoTable.hasOwnProperty(data[i].device_id)){
               dataSum += data[i].value;
+              ++dataLength;
               if(data[i].value > dataMax){ dataMax = data[i].value; }
               if(data[i].value < dataMin){ dataMin = data[i].value; }
             }
           }
-          var dataAvg = dataSum/data.length;
+          var dataAvg = dataSum/dataLength;
           for(var i=0; i<data.length; ++i){
             if(self.uriGeoTable.hasOwnProperty(data[i].device_id)){
               var
                 elevation = self.uriGeoTable[data[i].device_id].geo[2],
                 position = self.getPosition(data[i].device_id),
-                width = $(self.selector+" .heatmap:last").width(),
-                height = $(self.selector+" .heatmap:last").height();
+                value = (data[i].value-dataAvg)/(dataMax-dataMin);
 
-              self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 50, (data[i].value-dataAvg)/(dataMax-dataMin) );
+              if(value > 0){ value *= 0.3; } else { value *= 0.7; }
+
+              self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 50, value );
               //self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 100, (data[i].value-450)/100);
             }
           }
