@@ -3,42 +3,11 @@ var sn_visualization = sn_visualization || {};
 sn_visualization.timeseriesView = (function(){
 
   var
-  // some static variables
+    // some static variables
     timeLength = 5*60, //seconds
     dataCache = {},
     dataWorkers = {},
-    context = cubism.context()
-        .serverDelay(0)
-        .clientDelay(0)
-        .step(3e3) // update interval
-        .size(timeLength)
-    ,
 
-    getContext = function(deviceURI, metricId){
-
-      //var values = [];
-      return context.metric(function(start, stop, step, callback) {
-        /*start = +start, stop = +stop;
-        if (isNaN(last)) last = start;
-        while (last < stop) {
-          last += step;
-          value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
-          values.push(value);
-        }*/
-
-        var values = dataCache[deviceURI][metricId].values.slice(-timeLength);
-
-        /*for(var i=0; i<dataCache[deviceURI][metricId].length; ++i){
-          values.push(dataCache[deviceURI][metricId][i].value);
-        }*/
-
-        /*for(var i=0; i<dataCache[deviceURI].data.length; ++i){
-          values.push(parseInt(dataCache[deviceURI].data[i][metricId], 10));
-        }
-        console.log(values);*/
-        callback(null, values);
-      }, deviceURI);
-    },
     // internal functions
     updateCache = function(deviceURI, metricId, data, updateTime){
       console.log(data);
@@ -179,10 +148,6 @@ sn_visualization.timeseriesView = (function(){
 
     };*/
 
-  context.on("focus", function(i) {
-    d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-  });
-
   return {
 
     insert : function(deviceURI, metricId, deviceName, metricName){
@@ -204,29 +169,6 @@ sn_visualization.timeseriesView = (function(){
 
       var selector = '.timeseriesView[data-d_uri="'+deviceURI+'"]';
       $(selector+'[data-s_id="'+metricId+'"]').draggable();
-
-      // Create Cubism Div
-      d3.select(selector+'[data-s_id="'+metricId+'"]').call(function(div) {
-        div.datum(getContext(deviceURI, metricId));
-
-        div.append("div")
-          .attr("class", "axis")
-          .call(context.axis().orient("top"));
-
-        div.append("div")
-          .attr("class", "horizon")
-          .call(context.horizon()
-            .height(300)
-            //.mode("mirror")
-            .colors(["#bdd7e7","#bae4b3"])
-            //.title("Area (120px)")
-            .extent([0, 500]));
-
-        div.append("div")
-            .attr("class", "rule")
-            .call(context.rule());
-
-      });
 
     },
 

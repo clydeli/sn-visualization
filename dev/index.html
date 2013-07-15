@@ -17,20 +17,22 @@
     </head>
     <body>
 
+        <!-- Top-Right Menu -->
         <header id="menuBar"><img src="images/cmu_wordmark.gif">
             <nav><ol>
                 <li>Heatmap</li>
                 <li>Map</li>
-                <li>Dashboard</li>
                 <li>Log</li>
             </ol></nav>
         </header>
 
+        <!-- Left Topological View Container-->
         <div id="topologicalView" class="view">
             <div id="topologicalSlider" style="height: 160px;"></div>
             <button id="topologicalPin">pin</button>
         </div>
 
+        <!-- Building View Container -->
         <div id="geographicalView" class="view">
           <div id="gmapOverlay"></div>
           <div id="geographicalContainer" class="hidden">
@@ -38,18 +40,12 @@
 	        </div>
         </div>
 
-        <!-- <div id="dashboardView" class="view hidden">
-            <ol id="dashFilter">
-                <li>bad</li> <li>avg</li> <li>good</li> <li class="active">all</li>
-            </ol>
-        </div> -->
-
+        <!-- Log View Container-->
         <div id="logView" class="view hidden"> </div>
 
         <script src="scripts/jquery/jquery.ui.touch-punch.min.js"></script>
         <script src="scripts/d3/d3.v3.min.js"></script>
         <script src="scripts/d3/d3.layout.js"></script>
-        <script src="scripts/cubism/cubism.v1.min.js"></script>
         <script src="scripts/heatmap/webgl-heatmap.js"></script>
         <script src="scripts/prestoredData.js"></script>
         <script src="scripts/topologicalView.js"></script>

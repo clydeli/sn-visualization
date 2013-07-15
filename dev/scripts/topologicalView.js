@@ -41,7 +41,6 @@ sn_visualization.topologicalView = (function(){
 			function update(source) {
 				var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
-
 				var nodes = tree.nodes(_root).reverse(); // Compute the new tree layout.
 				nodes.forEach(function(d) { d.y = d.depth * 180; }); // Normalize for fixed-depth.
 
@@ -167,7 +166,7 @@ sn_visualization.topologicalView = (function(){
 			d3Update = update;
 		},
 
-		// Helper functions
+		// Helper functions written for later...
 		openChildren = function(d){
 			if (d.children === null){
 				d.children = d._children; d._children = null;
@@ -217,8 +216,7 @@ sn_visualization.topologicalView = (function(){
 			d3Init("#topologicalView", 760, $('#topologicalView').height()*0.95);
 
 			$("#topologicalSlider").slider({
-				orientation: "vertical",
-				range: "min", min: 0, max: 100,
+				orientation: "vertical", range: "min", min: 0, max: 100,
 				slide: function( event, ui ) {
 					sn_visualization.topologicalView.resize(1+ui.value/100);
 				}
@@ -229,36 +227,38 @@ sn_visualization.topologicalView = (function(){
       });
 
 		},
+
+    // Shorthand functions for manipulating the topological view
 		openDevice : function(uri){
 			findAndOpenDevice(_root, uri);
-			$("#topologicalView")[0].scrollLeft = 320;
+			//$("#topologicalView")[0].scrollLeft = 320;
 		},
 		closeDevice : function(uri){
 			var device = findChildren(_root, ["d_uri"], [uri], "Device");
 			if(device) { closeChildren(device);	}
-			$("#topologicalView")[0].scrollLeft = 320;
+			//$("#topologicalView")[0].scrollLeft = 320;
 		},
 		closeSensor : function(uri, s_id){
 			var sensor = findChildren(_root, ["d_uri", "s_id"], [uri, s_id], "Sensor");
 			if(sensor) { closeChildren(sensor);	}
-			$("#topologicalView")[0].scrollLeft = 480;
+			//$("#topologicalView")[0].scrollLeft = 480;
 		},
+
+    // Some other maitainence functions
 		resize : function(zoom){
 			$('#topologicalView svg').remove();
 			d3Init("#topologicalView", 760*zoom, $('#topologicalView').height()*0.95*zoom, true);
 		},
     updateStatus : function(data){
-      var now = new Date();
-
-      for(var key in data){
+      for(var i=0; i<data.length; ++i){
         var
-          offset = now.getTime()-data[key]*1000,
-          targetCircle = $('#topologicalView svg text[data-d_uri="'+key+'"]').parent().find('circle');
+          offset = (new Date()).getTime()-data[i].timestamp,
+          targetCircle = $('#topologicalView svg text[data-d_uri="'+data[i].device_id+'"]').parent().find('circle');
 
-        if(offset > 3*60*1000){ statusColorTable[key] = "red"; }
-        else if(offset > 15*1000){ statusColorTable[key] = "khaki"; }
-        else { statusColorTable[key] = "steelBlue"; }
-        targetCircle.css('fill', statusColorTable[key]);
+        if(offset > 3*60*1000){ statusColorTable[data[i].device_id] = "red"; }
+        else if(offset > 15*1000){ statusColorTable[data[i].device_id] = "khaki"; }
+        else { statusColorTable[data[i].device_id] = "steelBlue"; }
+        targetCircle.css('fill', statusColorTable[data[i].device_id]);
       }
     }
 	};

@@ -4,68 +4,41 @@ sn_visualization.main = (function(){
 
   var
     buildingManager,
-    //mapOverlay = {},
-    //mapHandlers = {},
-    pollingWorker = {},
+    statusWorker = {},
 
     pollingSensorStatus = function(){
-      pollingWorker = new Worker('scripts/workers/floorViewWorker.js');
-      pollingWorker.addEventListener(
+      statusWorker = new Worker('scripts/workers/statusWorker.js');
+      statusWorker.addEventListener(
         'message', function(e){
           var data = JSON.parse(e.data);
           console.log("device (temp) last update time update", data);
 
           // Update data in topologicalView and floorView
-          //sn_visualization.topologicalView.updateStatus(data);
+          sn_visualization.topologicalView.updateStatus(data);
           buildingManager.getBuilding("cmusvB23").updateDeviceStatus(data);
 	        //sn_visualization.floorViews.getView("nasaFloors").updateDeviceStatus(data);
-
-          // Update data in dashboardView
-          var now = new Date();
-
-          for(var key in data){
-            var
-              offset = now.getTime()-data[key]*1000,
-              targetCard = $('#dashboardView .deviceCard[data-d_uri='+key+']');
-
-            if(targetCard.length == 0){
-              var cardHTML =
-                '<div class="deviceCard" data-d_uri="'+key+'">'+
-                key+
-                '</div>';
-              $('#dashboardView').append(cardHTML);
-              targetCard = $('#dashboardView .deviceCard[data-d_uri='+key+']');
-            }
-
-            targetCard.removeClass('badBlock avgBlock goodBlock');
-            if(offset > 3*60*1000){ targetCard.addClass('badBlock'); }
-            else if(offset > 15*1000){ targetCard.addClass('avgBlock'); }
-            else { targetCard.addClass('goodBlock'); }
-          }
 
           // Log received data into logView
           $('#logView').append('Update received for device status at '+(new Date())+'<br>');
           var logText = '{';
-          for(var key2 in data){
-            logText += key2+' : '+data[key2]+' ';
-          }
+          for(var key2 in data){ logText += key2+' : '+data[key2]+' '; }
           logText += '}<br>';
           $('#logView').append(logText);
 
         }, false
       );
-      // pollingWorker.postMessage({
-      //   type: "START",
-      //   url: "http://"+sn_visualization.serverAddress+"/last_readings_from_all_devices/",
-      // });
+      statusWorker.postMessage({
+        type: "START",
+        url: "http://"+sn_visualization.serverAddress+"/last_readings_from_all_devices/",
+      });
     },
 
     buildSensorsObj = function(callback){
+
       var snArch = { id : "root", name : "CMUSV", children : [] };
       var gatewayHash = {};
 
       $.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
-        console.log("get all devices (should be deprecated though...)", data);
 
         /* Parse the data */
         var deviceCount = data.length;
@@ -103,16 +76,17 @@ sn_visualization.main = (function(){
           );
         }
 
-        if(callback){
-          console.log(JSON.stringify(snArch));
-          callback(snArch);
-        }
+        if(callback){ callback(snArch); }
       });
     };
 
   return {
     initialize : function(){
-      buildSensorsObj(sn_visualization.topologicalView.initialize);
+
+      // Load from prestored data
+      sn_visualization.topologicalView.initialize(sn_visualization.networkArchictecture);
+      // Or fetch and parse data from old server
+      //buildSensorsObj(sn_visualization.topologicalView.initialize);
 
       // Initialize buidling manager
       buildingManager = sn_visualization.buildingManager(
@@ -128,7 +102,29 @@ sn_visualization.main = (function(){
       buildingManager.insertBuilding("nasaBuildingN", sn_visualization.prestoredData.nasaBuildingN);
       buildingManager.insertBuilding("nasaBuildingS", sn_visualization.prestoredData.nasaBuildingS);
 
+      // Polling Sensor Status
       pollingSensorStatus();
+
+      // Menu click handlers
+      $('#menuBar nav li').click( function(){
+        switch($(this).html()){
+          case "Heatmap":
+            $('.heatmap').toggleClass('hidden');
+            break;
+          case "Map":
+            $('#geographicalContainer').addClass('hidden');
+            buildingManager.hideBuilding();
+            //$('#gmapOverlay').removeClass('hidden');
+            break;
+          case "Log":
+            $('#logView').toggleClass('hidden');
+            break;
+          case "API":
+            $('#apiView').toggleClass('hidden');
+            break;
+        }
+      });
+
     }
   };
 
@@ -139,7 +135,7 @@ $(document).on('ready', function(){
 
   sn_visualization.main.initialize();
 
-  $(window).resize(function () { 
+  $(window).resize(function () {
     $('.nodeBlock').css({'width' : (($(window).width() / 1250)+'em')});
     $('.nodeBlock').css({'height' : (($(window).height() / 540)+'em')});
   });
@@ -158,53 +154,11 @@ $(document).on('ready', function(){
     var
       deviceURI = $(this).parent().attr('data-d_uri'),
       metricId = $(this).parent().attr('data-s_id');
-
-    console.log(deviceURI);
-    console.log(metricId);
     sn_visualization.timeseriesView.remove(deviceURI, metricId);
     sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
   });
 
-  $('#dashFilter li').click( function(){
-    $('#dashFilter li').removeClass('active');
-    $(this).addClass('active');
-    $('.deviceCard').addClass('hidden');
-    switch($(this).html()){
-      case "all":
-        $('.deviceCard').removeClass('hidden');
-        break;
-      case "good":
-        $('.deviceCard.goodBlock').removeClass('hidden');
-        break;
-      case "avg":
-        $('.deviceCard.avgBlock').removeClass('hidden');
-        break;
-      case "bad":
-        $('.deviceCard.badBlock').removeClass('hidden');
-        break;
-    }
-  })
 
 
-  $('#menuBar nav li').click( function(){
-    switch($(this).html()){
-      case "Heatmap":
-        $('.heatmap').toggleClass('hidden');
-        break;
-      case "Map":
-        $('#geographicalContainer').addClass('hidden');
-        //$('#gmapOverlay').removeClass('hidden');
-        break;
-      case "Dashboard":
-        $('#dashboardView').toggleClass('hidden');
-        break;
-      case "Log":
-        $('#logView').toggleClass('hidden');
-        break;
-      case "API":
-        $('#apiView').toggleClass('hidden');
-        break;
-    }
-  })
 
 });

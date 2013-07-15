@@ -132,41 +132,6 @@ body {
 .floorNode:hover .hoverBlock { opacity: 0.85; width: auto;}
 
 
-
-#dashboardView {
-  position: absolute; right: 2em; top: 5%;
-  width : auto; max-height: 90%; z-index: 3; padding: 0.2em;
-  color: #000; background-color: #fff; opacity: 0.95;
-  border: 1px solid #666; box-shadow: 0 0 6px 1px #666;
-  overflow-y: auto;
-}
-#dashboardView.hidden { display: none; }
-
-#dashFilter {
-  list-style: none; margin: 0; padding: 0;
-  text-align: right;
-}
-#dashFilter li {
-  display: inline-block; background-color: #fff;
-  border: 1px solid #666; border-radius: 1px;
-  margin: 0 0.2em;
-  cursor: pointer;
-}
-#dashFilter li.active {
-  background-color: #ccc;
-}
-
-.deviceCard {
-  height: 1em;
-  margin: 0.2em;
-  box-shadow: 0 0 1px 1px #111;
-  box-sizing: border-box; -moz-box-sizing: border-box;
-}
-.deviceCard.hidden { display: none; }
-.deviceCard.goodBlock { border-left: 1em solid steelBlue; }
-.deviceCard.avgBlock { border-left: 1em solid khaki; }
-.deviceCard.badBlock { border-left: 1em solid red; }
-
 #logView {
 	position: absolute; right: 0; bottom: 0;
 	width : 100%; height : 200px; z-index: 3;

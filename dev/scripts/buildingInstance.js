@@ -2,7 +2,6 @@
 sn_visualization.buildingInstance = function(buildingData, selector){
   this.heatmaps = [],
   this.heatmapWorkers = {},
-  this.statusWorker = {},
   this.selector = selector;
   this.backgroundGeo = buildingData.bgGeo;
   this.elevations = buildingData.elevations;
@@ -45,29 +44,29 @@ sn_visualization.buildingInstance.prototype = {
     for(var i=0; i<=this.elevations; ++i){
       var heatmapHtml = '';
       heatmapHtml +=
-        '<div class="heatmap hidden" data-elevation="'+i+'" style="height: '+100/(this.elevations+1)+'%; top: '+i*100/(this.elevations+1)+'%;">'+
+        '<div class="heatmap" data-elevation="'+i+'" style="height: '+100/(this.elevations+1)+'%; top: '+i*100/(this.elevations+1)+'%;">'+
           '<canvas style="width: 100%; height: 100%">'
         '</div>';
       $(this.selector).append(heatmapHtml);
       this.heatmaps.push(
-        createWebGLHeatmap({canvas: $('.heatmap[data-elevation="'+i+'"][canvas]')[0]})
+        createWebGLHeatmap({canvas: $(this.selector+' .heatmap[data-elevation="'+i+'"][canvas]')[0]})
       );
-      $('.heatmap[data-elevation="'+i+'"]').html(this.heatmaps[i].canvas);
+      $(this.selector+' .heatmap[data-elevation="'+i+'"]').html(this.heatmaps[i].canvas);
     }
     this.addHeatmapWorker("temp"); // temporary only temp heatmap
 
   },
 
-  initStatusWorker : function(){
-
+  resumeWorkers : function(){
+    for(var key in this.heatmapWorkers){
+      this.heatmapWorkers[key].postMessage({ type: "RESUME" });
+    }
   },
 
-  startStatusWorker : function(){
-
-  },
-
-  pauseStatusWorker : function(){
-
+  pauseWorkers : function(){
+    for(var key in this.heatmapWorkers){
+      this.heatmapWorkers[key].postMessage({ type: "PAUSE" });
+    }
   },
 
   addHeatmapWorker : function(metricId){
@@ -78,23 +77,45 @@ sn_visualization.buildingInstance.prototype = {
           var data = JSON.parse(e.data);
           console.log("last updated device values ("+metricId+")", data);
 
-          // Update heatmap
-          for(var i=0; i<=self.elevations; ++i){
-            self.heatmaps[i].clear();
+          // Clear old heatmap
+          for(var i=0; i<=self.elevations; ++i){ self.heatmaps[i].clear(); }
+
+          var
+            width = $(self.selector+" .heatmap:last").width(),
+            height = $(self.selector+" .heatmap:last").height();
+
+          for(var i=0; i<width; ++i){
+            for(var j=0; j<height; ++j){
+              for(var k=0; k<=self.elevations; ++k){
+                self.heatmaps[k].addPoint(i, j, 2, 0.7);
+              }
+            }
           }
 
+          // Insert new data into heatmap
+          var dataSum = 0, dataMax = 0, dataMin = Infinity;
+          for(var i=0; i<data.length; ++i){
+            if(self.uriGeoTable.hasOwnProperty(data[i].device_id)){
+              dataSum += data[i].value;
+              if(data[i].value > dataMax){ dataMax = data[i].value; }
+              if(data[i].value < dataMin){ dataMin = data[i].value; }
+            }
+          }
+          var dataAvg = dataSum/data.length;
           for(var i=0; i<data.length; ++i){
             if(self.uriGeoTable.hasOwnProperty(data[i].device_id)){
               var
                 elevation = self.uriGeoTable[data[i].device_id].geo[2],
                 position = self.getPosition(data[i].device_id),
-                width = $(".heatmap:last").width(),
-                height = $(".heatmap:last").height();
+                width = $(self.selector+" .heatmap:last").width(),
+                height = $(self.selector+" .heatmap:last").height();
 
-              self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 100, data[i].value/800);
+              self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 50, (data[i].value-dataAvg)/(dataMax-dataMin) );
+              //self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 100, (data[i].value-450)/100);
             }
           }
 
+          // Update and refresh heatmap display
           for(var i=0; i<=self.elevations; ++i){
             self.heatmaps[i].adjustSize();
             self.heatmaps[i].update();
@@ -102,15 +123,6 @@ sn_visualization.buildingInstance.prototype = {
             //self.heatmaps[i].blur();
             //self.heatmaps[i].clamp(0.0, 1.0);
           }
-
-          // Log received data into logView
-          /*$('#logView').append('Update received for device status at '+(new Date())+'<br>');
-          var logText = '{';
-          for(var key2 in data){
-            logText += key2+' : '+data[key2]+' ';
-          }
-          logText += '}<br>';
-          $('#logView').append(logText);*/
 
         }, false
       );

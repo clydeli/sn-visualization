@@ -9,7 +9,6 @@ sn_visualization.buildingManager = function(googleMapInstance, buildingContainer
     buildingMapListeners = {},
 
     insertBuilding = function(buildingId, buildingData){
-      //buildingsTable[viewId] = view;
 
       // Construct the building polygon
       buildingMapPolygons[buildingId] = new google.maps.Polygon({
@@ -33,7 +32,7 @@ sn_visualization.buildingManager = function(googleMapInstance, buildingContainer
         }
       );
 
-      //
+      // Create the container for the building and initialize it
       $(buildingContainer).append("<div id='"+buildingId+"Building' class='buildingContainer'></div>");
       buildingsTable[buildingId] = new sn_visualization.buildingInstance(buildingData, '#'+buildingId+'Building');
 
@@ -43,10 +42,21 @@ sn_visualization.buildingManager = function(googleMapInstance, buildingContainer
       $('#geographicalContainer').removeClass('hidden');
       $('.buildingContainer').hide();
       $('#'+buildingId+'Building').show();
+      buildingsTable[buildingId].resumeWorkers();
     };
+    hideBuilding = function(buildingId){
+      if(buildingId){}
+      else{
+        for(var key in buildingsTable){
+          buildingsTable[key].pauseWorkers();
+        }
+      }
+    }
 
   return {
     insertBuilding : insertBuilding,
+    showBuilding : showBuilding,
+    hideBuilding : hideBuilding,
     getBuilding : function(buildingId){
       return buildingsTable[buildingId];
     }

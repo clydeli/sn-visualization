@@ -1,7 +1,8 @@
 var
   url = "",
   metricId = "",
-  interval = 7000;
+  timer = {},
+  interval = 60*60*1000;
 
 function pollData(){
   try {
@@ -10,7 +11,7 @@ function pollData(){
       if (xhr.readyState == 4) {
         if (xhr.status == 200 || xhr.status ==0) { postMessage(xhr.responseText); }
         //else { throw  xhr.status+xhr.responseText; }
-        setTimeout( function(){ pollData(); }, interval);
+        timer = setTimeout( function(){ pollData(); }, interval);
       }
     };
     xhr.open("GET", url+(new Date()).getTime()+"/"+metricId+"/json", true);
@@ -25,8 +26,16 @@ self.addEventListener('message', function(e) {
       metricId = e.data.metricId;
       pollData();
       break;
+    case "RESUME":
+      clearTimeout(timer);
+      interval = 3*1000;
+      pollData();
+      break;
     case "PAUSE":
+      clearTimeout(timer);
       interval = 60*60*1000;
+      pollData();
+      break;
     case "STOP":
       self.close();
       break;
