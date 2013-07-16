@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<style>
+			#d3testdiv {  }
+		</style>
+
+	</head>
+	<body>
+		<div id="d3testdiv"></div>
+
+		<script src="scripts/d3/d3.v3.min.js"></script>
+        <script src="scripts/d3/d3.layout.js"></script>
+        <script> 
+        	$(document).on("ready", function(){
+        		$.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/DCTN102T/1366082066000/1366083066000/temperature/json", function(d){
+        			console.log(d);
+        		});
+        	});
+        </script>
+	</body>
+</html>

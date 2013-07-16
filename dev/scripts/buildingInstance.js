@@ -87,7 +87,7 @@ sn_visualization.buildingInstance.prototype = {
           for(var i=0; i<width; ++i){
             for(var j=0; j<height; ++j){
               for(var k=0; k<=self.elevations; ++k){
-                self.heatmaps[k].addPoint(i, j, 2, 0.7);
+                //self.heatmaps[k].addPoint(i, j, 2, 0.5);
               }
             }
           }
@@ -110,7 +110,7 @@ sn_visualization.buildingInstance.prototype = {
                 position = self.getPosition(data[i].device_id),
                 value = (data[i].value-dataAvg)/(dataMax-dataMin);
 
-              if(value > 0){ value *= 0.3; } else { value *= 0.7; }
+              if(value > 0){ value = 0.5 + value*0.5; } else { value = 0.5 - value*0.5; }
 
               self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 50, value );
               //self.heatmaps[elevation].addPoint(width*position[0]/100, height*position[1]/100, 100, (data[i].value-450)/100);

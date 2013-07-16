@@ -13,7 +13,7 @@ function pollData(){
         timer = setTimeout( function(){ pollData(); }, interval);
       }
     };
-    xhr.open("GET", url+(new Date()).getTime()+"/temp/json", true);
+    xhr.open("GET", url+((new Date()).getTime())+"/temp/json", true);
     xhr.send();
   } catch(e){ postMessage("ERROR:"+e.message);}
 }

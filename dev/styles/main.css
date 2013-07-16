@@ -160,9 +160,12 @@ body {
 #apiImages {
     top: 5%;
     position: relative;
-    margin-left: 160px;
-    margin-right: 100px;
-    height: 100%;
-    margin-left: 100px;
+    text-align: center;
+    margin-left: 10%;
+    width: 80%; height: 100%;
     overflow: auto;
 }
+#apiImages img {
+    width: 100%;
+}
+
