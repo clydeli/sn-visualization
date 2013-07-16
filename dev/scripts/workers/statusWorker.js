@@ -1,7 +1,7 @@
 var
   url = "",
   timer = {},
-  interval = 5*1000;
+  interval = 7*1000;
 
 function pollData(){
   try {
@@ -26,7 +26,7 @@ self.addEventListener('message', function(e) {
       break;
     case "RESUME":
       clearTimeout(timer);
-      interval = 5*1000;
+      interval = 7*1000;
       pollData();
       break;
     case "PAUSE":

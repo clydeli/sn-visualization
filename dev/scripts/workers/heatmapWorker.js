@@ -28,7 +28,7 @@ self.addEventListener('message', function(e) {
       break;
     case "RESUME":
       clearTimeout(timer);
-      interval = 3*1000;
+      interval = 5*1000;
       pollData();
       break;
     case "PAUSE":
