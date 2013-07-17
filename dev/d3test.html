@@ -37,15 +37,16 @@
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
-      function getTime() {
-        var timestampscale = d3.scale.linear()
+      function getTime(date) {
+        var linear = d3.scale.linear()
         .domain([0, 999999999999999])
         .range([0, 999999999999999]);
 
-        /* timestamps entered in database in epoch format */
-        var parseTimestamp = timestampscale.copy().format;
-        var timestamp = new Date(parseTimestamp * 1000);
-        return (timestamp.toGMTString()+"<br>"+timestamp.toLocaleString());
+        /* timestamps entered in database in epoch format. So, retrieve epoch timestamp via linear scale and convert to 
+        GMT time, then return */
+        var timestamp = new Date(0);
+        timestamp.setUTCSeconds(linear(date));
+        return timestamp.toGMTString();
       }
 
       //x-axis scale value range
@@ -68,7 +69,7 @@
       .scale(y)
       .orient("left");
 
-      //compute the line
+      //compute the line via svg (for shapes) .svg.line() creates a new line generator
       var line = d3.svg.line()
       .interpolate("basis")
       .x(function(d) { return x(d.timestamp); })
@@ -83,33 +84,41 @@
       $(document).on("ready", function() {
         $.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/DCTN102T/1366082066000/1366289320000/temperature/json", function(data) {
           //every device_id found means a new color to designate it
-          color.domain(d3.keys(data[0]).filter(function(key) { return key !== "device_id"; }));
+          color.domain(d3.keys(data[0]).filter(function(key) { 
+            return key !== "device_id"; 
+          }));
           //for each value in the data
           data.forEach(function(d) {
-            d.timestamp = getTime();
+            d.timestamp = getTime(d.timestamp);
           });
 
-          var temperatures = color.domain().map(function(name) {
+          /* create a map of data - name vs. values. Values consists of another map of timestamps vs. temperatures */
+          var sensor = color.domain().map(function(name) {
             return {
               name: name,
               values: data.map(function(d) { 
-                return {date: d.date, temperature: +d[name]};
+                return {
+                  timestamp: d.timestamp, temperature: +d[name]
+                };
               })
             };
           });
 
+          //extent finds the minimum and maximum value in array to set domain
           x.domain(d3.extent(data, function(d) { return d.date; }));
 
           y.domain([
-          d3.min(temperatures, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
-          d3.max(temperatures, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+          d3.min(sensor, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+          d3.max(sensor, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
           ]);
 
+          //x axis attributes
           svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
 
+          //y axis attributes
           svg.append("g")
           .attr("class", "y axis")
           .call(yAxis)
@@ -118,19 +127,20 @@
           .attr("y", 6)
           .attr("dy", ".71em")
           .style("text-anchor", "end")
-          .text("Temperature (ºF)");
+          .text("Temperature (ºF)")
 
-          var city = svg.selectAll(".city")
-          .data(temperatures)
+          //define attributes
+          var sensordata = svg.selectAll(".sensordata")
+          .data(sensor)
           .enter().append("g")
-          .attr("class", "city");
+          .attr("class", "sensordata");
 
-          city.append("path")
+          sensordata.append("path")
           .attr("class", "line")
           .attr("d", function(d) { return line(d.values); })
           .style("stroke", function(d) { return color(d.name); });
 
-          city.append("text")
+          sensordata.append("text")
           .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
           .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
           .attr("x", 3)
