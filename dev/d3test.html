@@ -45,6 +45,7 @@
         return timestamp.toGMTString();
       }
 
+      /*
       //x-axis scale value range
       //var x = d3.time.scale()
       var x = d3.scale.linear()
@@ -59,28 +60,43 @@
       //x-axis is on the bottom
       var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("bottom");
+      .orient("bottom")
 
       //y-axis is on the left
       var yAxis = d3.svg.axis()
       .scale(y)
       .orient("left");
 
+
+      //console.log(sensor);
       //compute the line via svg (for shapes) .svg.line() creates a new line generator
       var line = d3.svg.line()
       .interpolate("basis")
+      
       .x(function(d) { 
-        return x(d.timestamp); 
+        //console.log()
+        //console.log(x(d.));
+        //            return x(d.timestamp); 
+        return d.timestamp;
       })
       .y(function(d) { 
-        return y(d.temperature); 
+        //console.log(d.temperature);
+        //console.log(y(d.temperature));
+        //return y(d.temperature); 
+        return d.temperature;
       });
+      //.x(function(d) { return x(d.time); })
+      //.y(function(d) { return y(d.value); });
 
       var svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      */
+
+var color = d3.scale.category10();
+
 
       $(document).on("ready", function() {
         $.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/DCTN102T/1366082066000/1366289320000/temperature/json", function(data) {
@@ -89,6 +105,7 @@
           The filter function tests each element in the array of entries with its code - each obj is a separate entry. 
           Thus count initialization must be outside of the function so that all of the non-essential entries are iterated
           over */
+
           var count = 0;
           color.domain(d3.entries(data[0]).filter(function(obj) { 
             for(var key in obj) {
@@ -122,6 +139,68 @@
               })
             };
           });
+
+
+
+
+
+          //x-axis scale value range
+          //var x = d3.time.scale()
+          var x = d3.scale.linear()
+          .range([0, width]);
+
+          //y-axis scale value range 
+          var y = d3.scale.linear()
+          .range([height, 0]);
+
+          //x-axis is on the bottom
+          var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+
+          //y-axis is on the left
+          var yAxis = d3.svg.axis()
+          .scale(y)
+          .orient("left");
+
+          //console.log(sensor);
+          //compute the line via svg (for shapes) .svg.line() creates a new line generator
+          var line = d3.svg.line()
+          .interpolate("basis")
+          /*
+          .x(function(d) { 
+            //console.log()
+            //console.log(x(d.));
+            //            return x(d.timestamp); 
+            return d.timestamp;
+          })
+          .y(function(d) { 
+            //console.log(d.temperature);
+            //console.log(y(d.temperature));
+            //return y(d.temperature); 
+            return d.temperature;
+          });*/
+          .x(function(d) { 
+            console.log(x(d.timestamp)); 
+            return d.timestamp; 
+          })
+          .y(function(d) { 
+            console.log(y(d.temperature)); 
+            return d.temperature; 
+          });
+
+          var svg = d3.select("body").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+
+
+
+
 
           //extent finds the minimum and maximum value in array to set domain. d.timestamp is set to GMT
           x.domain(d3.extent(data, function(d) { 
@@ -159,10 +238,11 @@
           .text("Temperature (ºF)")
 
           //define attributes
-          var sensordata = svg.selectAll(".sensordata")
+          var sensordata = svg.selectAll(".line")
           .data(sensor)
-          .enter().append("g")
-          .attr("class", "sensordata");
+          .enter().append("path")
+          .attr("class", "line")
+          .attr("d", line);
 
           sensordata.append("path")
           .attr("class", "line")

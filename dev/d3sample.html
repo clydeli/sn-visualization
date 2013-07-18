@@ -52,8 +52,8 @@
 
     var line = d3.svg.line()
     .interpolate("basis")
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.temperature); });
+    .x(function(d) { console.log(x(d.date)); return x(d.date); })
+    .y(function(d) { console.log(y(d.temperature)); return y(d.temperature); });
 
     var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -118,6 +118,7 @@
       })
       .attr("transform", function(d) { 
         //console.log(x(d.value.date));
+        //console.log(y(d.value.temperature));
         return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; 
       })
       .attr("x", 3)
