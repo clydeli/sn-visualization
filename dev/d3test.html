@@ -46,7 +46,8 @@
       }
 
       //x-axis scale value range
-      var x = d3.time.scale()
+      //var x = d3.time.scale()
+      var x = d3.scale.linear()
       .range([0, width]);
 
       //y-axis scale value range 
@@ -122,12 +123,22 @@
             };
           });
 
-          //extent finds the minimum and maximum value in array to set domain
-          x.domain(d3.extent(data, function(d) { return d.date; }));
+          //extent finds the minimum and maximum value in array to set domain. d.timestamp is set to GMT
+          x.domain(d3.extent(data, function(d) { 
+            return d.timestamp; 
+          }));
 
           y.domain([
-          d3.min(sensor, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
-          d3.max(sensor, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+          d3.min(sensor, function(c) { 
+            return d3.min(c.values, function(v) { 
+              return v.temperature; 
+            }); 
+          }),
+          d3.max(sensor, function(c) { 
+            return d3.max(c.values, function(v) { 
+              return v.temperature; 
+            }); 
+          })
           ]);
 
           //x axis attributes
@@ -156,16 +167,49 @@
           sensordata.append("path")
           .attr("class", "line")
           .attr("d", function(d) { 
+            //d.values is timestamps vs. temperature
             return line(d.values); 
           })
           .style("stroke", function(d) { return color(d.name); });
 
           sensordata.append("text")
-          .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-          .attr("transform", function(d) { return "translate(" + x(d.value.timestamp) + "," + y(d.value.temperature) + ")"; })
-          .attr("x", 3)
+          .datum(function(d) { 
+            //d.name is DCN, etc.
+            //d.values is the timestamps vs. temperature in an object
+            //console.log(d.values);
+            return {
+              name: d.name, 
+              value: d.values[d.values.length - 1]
+            }; 
+          })
+          .attr("transform", function(d) { 
+            //d.value contains entire object: Object { timestamp="Mon, 02 Jun 45259 19:53:34 GMT", temperature=68.42186}
+            /*console.log(d.value);
+            for (var key in d) {
+              //key in d are name, value
+              if (key == "value") {
+                for (var keys in d[key]) {
+                  //console.log(keys); corresponds to timestamp and temperature
+                  //(d[key])[keys] prints out the timestamp in GMT corresponding to one key and temperature corresponding to another key
+                  console.log((d[key])[keys]);
+                }
+                //console.log((d["value"])["timestamp"]); prints out GMT timestamp
+              }
+            }*/
+            //console.log((d["value"])["timestamp"]);
+            //console.log(d.values[d.values.length - 1]);
+
+            //return "translate(" + x((d["value"])["timestamp"]) + "," + y((d["value"])["temperature"]) + ")"; 
+            return "translate(" + (d["value"])["timestamp"] + "," + (d["value"])["temperature"] + ")"; 
+
+          })
+          .attr("x", 870)
+          .attr("y", 470)
           .attr("dy", ".35em")
-          //.text(function(d) { return d.name; });
+          /*.text(function(d) { 
+            console.log(d.name);
+            return d.name; 
+          })*/
           .style("text-anchor", "end")
           .text("Timestamp")
           .append("text");
