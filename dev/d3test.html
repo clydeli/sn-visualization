@@ -14,10 +14,6 @@
         shape-rendering: crispEdges;
       }
 
-      .x.axis path {
-        display: none;
-      }
-
       .line {
         fill: none;
         stroke: steelblue;
@@ -72,8 +68,12 @@
       //compute the line via svg (for shapes) .svg.line() creates a new line generator
       var line = d3.svg.line()
       .interpolate("basis")
-      .x(function(d) { return x(d.timestamp); })
-      .y(function(d) { return y(d.temperature); });
+      .x(function(d) { 
+        return x(d.timestamp); 
+      })
+      .y(function(d) { 
+        return y(d.temperature); 
+      });
 
       var svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -83,22 +83,40 @@
 
       $(document).on("ready", function() {
         $.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/DCTN102T/1366082066000/1366289320000/temperature/json", function(data) {
-          //every device_id found means a new color to designate it
-          color.domain(d3.keys(data[0]).filter(function(key) { 
-            return key !== "device_id"; 
+          /* d3.entries returns a list of entries from data[0]/first row in JSON data. Filter through entires 
+          via function(key, val) pairs - keys:  timestamp, sensor_type, value, device_id, vals: 28934987, etc. 
+          The filter function tests each element in the array of entries with its code - each obj is a separate entry. 
+          Thus count initialization must be outside of the function so that all of the non-essential entries are iterated
+          over */
+          var count = 0;
+          color.domain(d3.entries(data[0]).filter(function(obj) { 
+            for(var key in obj) {
+              ++count;
+              if (count == 8) {
+                //console.log("returning: " + obj[key]);
+                return obj[key];
+              }
+            }
           }));
           //for each value in the data
           data.forEach(function(d) {
             d.timestamp = getTime(d.timestamp);
           });
 
-          /* create a map of data - name vs. values. Values consists of another map of timestamps vs. temperatures */
+          /* create a map of data - name vs. values. Values consists of another map of timestamps vs. temperatures
+          This color domain is set directly above. Name passed in is key value pair of "device_id" and actual id */
           var sensor = color.domain().map(function(name) {
             return {
-              name: name,
+              name: name.value,
               values: data.map(function(d) { 
+                //name: object with key: device_id and value: DCTN___etc
+                //d: Object { timestamp="Tue, 26 Feb 45264 11:58:42 GMT", sensor_type="temperature", value=71.448105, more...}
+                //d[name]: device_id output
+                //d[timestamp]: timestamp in GMT
                 return {
-                  timestamp: d.timestamp, temperature: +d[name]
+                  //d.timestamp is correctly set to GMT
+                  timestamp: d.timestamp, 
+                  temperature: d["value"]
                 };
               })
             };
@@ -137,15 +155,21 @@
 
           sensordata.append("path")
           .attr("class", "line")
-          .attr("d", function(d) { return line(d.values); })
+          .attr("d", function(d) { 
+            return line(d.values); 
+          })
           .style("stroke", function(d) { return color(d.name); });
 
           sensordata.append("text")
           .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-          .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+          .attr("transform", function(d) { return "translate(" + x(d.value.timestamp) + "," + y(d.value.temperature) + ")"; })
           .attr("x", 3)
           .attr("dy", ".35em")
-          .text(function(d) { return d.name; });
+          //.text(function(d) { return d.name; });
+          .style("text-anchor", "end")
+          .text("Timestamp")
+          .append("text");
+
         });
       });
     </script>
