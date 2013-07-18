@@ -42,7 +42,10 @@
         GMT time, then return */
         var timestamp = new Date(0);
         timestamp.setUTCSeconds(linear(date));
-        return timestamp.toGMTString();
+        //return timestamp.toGMTString();
+        //console.log(timestamp);
+        return timestamp;
+        //returns a date object in GMT
       }
 
       /*
@@ -130,7 +133,7 @@ var color = d3.scale.category10();
                 //name: object with key: device_id and value: DCTN___etc
                 //d: Object { timestamp="Tue, 26 Feb 45264 11:58:42 GMT", sensor_type="temperature", value=71.448105, more...}
                 //d[name]: device_id output
-                //d[timestamp]: timestamp in GMT
+                //d.timestamp: date object timestamp in GMT
                 return {
                   //d.timestamp is correctly set to GMT
                   timestamp: d.timestamp, 
@@ -144,9 +147,9 @@ var color = d3.scale.category10();
 
 
 
-          //x-axis scale value range
-          //var x = d3.time.scale()
-          var x = d3.scale.linear()
+          //x-axis scale value range in d3.time for date objects
+          var x = d3.time.scale()
+          //var x = d3.scale.linear()
           .range([0, width]);
 
           //y-axis scale value range 
@@ -181,12 +184,14 @@ var color = d3.scale.category10();
             return d.temperature;
           });*/
           .x(function(d) { 
-            console.log(x(d.timestamp)); 
-            return d.timestamp; 
+            //console.log(x(d.timestamp)); 
+            //return d.timestamp; 
+            return x(d.timestamp);
           })
           .y(function(d) { 
-            console.log(y(d.temperature)); 
-            return d.temperature; 
+            //console.log(y(d.temperature)); 
+            //return d.temperature; 
+            return y(d.temperature);
           });
 
           var svg = d3.select("body").append("svg")
@@ -238,11 +243,10 @@ var color = d3.scale.category10();
           .text("Temperature (ºF)")
 
           //define attributes
-          var sensordata = svg.selectAll(".line")
+          var sensordata = svg.selectAll(".sensordata")
           .data(sensor)
-          .enter().append("path")
-          .attr("class", "line")
-          .attr("d", line);
+          .enter().append("g")
+          .attr("class", "sensordata")
 
           sensordata.append("path")
           .attr("class", "line")
@@ -279,8 +283,8 @@ var color = d3.scale.category10();
             //console.log((d["value"])["timestamp"]);
             //console.log(d.values[d.values.length - 1]);
 
-            //return "translate(" + x((d["value"])["timestamp"]) + "," + y((d["value"])["temperature"]) + ")"; 
-            return "translate(" + (d["value"])["timestamp"] + "," + (d["value"])["temperature"] + ")"; 
+            return "translate(" + x((d["value"])["timestamp"]) + "," + y((d["value"])["temperature"]) + ")"; 
+            //return "translate(" + (d["value"])["timestamp"] + "," + (d["value"])["temperature"] + ")"; 
 
           })
           .attr("x", 870)
