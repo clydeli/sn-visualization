@@ -28,7 +28,7 @@
     <script src="scripts/d3/d3.v3.min.js"></script>
     <script src="scripts/d3/d3.layout.js"></script>
 
-    <script> 
+    <script>
       var margin = {top: 20, right: 80, bottom: 30, left: 50},
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
@@ -38,7 +38,7 @@
         .domain([0, 999999999999999])
         .range([0, 999999999999999]);
 
-        /* timestamps entered in database in epoch format. So, retrieve epoch timestamp via linear scale and convert to 
+        /* timestamps entered in database in epoch format. So, retrieve epoch timestamp via linear scale and convert to
         GMT time, then return */
         var timestamp = new Date(0);
         timestamp.setUTCSeconds(linear(date));
@@ -50,14 +50,14 @@
 
       $(document).on("ready", function() {
         $.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/DCTN102T/1366082066000/1366289320000/temperature/json", function(data) {
-          /* d3.entries returns a list of entries from data[0]/first row in JSON data. Filter through entires 
-          via function(key, val) pairs - keys:  timestamp, sensor_type, value, device_id, vals: 28934987, etc. 
-          The filter function tests each element in the array of entries with its code - each obj is a separate entry. 
+          /* d3.entries returns a list of entries from data[0]/first row in JSON data. Filter through entires
+          via function(key, val) pairs - keys:  timestamp, sensor_type, value, device_id, vals: 28934987, etc.
+          The filter function tests each element in the array of entries with its code - each obj is a separate entry.
           Thus count initialization must be outside of the function so that all of the non-essential entries are iterated
           over */
 
           var count = 0;
-          color.domain(d3.entries(data[0]).filter(function(obj) { 
+          color.domain(d3.entries(data[0]).filter(function(obj) {
             for(var key in obj) {
               ++count;
               if (count == 8) {
@@ -67,23 +67,23 @@
             }
           }));
           //for each value in the data
-          data.forEach(function(d) {
+          /*data.forEach(function(d) {
             d.timestamp = getTime(d.timestamp);
-          });
+          });*/
 
           /* create a map of data - name vs. values. Values consists of another map of timestamps vs. temperatures
           This color domain is set directly above. Name passed in is key value pair of "device_id" and actual id */
           var sensor = color.domain().map(function(name) {
             return {
               name: name.value,
-              values: data.map(function(d) { 
+              values: data.map(function(d) {
                 //name: object with key: device_id and value: DCTN___etc
                 //d: Object { timestamp="Tue, 26 Feb 45264 11:58:42 GMT", sensor_type="temperature", value=71.448105, more...}
                 //d[name]: device_id output
                 //d.timestamp: date object timestamp in GMT
                 return {
                   //d.timestamp is correctly set to GMT
-                  timestamp: d.timestamp, 
+                  timestamp: d.timestamp,
                   temperature: d["value"]
                 };
               })
@@ -95,7 +95,7 @@
           //var x = d3.scale.linear()
           .range([0, width]);
 
-          //y-axis scale value range 
+          //y-axis scale value range
           var y = d3.scale.linear()
           .range([height, 0]);
 
@@ -113,14 +113,15 @@
           //compute the line via svg (for shapes) .svg.line() creates a new line generator
           var line = d3.svg.line()
           .interpolate("basis")
-          .x(function(d) { 
-            //console.log(x(d.timestamp)); 
-            //return d.timestamp; 
+          .x(function(d) {
+            //console.log(x(d.timestamp));
+            //return d.timestamp;
             return x(d.timestamp);
+            //return (new Date(d.timestamp));
           })
-          .y(function(d) { 
-            //console.log(y(d.temperature)); 
-            //return d.temperature; 
+          .y(function(d) {
+            //console.log(y(d.temperature));
+            //return d.temperature;
             return y(d.temperature);
           });
 
@@ -131,20 +132,22 @@
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
           //extent finds the minimum and maximum value in array to set domain. d.timestamp is set to GMT
-          x.domain(d3.extent(data, function(d) { 
-            return d.timestamp; 
+          x.domain(d3.extent(data, function(d) {
+            //console.log(d.timestamp);
+            //console.log(typeof(d.timestamp));
+            return (new Date(d.timestamp));
           }));
 
           y.domain([
-          d3.min(sensor, function(c) { 
-            return d3.min(c.values, function(v) { 
-              return v.temperature; 
-            }); 
+          d3.min(sensor, function(c) {
+            return d3.min(c.values, function(v) {
+              return v.temperature;
+            });
           }),
-          d3.max(sensor, function(c) { 
-            return d3.max(c.values, function(v) { 
-              return v.temperature; 
-            }); 
+          d3.max(sensor, function(c) {
+            return d3.max(c.values, function(v) {
+              return v.temperature;
+            });
           })
           ]);
 
@@ -173,31 +176,31 @@
 
           sensordata.append("path")
           .attr("class", "line")
-          .attr("d", function(d) { 
+          .attr("d", function(d) {
             //d.values is timestamps vs. temperature
-            return line(d.values); 
+            return line(d.values);
           })
           .style("stroke", function(d) { return color(d.name); });
 
           sensordata.append("text")
-          .datum(function(d) { 
+          .datum(function(d) {
             //d.name is DCN, etc.
             //d.values is the timestamps vs. temperature in an object
             //console.log(d.values);
             return {
-              name: d.name, 
+              name: d.name,
               value: d.values[d.values.length - 1]
-            }; 
+            };
           })
-          .attr("transform", function(d) { 
+          .attr("transform", function(d) {
             //d.value contains entire object: Object { timestamp="Mon, 02 Jun 45259 19:53:34 GMT", temperature=68.42186}
-            return "translate(" + x((d["value"])["timestamp"]) + "," + y((d["value"])["temperature"]) + ")"; 
+            return "translate(" + x((d["value"])["timestamp"]) + "," + y((d["value"])["temperature"]) + ")";
           })
           .attr("x", width)
           .attr("dy", ".35em")
-          .text(function(d) { 
+          .text(function(d) {
             console.log(d.name);
-            return d.name; 
+            return d.name;
           })
         });
       });
