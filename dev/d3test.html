@@ -42,10 +42,8 @@
         GMT time, then return */
         var timestamp = new Date(0);
         timestamp.setUTCSeconds(linear(date));
-        //return timestamp.toGMTString();
-        //console.log(timestamp);
-        return timestamp;
         //returns a date object in GMT
+        return timestamp;
       }
 
       var color = d3.scale.category10();
