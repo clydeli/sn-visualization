@@ -11,41 +11,32 @@ sn_visualization.timeseriesView = (function(){
     // internal functions
     updateCache = function(deviceURI, metricId, data, updateTime){
       console.log(data);
-      dataCache[deviceURI] = dataCache[deviceURI] || {};
-      dataCache[deviceURI][metricId] =
-        dataCache[deviceURI][metricId] || {
-          updateTime : updateTime-timeLength*1000,
-          values : []
-        };
-      var lastUpdateTime = dataCache[deviceURI][metricId].updateTime;
-      for(var i=0;i < data.length;++i){
-        var duration = (data[i].timestamp - lastUpdateTime) / 1000;
-        for(var j=0; j<duration; ++j){
-          dataCache[deviceURI][metricId].values.push(data[i].value);
-        }
-        lastUpdateTime = data[i].timestamp;
+      dataCache[deviceURI][metricId].updateTime = updateTime;
+      dataCache[deviceURI][metricId].data = dataCache[deviceURI][metricId].data || [];
+      dataCache[deviceURI][metricId].data = data.concat(dataCache[deviceURI][metricId].data);
+      while( dataCache[deviceURI][metricId].data.length > 0
+        && dataCache[deviceURI][metricId].data[dataCache[deviceURI][metricId].data.length-1].timestamp<updateTime-timeLength*1000){
+        dataCache[deviceURI][metricId].data.pop();
       }
-      //dataCache[deviceURI].updateTime = updateTime;
-      //dataCache[deviceURI].data = dataCache[deviceURI].data || [];
-      /*dataCache[deviceURI].data = dataCache[deviceURI].data.concat(data);
-      while( dataCache[deviceURI].data.length > 0 && dataCache[deviceURI].data[0].timestamp<updateTime-timeLength*1000){
-        dataCache[deviceURI].data.shift();
-      }*/
-      dataCache[deviceURI][metricId].updateTime = lastUpdateTime;
+      console.log(dataCache[deviceURI][metricId].data);
     },
 
     insertWorker = function(deviceURI, metricId){
-      var
-        now = new Date(),
-        fetchTime = now.getTime();
+
+      var fetchTime = (new Date()).getTime();
 
       dataWorkers[deviceURI][metricId].worker = new Worker('scripts/workers/timeSeriesWorker.js');
       dataWorkers[deviceURI][metricId].worker.addEventListener(
         'message', function(e){
           var data = JSON.parse(e.data);
-          console.log(data);
           $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] img.loading').remove();
+          $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"] svg').remove();
           updateCache(deviceURI, metricId, data, (new Date()).getTime());
+
+          drawData(
+            dataCache[deviceURI][metricId].data,
+            '.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]'
+          );
 
           // Log received data into logView
           /*$('#logView').append(data.length+' updates received for device '+deviceURI+' at '+(new Date())+'<br>');
@@ -71,82 +62,123 @@ sn_visualization.timeseriesView = (function(){
       delete dataWorkers[deviceURI][metricId];
     };
 
-  // Modified from d3 example (http://bl.ocks.org/mbostock/1667367)
 
-/*
-    margin = {top: 10, right: 10, bottom: 70, left: 40},
-    margin2 = {top: 215, right: 10, bottom: 20, left: 40},
-    width = 300 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom,
-    height2 = 250 - margin2.top - margin2.bottom,
+    // Modified from d3 example (http://bl.ocks.org/mbostock/3884955), annotated by Kyle
+    var
+      margin = {top: 20, right: 80, bottom: 30, left: 50},
+      width = 500 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom,
+      color = d3.scale.category10(),
+      x = d3.time.scale().range([0, width]), //x-axis scale value range in d3.time for date objects
+      y = d3.scale.linear().range([height, 0]), //y-axis scale value range
+      xAxis = d3.svg.axis().scale(x).orient("bottom"), //x-axis is on the bottom
+      yAxis = d3.svg.axis().scale(y).orient("left"); //y-axis is on the left
 
-    x = d3.time.scale().range([0, width]),
-    x2 = d3.time.scale().range([0, width]),
-    y = d3.scale.linear().range([height, 0]),
-    y2 = d3.scale.linear().range([height2, 0]),
+    var drawData = function(data, selector){
 
-    xAxis = d3.svg.axis().scale(x).orient("bottom"),
-    xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
-    yAxis = d3.svg.axis().scale(y).orient("left"),
+      var count = 0;
+      color.domain(d3.entries(data[0]).filter(function(obj) {
+        for(var key in obj) {
+          ++count;
+          if (count == 8) { return obj[key]; }
+        }
+      }));
 
-    area = d3.svg.area()
-    .interpolate("linear")
-    .x(function(d) { return x(d.date); })
-    .y0(height)
-    .y1(function(d) { return y(d.value); }),
-
-    area2 = d3.svg.area()
-    .interpolate("linear")
-    .x(function(d) { return x2(d.date); })
-    .y0(height2)
-    .y1(function(d) { return y2(d.value); }),
-
-    drawData = function(data, metric, selector){
-
-      data.forEach(function(d) {
-        d.date = new Date(parseInt(d.timestamp));
-        d.value = d[metric];
+      /* create a map of data - name vs. values. Values consists of another map of timestamps vs. temperatures
+      This color domain is set directly above. Name passed in is key value pair of "device_id" and actual id */
+      var sensor = color.domain().map(function(name) {
+        return {
+          name: name.value,
+          values: data.map(function(d) {
+            //name: object with key: device_id and value: DCTN___etc
+            //d: Object { timestamp="Tue, 26 Feb 45264 11:58:42 GMT", sensor_type="temperature", value=71.448105, more...}
+            //d[name]: device_id output
+            //d.timestamp: date object timestamp in GMT
+            return {
+              //d.timestamp is correctly set to GMT
+              timestamp: d.timestamp,
+              temperature: d["value"]
+            };
+          })
+        };
       });
 
-      var brush = d3.svg.brush().x(x2).on("brush", brush);
-
-      function brush() {
-        x.domain(brush.empty() ? x2.domain() : brush.extent());
-        focus.select("path").attr("d", area);
-        focus.select(".x.axis").call(xAxis);
-      }
+      //compute the line via svg (for shapes) .svg.line() creates a new line generator
+      var line = d3.svg.line()
+      .interpolate("basis")
+      .x(function(d) { return x(d.timestamp); })
+      .y(function(d) { return y(d.temperature); });
 
       var svg = d3.select(selector).append("svg")
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom);
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      svg.append("defs").append("clipPath")
-        .attr("id", "clip")
-        .append("rect")
-        .attr("width", width)
-        .attr("height", height);
+      //extent finds the minimum and maximum value in array to set domain. d.timestamp is set to GMT
+      x.domain(d3.extent(data, function(d) { return (new Date(d.timestamp)); }));
 
-      var focus = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      var context = svg.append("g").attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+      y.domain([
+        d3.min(sensor, function(c) {
+          return d3.min(c.values, function(v) { return v.temperature; });
+        }),
+        d3.max(sensor, function(c) {
+          return d3.max(c.values, function(v) { return v.temperature; });
+        })
+      ]);
 
-      x.domain(d3.extent(data.map(function(d) { return d.date; })));
+      //x axis attributes
+      svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
 
-      y.domain(
-        [0.9*d3.min(data.map(function(d) { return d.value; })),
-         1.1*d3.max(data.map(function(d) { return d.value; }))]
-      );
-      x2.domain(x.domain());
-      y2.domain(y.domain());
+      //y axis attributes
+      svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Temperature (ºF)")
 
-      focus.append("path").datum(data).attr("clip-path", "url(#clip)").attr("d", area);
-      focus.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
-      focus.append("g").attr("class", "y axis").call(yAxis);
+      //define attributes
+      var sensordata = svg.selectAll(".sensordata")
+      .data(sensor)
+      .enter().append("g")
+      .attr("class", "sensordata")
 
-      context.append("path").datum(data).attr("d", area2);
-      context.append("g").attr("class", "x axis").attr("transform", "translate(0," + height2 + ")").call(xAxis2);
-      context.append("g").attr("class", "x brush").call(brush).selectAll("rect").attr("y", -6).attr("height", height2 + 7);
+      sensordata.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) {
+        //d.values is timestamps vs. temperature
+        return line(d.values);
+      })
+      .style("stroke", function(d) { return color(d.name); });
 
-    };*/
+      sensordata.append("text")
+      .datum(function(d) {
+        //d.name is DCN, etc.
+        //d.values is the timestamps vs. temperature in an object
+        return {
+          name: d.name,
+          value: d.values[d.values.length - 1]
+        };
+      })
+      .attr("transform", function(d) {
+        //d.value contains entire object: Object { timestamp="Mon, 02 Jun 45259 19:53:34 GMT", temperature=68.42186}
+        return "translate(" + x((d["value"])["timestamp"]) + "," + y((d["value"])["temperature"]) + ")";
+      })
+      .attr("x", width)
+      .attr("dy", ".35em")
+      .text(function(d) {
+        console.log(d.name);
+        return d.name;
+      });
+    };
+
 
   return {
 
@@ -167,9 +199,7 @@ sn_visualization.timeseriesView = (function(){
         '</div>'
       );
 
-      var selector = '.timeseriesView[data-d_uri="'+deviceURI+'"]';
-      $(selector+'[data-s_id="'+metricId+'"]').draggable();
-
+      $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').draggable();
     },
 
     remove: function(deviceURI, metricId){
