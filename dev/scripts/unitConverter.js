@@ -8,26 +8,31 @@ sn_visualization.unitConverter = (function(){
     },
     conversionTable = {
       "Firefly": {
-        "bat": [0.003060217, 0], // Battery voltage (V)
-        "temp": [0.07506, 32], // Temperature (analog sensor F)
-        "digital_temp": [0.18,32], // Temperature (digital sensor F)
-        "light": [-1, 1], // Incident Illumination (lumens)
-        "humidity": [1, 0], // Relative Humidity (%)
-        "pressure ": [0.000295781, 0], // Barometric Pressure (in. Hg)
-        "acc_x": [1, 0], // Acceleration - X (ft / sec^2)
-        "acc_x": [1, 0], // Acceleration - Y (ft / sec^2)
-        "acc_x": [1, 0], // Acceleration - Z (ft / sec^2)
-        "audio_p2p": [1, 0], // Audio Level (relative)
-        "motion": [950, 0] // Motion Detected (binary)
+        "bat": [0.003060217, 0, 'Battery voltage (V)'], // Battery voltage (V)
+        "temp": [0.07506, 32, 'Temperature (analog sensor) (F)'], //
+        "digital_temp": [0.18,32, 'Temperature (digital sensor) (F)'], // Temperature (digital sensor F)
+        "light": [-1, 1, 'Incident Illumination (lumens)'], // Incident Illumination (lumens)
+        "humidity": [1, 0, 'Relative Humidity (%)'], // Relative Humidity (%)
+        "pressure ": [0.000295781, 0, 'Barometric Pressure (in. Hg)'], //
+        "acc_x": [1, 0, 'Acceleration - X (ft/sec^2)'], // Acceleration - X (ft / sec^2)
+        "acc_x": [1, 0, 'Acceleration - Y (ft/sec^2)'], // Acceleration - Y (ft / sec^2)
+        "acc_x": [1, 0, 'Acceleration - Z (ft/sec^2)'], // Acceleration - Z (ft / sec^2)
+        "audio_p2p": [1, 0, 'Audio Level (relative)'], // Audio Level (relative)
+        "motion": [950, 0, 'Motion Detected (binary)'] // Motion Detected (binary)
       }
     };
 
   return{
-    convert : function(deviceURI, metricId, value){
+    convert: function(deviceURI, metricId, value){
       if(deviceTypeTable[deviceURI]){
         var convertRule = conversionTable[deviceTypeTable[deviceURI]][metricId];
-        return value*convertRule[0]+convertRule[1];
+        return value*convertRule[0]+convertRule[1]; // data = A*rawdata + B
       } else { return value; }
+    },
+    sensorName: function(deviceURI, metricId){
+      if(deviceTypeTable[deviceURI]){
+        return conversionTable[deviceTypeTable[deviceURI]][metricId][2];
+      } else { return metricId; }
     }
   }
 

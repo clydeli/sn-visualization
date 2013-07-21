@@ -18,7 +18,6 @@ sn_visualization.timeseriesView = (function(){
         && dataCache[deviceURI][metricId].data[dataCache[deviceURI][metricId].data.length-1].timestamp<updateTime-timeLength*1000){
         dataCache[deviceURI][metricId].data.pop();
       }
-      console.log(dataCache[deviceURI][metricId].data);
     },
 
     insertWorker = function(deviceURI, metricId){
@@ -138,7 +137,7 @@ sn_visualization.timeseriesView = (function(){
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      //.text("Temperature (ºF)")
+      .text(sn_visualization.unitConverter.sensorName(deviceURI, metricId))
 
       //define attributes
       var sensordata = svg.selectAll(".sensordata")
