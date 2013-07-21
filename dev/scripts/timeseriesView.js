@@ -34,6 +34,7 @@ sn_visualization.timeseriesView = (function(){
           updateCache(deviceURI, metricId, data, (new Date()).getTime());
 
           drawData(
+            deviceURI, metricId,
             dataCache[deviceURI][metricId].data,
             '.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]'
           );
@@ -74,7 +75,7 @@ sn_visualization.timeseriesView = (function(){
       xAxis = d3.svg.axis().scale(x).orient("bottom"), //x-axis is on the bottom
       yAxis = d3.svg.axis().scale(y).orient("left"); //y-axis is on the left
 
-    var drawData = function(data, selector){
+    var drawData = function(deviceURI, metricId, data, selector){
 
       var count = 0;
       color.domain(d3.entries(data[0]).filter(function(obj) {
@@ -97,7 +98,7 @@ sn_visualization.timeseriesView = (function(){
             return {
               //d.timestamp is correctly set to GMT
               timestamp: d.timestamp,
-              temperature: d["value"]
+              temperature: sn_visualization.unitConverter.convert(deviceURI, metricId, d.value)
             };
           })
         };
@@ -117,14 +118,9 @@ sn_visualization.timeseriesView = (function(){
 
       //extent finds the minimum and maximum value in array to set domain. d.timestamp is set to GMT
       x.domain(d3.extent(data, function(d) { return (new Date(d.timestamp)); }));
-
       y.domain([
-        d3.min(sensor, function(c) {
-          return d3.min(c.values, function(v) { return v.temperature; });
-        }),
-        d3.max(sensor, function(c) {
-          return d3.max(c.values, function(v) { return v.temperature; });
-        })
+        d3.min(sensor, function(c){ return d3.min(c.values, function(v) { return v.temperature; }); }),
+        d3.max(sensor, function(c){ return d3.max(c.values, function(v) { return v.temperature; }); })
       ]);
 
       //x axis attributes
@@ -142,7 +138,7 @@ sn_visualization.timeseriesView = (function(){
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Temperature (ºF)")
+      //.text("Temperature (ºF)")
 
       //define attributes
       var sensordata = svg.selectAll(".sensordata")
@@ -173,10 +169,7 @@ sn_visualization.timeseriesView = (function(){
       })
       .attr("x", width)
       .attr("dy", ".35em")
-      .text(function(d) {
-        console.log(d.name);
-        return d.name;
-      });
+      .text(function(d){ return d.name; });
     };
 
 
@@ -184,7 +177,7 @@ sn_visualization.timeseriesView = (function(){
 
     insert : function(deviceURI, metricId, deviceName, metricName){
 
-      dataCache[deviceURI] = {};
+      dataCache[deviceURI] = dataCache[deviceURI] || {};
       dataCache[deviceURI][metricId] = dataCache[deviceURI][metricId] || {};
 
       dataWorkers[deviceURI] = dataWorkers[deviceURI] || {};

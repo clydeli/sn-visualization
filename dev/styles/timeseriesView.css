@@ -25,7 +25,7 @@
 	box-shadow: 1px 1px 5px 2px #666;
 	width: 480px; height: 300px;
 	cursor: pointer;
-	z-index: 2;
+	z-index: 10;
 }
 
 .timeseriesView img.loading {

@@ -31,53 +31,6 @@ sn_visualization.main = (function(){
         type: "START",
         url: "http://"+sn_visualization.serverAddress+"/last_readings_from_all_devices/",
       });
-    },
-
-    buildSensorsObj = function(callback){
-
-      var snArch = { id : "root", name : "CMUSV", children : [] };
-      var gatewayHash = {};
-
-      $.getJSON("http://cmu-sds.herokuapp.com/get_devices", function(data){
-
-        /* Parse the data */
-        var deviceCount = data.length;
-        for(var i=0; i< deviceCount; ++i){
-
-          var gatewayName = data[i].device_agent[0].print_name;
-          if(!gatewayHash.hasOwnProperty(gatewayName)){
-            snArch.children.push({ type: "Gateway", id: "gateway"+String(i), name: gatewayName, data: {}, children: [] });
-            gatewayHash[gatewayName] = snArch.children.length-1;
-          }
-
-          var deviceNode = {
-            type : "Device", d_uri : data[i].uri,
-            name : data[i].location.print_name,
-            data : {}, children : []
-          };
-
-          var sensorCount = data[i].sensors.length;
-          for(var j=0; j<sensorCount; ++j){
-            for( var key in data[i].sensors[j]){
-              deviceNode.children.push({
-                type : "Sensor", d_uri : data[i].uri, s_id : key, d_name : data[i].location.print_name, name : data[i].sensors[j][key],
-                data : {}, children : []
-              });
-            }
-          }
-
-          snArch.children[ gatewayHash[gatewayName]].children.push(deviceNode);
-        }
-
-        // Sort the devices by their names
-        for(var key in gatewayHash){
-          snArch.children[ gatewayHash[key] ].children.sort(
-            function(a, b){ return (a.name < b.name)? -1:1 ; }
-          );
-        }
-
-        if(callback){ callback(snArch); }
-      });
     };
 
   return {
@@ -85,8 +38,6 @@ sn_visualization.main = (function(){
 
       // Load from prestored data
       sn_visualization.topologicalView.initialize(sn_visualization.networkArchictecture);
-      // Or fetch and parse data from old server
-      //buildSensorsObj(sn_visualization.topologicalView.initialize);
 
       // Initialize buidling manager
       buildingManager = sn_visualization.buildingManager(
@@ -142,11 +93,8 @@ $(document).on('ready', function(){
 
   $('#buildingContainer .floorNode').click(function(){
     var deviceURI = $(this).attr("data-d_uri");
-    if($(this).hasClass("highlighted")){
-      sn_visualization.topologicalView.closeDevice(deviceURI);
-    } else {
-      sn_visualization.topologicalView.openDevice(deviceURI);
-    }
+    if($(this).hasClass("highlighted")){ sn_visualization.topologicalView.closeDevice(deviceURI); }
+    else { sn_visualization.topologicalView.openDevice(deviceURI); }
     $(this).toggleClass("highlighted");
   });
 
