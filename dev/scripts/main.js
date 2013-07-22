@@ -56,6 +56,12 @@ sn_visualization.main = (function(){
       // Polling Sensor Status
       pollingSensorStatus();
 
+      // Resize the device node block size according to window size
+      $(window).resize(function () {
+        $('.nodeBlock').css({'width' : (($(window).width() / 1250)+'em')});
+        $('.nodeBlock').css({'height' : (($(window).height() / 540)+'em')});
+      });
+
       // Menu click handlers
       $('#menuBar nav li').click( function(){
         switch($(this).html()){
@@ -86,27 +92,11 @@ $(document).on('ready', function(){
 
   sn_visualization.main.initialize();
 
-  $(window).resize(function () {
-    $('.nodeBlock').css({'width' : (($(window).width() / 1250)+'em')});
-    $('.nodeBlock').css({'height' : (($(window).height() / 540)+'em')});
-  });
-
   $('#buildingContainer .floorNode').click(function(){
     var deviceURI = $(this).attr("data-d_uri");
     if($(this).hasClass("highlighted")){ sn_visualization.topologicalView.closeDevice(deviceURI); }
     else { sn_visualization.topologicalView.openDevice(deviceURI); }
     $(this).toggleClass("highlighted");
   });
-
-  $('body').on('click', '.timeseriesClose', function(){
-    var
-      deviceURI = $(this).parent().attr('data-d_uri'),
-      metricId = $(this).parent().attr('data-s_id');
-    sn_visualization.timeseriesView.remove(deviceURI, metricId);
-    sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
-  });
-
-
-
 
 });

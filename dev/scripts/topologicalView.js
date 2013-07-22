@@ -54,8 +54,8 @@ sn_visualization.topologicalView = (function(){
 
 						// If the node is a sensor
 						if(d.type == "Sensor"){
-  						if (d.children){ sn_visualization.timeseriesView.remove( d.d_uri, d.s_id); }
-  						else { sn_visualization.timeseriesView.insert( d.d_uri, d.s_id, d.d_name, d.name );	}
+  						if (d.children){ sn_visualization.timeseriesManager.remove( d.d_uri, d.s_id); }
+  						else { sn_visualization.timeseriesManager.insert( d.d_uri, d.s_id, d.d_name, d.name );	}
 						// else if the node is a device
 						} else if(d.type == "Device"){
 							//var view = sn_visualization.floorViews.getView("cmusvFloors");

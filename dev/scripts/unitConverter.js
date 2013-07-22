@@ -13,7 +13,7 @@ sn_visualization.unitConverter = (function(){
         "digital_temp": [0.18,32, 'Temperature (digital sensor) (F)'], // Temperature (digital sensor F)
         "light": [-1, 1, 'Incident Illumination (lumens)'], // Incident Illumination (lumens)
         "humidity": [1, 0, 'Relative Humidity (%)'], // Relative Humidity (%)
-        "pressure ": [0.000295781, 0, 'Barometric Pressure (in. Hg)'], //
+        "pressure": [0.000295781, 0, 'Barometric Pressure (in. Hg)'], //
         "acc_x": [1, 0, 'Acceleration - X (ft/sec^2)'], // Acceleration - X (ft / sec^2)
         "acc_x": [1, 0, 'Acceleration - Y (ft/sec^2)'], // Acceleration - Y (ft / sec^2)
         "acc_x": [1, 0, 'Acceleration - Z (ft/sec^2)'], // Acceleration - Z (ft / sec^2)

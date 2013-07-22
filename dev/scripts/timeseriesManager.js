@@ -1,6 +1,6 @@
 var sn_visualization = sn_visualization || {};
 
-sn_visualization.timeseriesView = (function(){
+sn_visualization.timeseriesManager = (function(){
 
   var
     // some static variables
@@ -171,7 +171,6 @@ sn_visualization.timeseriesView = (function(){
       .text(function(d){ return d.name; });
     };
 
-
   return {
 
     insert : function(deviceURI, metricId, deviceName, metricName){
@@ -183,13 +182,19 @@ sn_visualization.timeseriesView = (function(){
       dataWorkers[deviceURI][metricId] = dataWorkers[deviceURI][metricId] || {};
       insertWorker(deviceURI, metricId);
 
-      $("body").append(
+      var timeseriesBlock = $(
         '<div class="timeseriesView" data-d_uri="'+deviceURI+'" data-s_id="'+metricId+'">'+
         '<img class="loading" src="images/loading.gif">'+
         '<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
         '<div class="timeseriesClose">X</div>'+
-        '</div>'
-      );
+        '</div>');
+
+      timeseriesBlock.find('.timeseriesClose').on('click', function(){
+        sn_visualization.timeseriesManager.remove(deviceURI, metricId);
+        sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
+      });
+
+      $("body").append(timeseriesBlock);
 
       $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').draggable();
     },
