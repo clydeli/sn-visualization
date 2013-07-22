@@ -33,7 +33,11 @@ sn_visualization.buildingManager = function(googleMapInstance, buildingContainer
       );
 
       // Create the container for the building and initialize it
-      $(buildingContainer).append("<div id='"+buildingId+"Building' class='buildingContainer'></div>");
+      $(buildingContainer).append(
+        "<div id='"+buildingId+"Building' class='buildingContainer'>"+
+        "<span class='buildingCloseBtn'>x</span><span class='heatmapToggleBtn'>Toggle Heatmap</span>"+
+        "</div>"
+      );
       buildingsTable[buildingId] = new sn_visualization.buildingInstance(buildingData, '#'+buildingId+'Building');
 
     },

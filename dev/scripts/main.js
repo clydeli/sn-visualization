@@ -62,17 +62,31 @@ sn_visualization.main = (function(){
         $('.nodeBlock').css({'height' : (($(window).height() / 540)+'em')});
       });
 
+      // Floornode click handler
+      $('#geographicalContainer .floorNode').click(function(){
+        var deviceURI = $(this).attr("data-d_uri");
+        if($(this).hasClass("highlighted")){
+          sn_visualization.topologicalView.closeDevice(deviceURI);
+        } else {
+          sn_visualization.topologicalView.openDevice(deviceURI);
+          $("#topologicalView").toggleClass("pinned");
+        }
+        $(this).toggleClass("highlighted");
+      });
+
+      // Heatmap and building toggle/close handler
+      $('#geographicalContainer').on('click', '.buildingCloseBtn', function(){
+        $('#geographicalContainer').addClass('hidden');
+        buildingManager.hideBuilding();
+      });
+      $('#geographicalContainer').on('click', '.heatmapToggleBtn', function(){
+        $('.heatmap').toggleClass('hidden');
+      });
+
+
       // Menu click handlers
       $('#menuBar nav li').click( function(){
         switch($(this).html()){
-          case "Heatmap":
-            $('.heatmap').toggleClass('hidden');
-            break;
-          case "Map":
-            $('#geographicalContainer').addClass('hidden');
-            buildingManager.hideBuilding();
-            //$('#gmapOverlay').removeClass('hidden');
-            break;
           case "Log":
             $('#logView').toggleClass('hidden');
             break;
@@ -89,14 +103,5 @@ sn_visualization.main = (function(){
 
 
 $(document).on('ready', function(){
-
   sn_visualization.main.initialize();
-
-  $('#buildingContainer .floorNode').click(function(){
-    var deviceURI = $(this).attr("data-d_uri");
-    if($(this).hasClass("highlighted")){ sn_visualization.topologicalView.closeDevice(deviceURI); }
-    else { sn_visualization.topologicalView.openDevice(deviceURI); }
-    $(this).toggleClass("highlighted");
-  });
-
 });

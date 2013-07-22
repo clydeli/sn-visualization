@@ -44,7 +44,7 @@ sn_visualization.buildingInstance.prototype = {
     for(var i=0; i<=this.elevations; ++i){
       var heatmapHtml = '';
       heatmapHtml +=
-        '<div class="heatmap" data-elevation="'+i+'" style="height: '+100/(this.elevations+1)+'%; top: '+i*100/(this.elevations+1)+'%;">'+
+        '<div class="heatmap hidden" data-elevation="'+i+'" style="height: '+100/(this.elevations+1)+'%; top: '+i*100/(this.elevations+1)+'%;">'+
           '<canvas style="width: 100%; height: 100%">'
         '</div>';
       $(this.selector).append(heatmapHtml);

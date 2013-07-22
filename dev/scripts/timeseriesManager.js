@@ -185,6 +185,7 @@ sn_visualization.timeseriesManager = (function(){
       var timeseriesBlock = $(
         '<div class="timeseriesView" data-d_uri="'+deviceURI+'" data-s_id="'+metricId+'">'+
         '<img class="loading" src="images/loading.gif">'+
+        // '<input type="datetime" name="initTime" class="initTime"> to <input type="datetime" name="endTime" class="endTime"><input type="button" class="generateStaticBtn">'+
         '<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
         '<div class="timeseriesClose">X</div>'+
         '</div>');
