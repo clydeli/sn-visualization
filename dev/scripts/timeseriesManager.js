@@ -185,7 +185,7 @@ sn_visualization.timeseriesManager = (function(){
       var timeseriesBlock = $(
         '<div class="timeseriesView" data-d_uri="'+deviceURI+'" data-s_id="'+metricId+'">'+
         '<img class="loading" src="images/loading.gif">'+
-        // '<input type="datetime" name="initTime" class="initTime"> to <input type="datetime" name="endTime" class="endTime"><input type="button" class="generateStaticBtn">'+
+        '<div class="queryBlock"><input type="datetime" name="initTime" class="initTime"> to <input type="datetime" name="endTime" class="endTime"><input type="button" class="generateStaticBtn" value="Query"></div>'+
         '<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
         '<div class="timeseriesClose">X</div>'+
         '</div>');
@@ -195,9 +195,36 @@ sn_visualization.timeseriesManager = (function(){
         sn_visualization.topologicalView.closeSensor(deviceURI, metricId);
       });
 
-      $("body").append(timeseriesBlock);
+      timeseriesBlock.find('.generateStaticBtn').on('click', function(){
+        sn_visualization.timeseriesManager.insertStatic(
+          deviceURI, metricId, deviceName, metricName,
+          (new Date(timeseriesBlock.find('.initTime').val())).getTime(),
+          (new Date(timeseriesBlock.find('.endTime').val())).getTime()
+        );
+      });
 
+      $("body").append(timeseriesBlock);
       $('.timeseriesView[data-d_uri="'+deviceURI+'"][data-s_id="'+metricId+'"]').draggable();
+    },
+
+    insertStatic : function(deviceURI, metricId, deviceName, metricName, initTime, endTime){
+
+      var
+        uid = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1),
+        timeseriesBlock = $(
+          '<div class="timeseriesView" id="timeseries'+uid+'">'+
+          '<div class="timeseriesLabel">'+deviceName+' - '+metricName+'</div>'+
+          '<div class="timeseriesClose">X</div>'+
+          '</div>'
+        );
+
+      timeseriesBlock.find('.timeseriesClose').on('click', function(){ timeseriesBlock.remove(); });
+
+      $.getJSON("http://"+sn_visualization.serverAddress+"/sensors/"+deviceURI+"/"+initTime+"/"+endTime+"/"+metricId+"/json", function(data){
+        $("body").append(timeseriesBlock);
+        drawData(deviceURI, metricId, data, "#timeseries"+uid );
+        $(".timeseriesView").draggable();
+      });
     },
 
     remove: function(deviceURI, metricId){

@@ -23,7 +23,7 @@
 	background-color: #fff;
 	border-radius: 1px;
 	box-shadow: 1px 1px 5px 2px #666;
-	width: 480px; height: 300px;
+	width: 480px; height: 320px;
 	cursor: pointer;
 	z-index: 10;
 }
@@ -52,4 +52,8 @@
 
 .timeseriesClose:hover {
 	opacity : 1;
+}
+
+.timeseriesView .queryBlock {
+  float: right;
 }

@@ -16,7 +16,7 @@ sn_visualization.main = (function(){
           // Update data in topologicalView and floorView
           sn_visualization.topologicalView.updateStatus(data);
           buildingManager.getBuilding("cmusvB23").updateDeviceStatus(data);
-	        //sn_visualization.floorViews.getView("nasaFloors").updateDeviceStatus(data);
+	        buildingManager.getBuilding("nasaBuildingN").updateDeviceStatus(data);
 
           // Log received data into logView
           $('#logView').append('Update received for device status at '+(new Date())+'<br>');
