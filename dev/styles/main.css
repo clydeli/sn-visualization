@@ -206,6 +206,12 @@ body {
     padding-top: 2%;
     font-size: 1.5em;
 }
+/* styling for failed class version of api-getalldevices div 
+ * '#' - css id string
+ * '.' - css class string, appends a class on to rest of identifier (if any) */
+#api-getalldevices.failed-api-test {
+    background-color: #CC0000;
+}
 
 #api-getsensortype {
     top: 10%;
@@ -220,6 +226,9 @@ body {
     text-indent: 1em;
     padding-top: 2%;
     font-size: 1.5em;
+}
+#api-getsensortype.failed-api-test {
+    background-color: #CC0000;
 }
 
 #api-addsensorreadings {
@@ -236,6 +245,9 @@ body {
     padding-top: 2%;
     font-size: 1.5em;
 }
+#api-addsensorreadings.failed-api-test {
+    background-color: #CC0000;
+}
 
 #api-getsensorreadingsattime {
     top: 10%;
@@ -250,6 +262,9 @@ body {
     text-indent: 1em;
     padding-top: 2%;
     font-size: 1.5em;
+}
+#api-getsensorreadingsattime.failed-api-test {
+    background-color: #CC0000;
 }
 
 #api-getsensorreadingstimerange {
@@ -266,6 +281,9 @@ body {
     padding-top: 2%;
     font-size: 1.5em;
 }
+#api-getsensorreadingstimerange.failed-api-test {
+    background-color: #CC0000;
+}
 
 #api-getspecifictimereadings {
     top: 10%;
@@ -280,6 +298,9 @@ body {
     text-indent: 1em;
     padding-top: 2%;
     font-size: 1.5em;
+}
+#api-getspecifictimereadings.failed-api-test {
+    background-color: #CC0000;
 }
 
 #api-getcurrenttimereadings {
@@ -296,4 +317,6 @@ body {
     padding-top: 2%;
     font-size: 1.5em;
 }
-
+#api-getcurrenttimereadings.failed-api-test {
+    background-color: #CC0000;
+}

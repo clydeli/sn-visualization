@@ -84,8 +84,11 @@ sn_visualization.main = (function(){
       });
 
 
-      // Menu click handlers
-      $('#menuBar nav li').click( function(){
+      /* Menu click handlers
+       * select all li in tag with id=menuBar and tag with id=nav. JQuery toggles the class property of 
+       * div element by appending/removing "hidden" from string. This "creates" a new "class" 
+       * property that has separate css styling */
+      $('#menuBar nav li').click( function(){  
         switch($(this).html()){
           case "Log":
             $('#logView').toggleClass('hidden');
@@ -95,6 +98,60 @@ sn_visualization.main = (function(){
             break;
         }
       });
+
+      window.setInterval(function(){
+        $.getJSON("http://cmu-sensor-network.herokuapp.com/get_devices/json", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-getalldevices").toggleClass("failed-api-test");
+        });
+
+        $.getJSON("http://cmu-sensor-network.herokuapp.com/get_sensor_types/firefly_v3/json", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-getsensortype").toggleClass("failed-api-test");
+        });
+
+        $.getJSON("", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-addsensorreadings").toggleClass("failed-api-test");
+        });
+
+
+        $.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/json", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-getsensorreadingsattime").toggleClass("failed-api-test");
+        });
+
+        $.getJSON("http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/1368568996000/temp/json", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-getsensorreadingstimerange").toggleClass("failed-api-test");
+        });
+
+        $.getJSON("http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/1368568896000/temp/json", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-getspecifictimereadings").toggleClass("failed-api-test");
+        });
+
+        $.getJSON("http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/temp/json", function(data) {
+        })
+        //start chaining off getJSON()
+        .fail(function() {
+          $("#api-getcurrenttimereadings").toggleClass("failed-api-test");
+        });
+
+
+      }, 2000); //call function every 5 seconds
 
     }
   };
