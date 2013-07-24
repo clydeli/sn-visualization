@@ -153,11 +153,11 @@ body {
 
 
 #logView {
-	position: absolute; right: 0; bottom: 0;
-	width : 100%; height : 200px; z-index: 3;
-	color: #fff; background-color: #000; opacity: 0.8;
-	overflow-y: auto;
-  transition: all 300ms ease;
+    position: absolute; right: 0; bottom: 0;
+    width : 100%; height : 200px; z-index: 3;
+    color: #fff; background-color: #000; opacity: 0.8;
+    overflow-y: auto;
+    transition: all 300ms ease;
 }
 #logView.hidden { opacity: 0; height: 0;}
 
@@ -170,22 +170,130 @@ body {
     height: 100%;
     background-color: #000000;
     color: #fff;
-    opacity: 0.95;
+    opacity: 1.0;
     transition: all 300ms ease;
+    overflow: auto;
 }
 #apiView.hidden {
     opacity: 0;
     height: 0;
 }
+
 #apiImages {
     top: 5%;
     position: relative;
     text-align: center;
     margin-left: 10%;
-    width: 80%; height: 100%;
+    width: 100%; height: 100%;
     overflow: auto;
+    bottom: 10%;
 }
 #apiImages img {
     width: 100%;
+}
+
+#api-getalldevices {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #33CC33;
+    border-radius: 0.3em; /* rounded div corners */
+}
+#api-getalldevices-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
+}
+
+#api-getsensortype {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #339933;
+    border-radius: 0.3em;
+}
+#api-getsensortype-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
+}
+
+#api-addsensorreadings {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #009933;
+    border-radius: 0.3em;
+}
+#api-addsensorreadings-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
+}
+
+#api-getsensorreadingsattime {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #009933;
+    border-radius: 0.3em;
+}
+#api-getsensorreadingsattime-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
+}
+
+#api-getsensorreadingstimerange {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #009933;
+    border-radius: 0.3em;
+}
+#api-getsensorreadingstimerange-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
+}
+
+#api-getspecifictimereadings {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #009933;
+    border-radius: 0.3em;
+}
+#api-getspecifictimereadings-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
+}
+
+#api-getcurrenttimereadings {
+    top: 10%;
+    width: 75%;
+    text-align: left;
+    margin-left: 3%;
+    height: 12%;
+    background-color: #009933;
+    border-radius: 0.3em;
+}
+#api-getcurrenttimereadings-text {
+    text-indent: 1em;
+    padding-top: 2%;
+    font-size: 1.5em;
 }
 
