@@ -200,7 +200,7 @@ sn_visualization.main = (function(){
           }
         });
 
-      }, 3000); //call function every 2 seconds
+      }, 4000); //call function every /1000 seconds
 
     }
   };
