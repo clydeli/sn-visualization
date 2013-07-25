@@ -198,7 +198,7 @@ body {
     text-align: left;
     margin-left: 3%;
     height: 12%;
-    background-color: #33CC33;
+    background-color: #339933;
     border-radius: 0.3em; /* rounded div corners */
 }
 #api-getalldevices-text {
@@ -210,7 +210,7 @@ body {
  * '#' - css id string
  * '.' - css class string, appends a class on to rest of identifier (if any) */
 #api-getalldevices.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
 
 #api-getsensortype {
@@ -228,7 +228,7 @@ body {
     font-size: 1.5em;
 }
 #api-getsensortype.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
 
 #api-addsensorreadings {
@@ -237,7 +237,7 @@ body {
     text-align: left;
     margin-left: 3%;
     height: 12%;
-    background-color: #009933;
+    background-color: #339933;
     border-radius: 0.3em;
 }
 #api-addsensorreadings-text {
@@ -246,7 +246,7 @@ body {
     font-size: 1.5em;
 }
 #api-addsensorreadings.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
 
 #api-getsensorreadingsattime {
@@ -255,7 +255,7 @@ body {
     text-align: left;
     margin-left: 3%;
     height: 12%;
-    background-color: #009933;
+    background-color: #339933;
     border-radius: 0.3em;
 }
 #api-getsensorreadingsattime-text {
@@ -264,7 +264,7 @@ body {
     font-size: 1.5em;
 }
 #api-getsensorreadingsattime.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
 
 #api-getsensorreadingstimerange {
@@ -273,7 +273,7 @@ body {
     text-align: left;
     margin-left: 3%;
     height: 12%;
-    background-color: #009933;
+    background-color: #339933;
     border-radius: 0.3em;
 }
 #api-getsensorreadingstimerange-text {
@@ -282,7 +282,7 @@ body {
     font-size: 1.5em;
 }
 #api-getsensorreadingstimerange.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
 
 #api-getspecifictimereadings {
@@ -291,7 +291,7 @@ body {
     text-align: left;
     margin-left: 3%;
     height: 12%;
-    background-color: #009933;
+    background-color: #339933;
     border-radius: 0.3em;
 }
 #api-getspecifictimereadings-text {
@@ -300,7 +300,7 @@ body {
     font-size: 1.5em;
 }
 #api-getspecifictimereadings.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
 
 #api-getcurrenttimereadings {
@@ -309,7 +309,7 @@ body {
     text-align: left;
     margin-left: 3%;
     height: 12%;
-    background-color: #009933;
+    background-color: #339933;
     border-radius: 0.3em;
 }
 #api-getcurrenttimereadings-text {
@@ -318,5 +318,5 @@ body {
     font-size: 1.5em;
 }
 #api-getcurrenttimereadings.failed-api-test {
-    background-color: #CC0000;
+    background-color: #CD2626;
 }
