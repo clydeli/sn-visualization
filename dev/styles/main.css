@@ -168,7 +168,7 @@ body {
     max-width: 100%;
     max-height: 100%;
     height: 100%;
-    background-color: #121212;
+    background-color: #FFFFFF;
     color: #fff;
     opacity: 1.0;
     transition: all 300ms ease;
@@ -193,15 +193,37 @@ body {
     width: 100%;
 }
 
-
-
-
-
-
 #api-description {
+    top: 0;
     width: 100%;
-    background-color: #0F0F0F;
+    background-color: #1A1A1A;
+    border-bottom-style: solid;
+    border-bottom-width: medium;
+    border-bottom-color: #3D3D3D;
     height: 10%;
+    text-align: left;
+    min-width: 700px;
+    word-wrap:break-word
+    display: block;
+}
+.apidescriptiontitle {
+    font-size: 2em;
+    text-indent: 1em;
+    padding-top: 1%;
+}
+
+#api-description-text-div {
+    display: block;
+    text-align: left;
+}
+#api-description-text-p.apidescriptiontext {
+    text-decoration: none;
+    font-size: 1.3em;
+    margin: 0 auto; /* auto center */
+    width: 850px; /* set width auto breaks text */
+    text-align: justify;
+    color: #4A4A4A; /* set text color */
+    padding-bottom: 3%;
 }
 
 /* styling for failed class version of api-getalldevices div 
@@ -222,7 +244,6 @@ body {
 .api.failed-api-test {
     background-color: #CD2626;
 }
-
 .apitext {
     text-indent: 1em;
     font-size: 1.5em;
