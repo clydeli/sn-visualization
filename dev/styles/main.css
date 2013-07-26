@@ -181,6 +181,7 @@ body {
 
 #apiImages {
     top: 5%;
+    height: 100%;
     position: relative;
     text-align: center;
     margin-left: 0;
@@ -193,6 +194,7 @@ body {
     width: 100%;
 }
 
+/* dark gray div at very top, contains title of page */
 #api-description {
     top: 0;
     width: 100%;
@@ -226,13 +228,22 @@ body {
     padding-bottom: 3%;
 }
 
-/* styling for failed class version of api-getalldevices div 
+/* div that contains all the api functions and their expansions */
+.apicontainer {
+    margin-bottom: 2%;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+    min-width: 650px;
+    width: 65%;
+    margin-left: 10%;
+}
+
+/* individual function status boxes
  * '#' - css id string
  * '.' - css class string, appends a class on to rest of identifier (if any) */
 .api {
-    top: 2%;
-    width: 50%;
-    margin: 0 auto;
+    width: 60%;
     margin-bottom: 2%;
     text-align: left;
     height: 9%;
@@ -241,10 +252,44 @@ body {
     white-space: nowrap;
     overflow: hidden;
 }
+/* api failed-api-test is within class description */
 .api.failed-api-test {
     background-color: #CD2626;
 }
 .apitext {
     text-indent: 1em;
-    font-size: 1.5em;
+    font-size: 1.2em;
+}
+
+/* expanded api data div */
+.api-expansion {
+    background-color: #000000;
+    width: 400px;
+    min-width: 40%;
+    height: 400px;
+    border-radius: 0.3em;
+    text-align: justify;
+    text-indent: 1em;
+    word-wrap: break-word;
+    opacity: 1.0;
+    margin-left: 50%;
+    /*left: 50%; [> left side "margin" of off float <]*/
+    float: left; /* put divs side by side at same level. */
+    position: absolute; /* allow for tags to overlap on screen. this way, 
+                  all the api expansion divs overlap each other at the
+                  same position on the same level, but only one can be 
+                  seen at a time due to opacity*/
+    background-color: #000000;
+}
+.api-expansion.hidden {
+    opacity: 0;
+}
+
+/* paragraph that contains more detailed api */
+.api-expansiontext {
+    text-indent: 0.5em;
+    font-size: 1em;
+    text-decoration: none;
+    text-align: justify;
+    color: #FFFFFF; /* set text color */
 }

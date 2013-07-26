@@ -99,7 +99,72 @@ sn_visualization.main = (function(){
         }
       });
 
-      /* if a query fails, toggle only if successful style is up
+      /* API expanding divs 
+       *
+       * when mouse hovers over it, display corresponding text
+       * when mouse leaves it, remove corresponding text */
+      $('#api-getalldevices').on('mouseenter', function(){
+        $('#api-getalldevicesexpansion').toggleClass('hidden');
+      });
+      $('#api-getalldevices').on('mouseleave', function(){
+        $('#api-getalldevicesexpansion').toggleClass('hidden');
+      });
+
+      $('#api-getsensortype').on('mouseenter', function(){
+        $('#api-getsensortypeexpansion').toggleClass('hidden');
+      });
+      $('#api-getsensortype').on('mouseleave', function(){
+        $('#api-getsensortypeexpansion').toggleClass('hidden');
+      });
+
+
+      $('#api-addsensorreadings').on('mouseenter', function(){
+        $('#api-addsensorreadingsexpansion').toggleClass('hidden');
+      });
+      $('#api-addsensorreadings').on('mouseleave', function(){
+        $('#api-addsensorreadingsexpansion').toggleClass('hidden');
+      });
+
+
+      $('#api-getsensorreadingsattime').on('mouseenter', function(){
+        $('#api-getsensorreadingsattimeexpansion').toggleClass('hidden');
+      });
+      $('#api-getsensorreadingsattime').on('mouseleave', function(){
+        $('#api-getsensorreadingsattimeexpansion').toggleClass('hidden');
+      });
+
+
+      $('#api-getsensorreadingstimerange').on('mouseenter', function(){
+        $('#api-getsensorreadingstimerangeexpansion').toggleClass('hidden');
+      });
+      $('#api-getsensorreadingstimerange').on('mouseleave', function(){
+        $('#api-getsensorreadingstimerangeexpansion').toggleClass('hidden');
+      });
+
+
+      $('#api-getspecifictimereadings').on('mouseenter', function(){
+        $('#api-getspecifictimereadingsexpansion').toggleClass('hidden');
+      });
+      $('#api-getspecifictimereadings').on('mouseleave', function(){
+        $('#api-getspecifictimereadingsexpansion').toggleClass('hidden');
+      });
+
+
+      $('#api-getcurrenttimereadings').on('mouseenter', function(){
+        $('#api-getcurrenttimereadingsexpansion').toggleClass('hidden');
+      });
+      $('#api-getcurrenttimereadings').on('mouseleave', function(){
+        $('#api-getcurrenttimereadingsexpansion').toggleClass('hidden');
+      });
+
+
+
+
+
+
+
+      /* Dynamic API querying
+       * if a query fails, toggle only if successful style is up
        * if a query succeeds, toggle only if failure style is up */
       window.setInterval(function(){
         $.getJSON("http://cmu-sensor-network.herokuapp.com/get_devices/json", function(data) {
