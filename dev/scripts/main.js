@@ -106,14 +106,14 @@ sn_visualization.main = (function(){
       $('#api-getalldevices').on('mouseenter', function(){
         $('#api-getalldevicesexpansion').toggleClass('hidden');
       });
-      $('#api-getalldevices').on('mouseleave', function(){
+      $('.getalldevices').on('mouseleave', function(){
         $('#api-getalldevicesexpansion').toggleClass('hidden');
       });
 
       $('#api-getsensortype').on('mouseenter', function(){
         $('#api-getsensortypeexpansion').toggleClass('hidden');
       });
-      $('#api-getsensortype').on('mouseleave', function(){
+      $('.getsensortype').on('mouseleave', function(){
         $('#api-getsensortypeexpansion').toggleClass('hidden');
       });
 
@@ -121,7 +121,7 @@ sn_visualization.main = (function(){
       $('#api-addsensorreadings').on('mouseenter', function(){
         $('#api-addsensorreadingsexpansion').toggleClass('hidden');
       });
-      $('#api-addsensorreadings').on('mouseleave', function(){
+      $('.addsensorreadings').on('mouseleave', function(){
         $('#api-addsensorreadingsexpansion').toggleClass('hidden');
       });
 
@@ -129,7 +129,7 @@ sn_visualization.main = (function(){
       $('#api-getsensorreadingsattime').on('mouseenter', function(){
         $('#api-getsensorreadingsattimeexpansion').toggleClass('hidden');
       });
-      $('#api-getsensorreadingsattime').on('mouseleave', function(){
+      $('.getsensorreadingsattime').on('mouseleave', function(){
         $('#api-getsensorreadingsattimeexpansion').toggleClass('hidden');
       });
 
@@ -137,7 +137,7 @@ sn_visualization.main = (function(){
       $('#api-getsensorreadingstimerange').on('mouseenter', function(){
         $('#api-getsensorreadingstimerangeexpansion').toggleClass('hidden');
       });
-      $('#api-getsensorreadingstimerange').on('mouseleave', function(){
+      $('.getsensorreadingstimerange').on('mouseleave', function(){
         $('#api-getsensorreadingstimerangeexpansion').toggleClass('hidden');
       });
 
@@ -145,7 +145,7 @@ sn_visualization.main = (function(){
       $('#api-getspecifictimereadings').on('mouseenter', function(){
         $('#api-getspecifictimereadingsexpansion').toggleClass('hidden');
       });
-      $('#api-getspecifictimereadings').on('mouseleave', function(){
+      $('.getspecifictimereadings').on('mouseleave', function(){
         $('#api-getspecifictimereadingsexpansion').toggleClass('hidden');
       });
 
@@ -153,7 +153,7 @@ sn_visualization.main = (function(){
       $('#api-getcurrenttimereadings').on('mouseenter', function(){
         $('#api-getcurrenttimereadingsexpansion').toggleClass('hidden');
       });
-      $('#api-getcurrenttimereadings').on('mouseleave', function(){
+      $('.getcurrenttimereadings').on('mouseleave', function(){
         $('#api-getcurrenttimereadingsexpansion').toggleClass('hidden');
       });
 

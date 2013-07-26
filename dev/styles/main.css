@@ -266,10 +266,9 @@ body {
     background-color: #000000;
     width: 400px;
     min-width: 40%;
-    height: 400px;
+    height: 500px;
     border-radius: 0.3em;
-    text-align: justify;
-    text-indent: 1em;
+    text-align: left;
     word-wrap: break-word;
     opacity: 1.0;
     margin-left: 50%;
@@ -287,9 +286,10 @@ body {
 
 /* paragraph that contains more detailed api */
 .api-expansiontext {
-    text-indent: 0.5em;
     font-size: 1em;
     text-decoration: none;
     text-align: justify;
     color: #FFFFFF; /* set text color */
+    margin-left: 5%; /* all text in expansion has a left side margin */
+    margin-right: 5%; /* all text in expansion has a right side margin */
 }

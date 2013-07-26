@@ -63,72 +63,91 @@
 
             <div id="api-divcontainer" class="apicontainer">
 
-              <div id="api-getalldevices" class="api">
+              <div id="api-getalldevices" class="api getalldevices">
                 <p id="api-getalldevices-text" class="apitext">
                 Method: GET - get all devices
                 </p>
               </div>
 
-              <div id="api-getsensortype" class="api">
+              <div id="api-getsensortype" class="api getsensortype">
                 <p id="api-getsensortype-text" class="apitext">
                 Method: GET - get sensor type
                 </p>
               </div>
 
-              <div id="api-addsensorreadings" class="api">
+              <div id="api-addsensorreadings" class="api addsensorreadings">
                 <p id="api-addsensorreadings-text" class="apitext">
                 Method: POST - add sensor readings
                 </p>
               </div>
 
-              <div id="api-getsensorreadingsattime" class="api">
+              <div id="api-getsensorreadingsattime" class="api getsensorreadingsattime">
                 <p id="api-getsensorreadingsattime-text" class="apitext">
                 Method: GET - get sensor readings at specific time
                 </p>
               </div>
 
-              <div id="api-getsensorreadingstimerange" class="api">
+              <div id="api-getsensorreadingstimerange" class="api getsensorreadingstimerange">
                 <p id="api-getsensorreadingstimerange-text" class="apitext">
                 Method: GET - get sensor readings from time range 
                 </p>
               </div>
 
-              <div id="api-getspecifictimereadings" class="api">
+              <div id="api-getspecifictimereadings" class="api getspecifictimereadings">
                 <p id="api-getspecifictimereadings-text" class="apitext">Method: GET - get sensor readings from specific time </p>
               </div>
 
-              <div id="api-getcurrenttimereadings" class="api">
+              <div id="api-getcurrenttimereadings" class="api getcurrenttimereadings">
                 <p id="api-getcurrenttimereadings-text" class="apitext">Method: GET - get sensor readings from current time </p>
               </div>
 
             </div>
 
-            <div id="api-getalldevicesexpansion" class="api-expansion hidden">
+            <div id="api-getalldevicesexpansion" class="api-expansion hidden getalldevices">
               <p id="api-getalldevicesexpansiontext" class="api-expansiontext">
-              Semantics:
-              uri: user-defined identifier for a device. Each uri is an identifier unique to the corresponding device
-              device_type: Model of the device. A device is a container (i.e., physical device) object that comprises one or more sensors and is capable of transmitting their readings over a network to a Device Agent.
-              device_agent: a local server or proxy that manages a set of devices registered to it. Device agents can receive data from devices, convert data to another format (eg. JSON), and can transmit it to central server over a LAN or WAN.
-              device_location: the location of the device that is transmitting sensor data
-              ResultFormat: either json or csv
-              URL: http://cmu-sensor-network.herokuapp.com/get_devices/<"ResultFormat">
-              Sample csv request: http://cmu-sensor-network.herokuapp.com/get_devices/csv
+              Semantics:<br><br>
+
+              uri: user-defined identifier for a device. Each uri is an identifier unique to the 
+              corresponding device<br><br>
+
+              device_type: Model of the device. A device is a container (i.e., physical device) object that comprises 
+              one or more sensors and is capable of transmitting their readings over a network to a Device Agent.<br><br>
+
+              device_agent: a local server or proxy that manages a set of devices registered to it. Device agents can 
+              receive data from devices, convert data to another format (eg. JSON), and can transmit it to central server 
+              over a LAN or WAN.<br><br>
+
+              device_location: the location of the device that is transmitting sensor data <br><br>
+
+              ResultFormat: either json or csv <br><br>
+
+              URL: http://cmu-sensor-network.herokuapp.com/get_devices/<"ResultFormat"> <br><br>
+
+              Sample csv request: http://cmu-sensor-network.herokuapp.com/get_devices/csv <br><br>
+
               Sample csv result: 
               uri,device_type,device_agent,device_location 
               10170202,Firefly_v3,SensorAndrew2,B23.216
-              Sample json request: http://cmu-sensor-network.herokuapp.com/get_devices/json
+              Sample json request: http://cmu-sensor-network.herokuapp.com/get_devices/json <br>
+
               Sample json result: {"device_type":"Firefly_v3","device_location":"B23.216","device_agent":"SensorAndrew2","uri":"10170202"}
               </p>
             </div>
 
-            <div id="api-getsensortypeexpansion" class="api-expansion hidden">
+            <div id="api-getsensortypeexpansion" class="api-expansion hidden getsensortypeexpansion">
               <p id="api-getsensortypeexpansiontext" class="api-expansiontext">
-              Semantics:
-              DeviceType: Model of the device.
-              SensorType: Type of the sensor eg. temperature, CO2 level etc. A device type could correspond to multiple sensor types if the device has multiple sensors.
-              ResultFormat: either json or csv
-              URL: http://cmu-sensor-network.herokuapp.com/get_sensor_type/<"DeviceType">/<"ResultFormat">
-              Sample csv request: http://cmu-sensor-network.herokuapp.com/get_sensor_types/firefly_v3/csv
+              Semantics:<br><br>
+
+              DeviceType: Model of the device.<br><br>
+
+              SensorType: Type of the sensor eg. temperature, CO2 level etc. A device type could correspond to multiple sensor types if the device has multiple sensors.<br><br>
+
+              ResultFormat: either json or csv<br><br>
+
+              URL: http://cmu-sensor-network.herokuapp.com/get_sensor_type/<"DeviceType">/<"ResultFormat"><br><br>
+
+              Sample csv request: http://cmu-sensor-network.herokuapp.com/get_sensor_types/firefly_v3/csv<br><br>
+
               Sample csv result: 
               sensor_types
               temp
@@ -138,41 +157,54 @@
               </p>
             </div>
 
-            <div id="api-addsensorreadingsexpansion" class="api-expansion hidden">
+            <div id="api-addsensorreadingsexpansion" class="api-expansion hidden addsensorreadingsexpansion">
               <p id="api-addsensorreadingsexpansiontext" class="api-expansiontext">
-              Semantics: this is a POST method, so the command cannot be directly execute through the browser. It may be executed through Rails, JQuery, Python, BASH, etc.
-              device id (string): device uri/id
-              timestamp (int): time of the reading in Unix epoch timestamp.
-              sensor type (string): Type of the sensor, such as temperature, CO2Levels, etc. It is up to the user to choose the sensor type to post to.
-              sensor value (double): this input corresponds to the value the user would like to post. It is up to the user to post the correct, pertinent value that correctly corresponds to the sensor type.
-              URL: http://cmu-sensor-network.herokuapp.com/sensors
-              Data: {"id": <"device id">, "timestamp": <"timestamp">, <"sensor type">: <"sensor value">} 
-              Note: more than one sensor type:sensor value pairs can be included in the json.
-              Command Line Example:
-              input sensor reading data in a JSON file
-              sample_reading.json contains {"id":"test", "timestamp": 1373566899100, "temp": 123}
-              curl -H "Content-Type: application/json" -d @sample_reading.json "http://cmu-sensor-network.herokuapp.com/sensors"
+              Semantics: <br><br>
+              
+              this is a POST method, so the command cannot be directly execute through the browser. It may be executed through Rails, 
+              JQuery, Python, BASH, etc.<br><br>
+
+              device id (string): device uri/id <br><br>
+
+              timestamp (int): time of the reading in Unix epoch timestamp. <br><br>
+
+              sensor type (string): Type of the sensor, such as temperature, CO2Levels, etc. It is up to the user to choose the 
+              sensor type to post to. <br><br>
+
+              sensor value (double): this input corresponds to the value the user would like to post. It is up to the user to 
+              post the correct, pertinent value that correctly corresponds to the sensor type. <br><br>
+
+              URL: http://cmu-sensor-network.herokuapp.com/sensors <br><br>
+
+              Data: {"id": <"device id">, "timestamp": <"timestamp">, <"sensor type">: <"sensor value">}  <br><br>
+
+              Note: more than one sensor type:sensor value pairs can be included in the json. <br><br>
+
+              Command Line Example: <br>
+              input sensor reading data in a JSON file<br>
+              sample_reading.json contains {"id":"test", "timestamp": 1373566899100, "temp": 123}<br>
+              curl -H "Content-Type: application/json" -d @sample_reading.json "http://cmu-sensor-network.herokuapp.com/sensors"<br><br>
               Result: "saved" if the reading has been successfully added to the database.
               </p>
             </div>
 
-            <div id="api-getsensorreadingsattimeexpansion" class="api-expansion hidden">
+            <div id="api-getsensorreadingsattimeexpansion" class="api-expansion hidden getsensorreadingsattimeexpansion">
               <p id="api-getsensorreadingsattimetext" class="api-expansiontext">
-              Semantics:
-              DeviceID: The device uri/unique identifier
-              TimeStamp: Time of the reading to query
-              SensorType: Type of the sensor (temperature, CO2, etc.)
-              ResultFormat: either json or csv
-              URL: http://cmu-sensor-network.herokuapp.com/sensors/<"DeviceID">/<"TimeStamp">/<"SensorType">/<"ResultFormat">
-              Sample csv request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/csv
-              ("temp" is the temperature sensor type)
-              Sample csv result: (device_id,timestamp,sensor_type,value) 10170102,1368568896000,temp,518.0
-              Sample json request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/json
-              Sample json result: {"timestamp":1368568896000,"sensor_type":"temp","value":518,"device_id":"10170102"}
+              Semantics:  <br><br>
+              DeviceID: The device uri/unique identifier  <br><br>
+              TimeStamp: Time of the reading to query  <br><br>
+              SensorType: Type of the sensor (temperature, CO2, etc.)  <br><br>
+              ResultFormat: either json or csv  <br><br>
+              URL: http://cmu-sensor-network.herokuapp.com/sensors/<"DeviceID">/<"TimeStamp">/<"SensorType">/<"ResultFormat">  <br><br>
+              Sample csv request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/csv  <br>
+              ("temp" is the temperature sensor type) <br>
+              Sample csv result: (device_id,timestamp,sensor_type,value) 10170102,1368568896000,temp,518.0  <br><br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/json <br>
+              Sample json result: {"timestamp":1368568896000,"sensor_type":"temp","value":518,"device_id":"10170102"} <br>
               </p>
             </div>
 
-            <div id="api-getsensorreadingstimerangeexpansion" class="api-expansion hidden">
+            <div id="api-getsensorreadingstimerangeexpansion" class="api-expansion hidden getsensorreadingstimerangeexpansion">
               <p id="api-getsensorreadingstimerangetext" class="api-expansiontext">
               Semantics:
               DeviceID: The device uri/unique identifier
@@ -193,7 +225,7 @@
               </p>
             </div>
 
-            <div id="api-getspecifictimereadingsexpansion" class="api-expansion hidden">
+            <div id="api-getspecifictimereadingsexpansion" class="api-expansion hidden getspecifictimereadingsexpansion">
               <p id="api-getspecifictimereadingstext" class="api-expansiontext">
               Semantics:
               TimeStamp: Time to get the last readings. The query returns the latest readings up to 60 seconds before this time.
@@ -211,7 +243,7 @@
               </p>
             </div>
 
-            <div id="api-getcurrenttimereadingsexpansion" class="api-expansion hidden">
+            <div id="api-getcurrenttimereadingsexpansion" class="api-expansion hidden getcurrenttimereadingsexpansion">
               <p id="api-getcurrenttimereadingstext" class="api-expansiontext">
               Semantics:
               SensorType: Type of the sensor (temperature, CO2, etc.)
