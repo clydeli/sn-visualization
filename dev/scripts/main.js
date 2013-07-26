@@ -103,60 +103,42 @@ sn_visualization.main = (function(){
        *
        * when mouse hovers over it, display corresponding text
        * when mouse leaves it, remove corresponding text */
-      $('#api-getalldevices').on('mouseenter', function(){
+      $('#api-getalldevices').on('click', function(){
         $('#api-getalldevicesexpansion').toggleClass('hidden');
-      });
-      $('.getalldevices').on('mouseleave', function(){
-        $('#api-getalldevicesexpansion').toggleClass('hidden');
+        $('#api-getalldevices').toggleClass('clicked');
       });
 
-      $('#api-getsensortype').on('mouseenter', function(){
+      $('#api-getsensortype').on('click', function(){
         $('#api-getsensortypeexpansion').toggleClass('hidden');
-      });
-      $('.getsensortype').on('mouseleave', function(){
-        $('#api-getsensortypeexpansion').toggleClass('hidden');
+        $('#api-getsensortype').toggleClass('clicked');
       });
 
-
-      $('#api-addsensorreadings').on('mouseenter', function(){
+      $('#api-addsensorreadings').on('click', function(){
         $('#api-addsensorreadingsexpansion').toggleClass('hidden');
-      });
-      $('.addsensorreadings').on('mouseleave', function(){
-        $('#api-addsensorreadingsexpansion').toggleClass('hidden');
+        $('#api-addsensorreadings').toggleClass('clicked');
       });
 
-
-      $('#api-getsensorreadingsattime').on('mouseenter', function(){
+      $('#api-getsensorreadingsattime').on('click', function(){
         $('#api-getsensorreadingsattimeexpansion').toggleClass('hidden');
-      });
-      $('.getsensorreadingsattime').on('mouseleave', function(){
-        $('#api-getsensorreadingsattimeexpansion').toggleClass('hidden');
+        $('#api-getsensorreadingsattime').toggleClass('clicked');
       });
 
 
-      $('#api-getsensorreadingstimerange').on('mouseenter', function(){
+      $('#api-getsensorreadingstimerange').on('click', function(){
         $('#api-getsensorreadingstimerangeexpansion').toggleClass('hidden');
-      });
-      $('.getsensorreadingstimerange').on('mouseleave', function(){
-        $('#api-getsensorreadingstimerangeexpansion').toggleClass('hidden');
+        $('#api-getsensorreadingstimerange').toggleClass('clicked');
       });
 
 
-      $('#api-getspecifictimereadings').on('mouseenter', function(){
+      $('#api-getspecifictimereadings').on('click', function(){
         $('#api-getspecifictimereadingsexpansion').toggleClass('hidden');
-      });
-      $('.getspecifictimereadings').on('mouseleave', function(){
-        $('#api-getspecifictimereadingsexpansion').toggleClass('hidden');
+        $('#api-getspecifictimereadings').toggleClass('clicked');
       });
 
-
-      $('#api-getcurrenttimereadings').on('mouseenter', function(){
+      $('#api-getcurrenttimereadings').on('click', function(){
         $('#api-getcurrenttimereadingsexpansion').toggleClass('hidden');
+        $('#api-getcurrenttimereadings').toggleClass('clicked');
       });
-      $('.getcurrenttimereadings').on('mouseleave', function(){
-        $('#api-getcurrenttimereadingsexpansion').toggleClass('hidden');
-      });
-
 
 
 

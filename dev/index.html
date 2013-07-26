@@ -125,10 +125,10 @@
 
               Sample csv request: http://cmu-sensor-network.herokuapp.com/get_devices/csv <br><br>
 
-              Sample csv result: 
-              uri,device_type,device_agent,device_location 
-              10170202,Firefly_v3,SensorAndrew2,B23.216
-              Sample json request: http://cmu-sensor-network.herokuapp.com/get_devices/json <br>
+              Sample csv result: <br>
+              uri,device_type,device_agent,device_location <br>
+              10170202,Firefly_v3,SensorAndrew2,B23.216<br><br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/get_devices/json <br><br>
 
               Sample json result: {"device_type":"Firefly_v3","device_location":"B23.216","device_agent":"SensorAndrew2","uri":"10170202"}
               </p>
@@ -148,11 +148,11 @@
 
               Sample csv request: http://cmu-sensor-network.herokuapp.com/get_sensor_types/firefly_v3/csv<br><br>
 
-              Sample csv result: 
-              sensor_types
-              temp
-              digital_temp
-              Sample json request: http://cmu-sensor-network.herokuapp.com/get_sensor_types/firefly_v3/json
+              Sample csv result: <br>
+              sensor_types<br>
+              temp<br>
+              digital_temp<br><br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/get_sensor_types/firefly_v3/json<br><br>
               Sample json result: {"device_type":"Firefly_v3", "sensor_type":"temp,digital_temp,light,pressure,humidity,motion,audio_p2p,acc_x,acc_y,acc_z"}
               </p>
             </div>
@@ -197,73 +197,69 @@
               ResultFormat: either json or csv  <br><br>
               URL: http://cmu-sensor-network.herokuapp.com/sensors/<"DeviceID">/<"TimeStamp">/<"SensorType">/<"ResultFormat">  <br><br>
               Sample csv request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/csv  <br>
-              ("temp" is the temperature sensor type) <br>
+              ("temp" is the temperature sensor type) <br><br>
               Sample csv result: (device_id,timestamp,sensor_type,value) 10170102,1368568896000,temp,518.0  <br><br>
-              Sample json request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/json <br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/temp/json <br><br>
               Sample json result: {"timestamp":1368568896000,"sensor_type":"temp","value":518,"device_id":"10170102"} <br>
               </p>
             </div>
 
             <div id="api-getsensorreadingstimerangeexpansion" class="api-expansion hidden getsensorreadingstimerangeexpansion">
               <p id="api-getsensorreadingstimerangetext" class="api-expansiontext">
-              Semantics:
-              DeviceID: The device uri/unique identifier
-              StartTime: Start time to retrieve the readings
-              EndTime: End time to retreive the readings
-              SensorType: Type of the sensor (temperature, CO2, etc.)
-              ResultFormat: either json or csv
-              URL: http://cmu-sensor-network.herokuapp.com/sensors/<"DeviceID">/<"StartTime">/<"EndTime">/<"SensorType">/<"ResultFormat">
-              Sample csv request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/1368568996000/temp/csv
-              Sample csv result: (device_id,timestamp,sensor_type,value)
-              10170102,1368568993000,temp,517.0 
-              ... 
-              10170102,1368568896000,temp,518.0
-              Sample json request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/1368568996000/temp/json
+              Semantics:<br><br>
+              DeviceID: The device uri/unique identifier<br><br>
+              StartTime: Start time to retrieve the readings<br><br>
+              EndTime: End time to retreive the readings<br><br>
+              SensorType: Type of the sensor (temperature, CO2, etc.)<br><br>
+              ResultFormat: either json or csv<br><br>
+              URL: http://cmu-sensor-network.herokuapp.com/sensors/<"DeviceID">/<"StartTime">/<"EndTime">/<"SensorType">/<"ResultFormat"><br><br>
+              Sample csv request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/1368568996000/temp/csv<br><br>
+              Sample csv result: (device_id,timestamp,sensor_type,value)<br>
+              10170102,1368568993000,temp,517.0 <br>
+              ... <br>
+              10170102,1368568896000,temp,518.0<br><br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/sensors/10170102/1368568896000/1368568996000/temp/json<br><br>
               Sample json result: 
-              [{"timestamp":1368568993000,"sensor_type":"temp","value":517,"device_id":"10170102"}, ... 
+              [{"timestamp":1368568993000,"sensor_type":"temp","value":517,"device_id":"10170102"},<br> ... <br>
               {"timestamp":1368568896000,"sensor_type":"temp","value":518,"device_id":"10170102"}]
               </p>
             </div>
 
             <div id="api-getspecifictimereadingsexpansion" class="api-expansion hidden getspecifictimereadingsexpansion">
               <p id="api-getspecifictimereadingstext" class="api-expansiontext">
-              Semantics:
-              TimeStamp: Time to get the last readings. The query returns the latest readings up to 60 seconds before this time.
-              SensorType: Type of the sensor (temperature, CO2, etc.)
-              ResultFormat: either json or csv
-              URL: http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/<"TimeStamp">/<"sensorType">/<"ResultFormat">
-              Sample csv request: http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/1368568896000/temp/csv
-              Sample csv result: (device_id,timestamp,sensor_type,value) 10170203,1368568896000,temp,513.0 
-              ... 
-              10170204,1368568889000,temp,513.0
-              Sample json request: http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/1368568896000/temp/json
+              Semantics:<br><br>
+              TimeStamp: Time to get the last readings. The query returns the latest readings up to 60 seconds before this time.<br><br>
+              SensorType: Type of the sensor (temperature, CO2, etc.)<br><br>
+              ResultFormat: either json or csv<br><br>
+              URL: http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/<"TimeStamp">/<"sensorType">/<"ResultFormat"><br><br>
+              Sample csv request: http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/1368568896000/temp/csv<br><br>
+              Sample csv result: (device_id,timestamp,sensor_type,value) 10170203,1368568896000,temp,513.0 <br>
+              ... <br>
+              10170204,1368568889000,temp,513.0<br><br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/last_readings_from_all_devices/1368568896000/temp/json<br><br>
               Sample json result: 
-              [{"timestamp":1368568896000,"sensor_type":"temp","value":513,"device_id":"10170203"}, ... 
+              [{"timestamp":1368568896000,"sensor_type":"temp","value":513,"device_id":"10170203"},<br> ... <br>
               {"timestamp":1368568889000,"sensor_type":"temp","value":513,"device_id":"10170204"}]
               </p>
             </div>
 
             <div id="api-getcurrenttimereadingsexpansion" class="api-expansion hidden getcurrenttimereadingsexpansion">
               <p id="api-getcurrenttimereadingstext" class="api-expansiontext">
-              Semantics:
-              SensorType: Type of the sensor (temperature, CO2, etc.)
-              ResultFormat: either json or csv
-              Note: the difference between this API and last_readings_from_all_devices given the current timestamp is that this API returns the last reading from each device even if it's more than 60 seconds old.
-              URL: http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/<"sensorType">/<"ResultFormat">
-              Sample csv request: http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/temp/csv
-              Sample csv result: (device_id,timestamp,sensor_type,value) 10170203,1368568896000,temp,513.0 
-              ... 
-              10170204,1368568889000,temp,513.0
-              Sample json request: http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/temp/json
+              Semantics:<br><br>
+              SensorType: Type of the sensor (temperature, CO2, etc.)<br><br>
+              ResultFormat: either json or csv<br><br>
+              Note: the difference between this API and last_readings_from_all_devices given the current timestamp is that this API returns the last reading from each device even if it's more than 60 seconds old.<br><br>
+              URL: http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/<"sensorType">/<"ResultFormat"><br><br>
+              Sample csv request: http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/temp/csv<br>
+              Sample csv result: (device_id,timestamp,sensor_type,value) 10170203,1368568896000,temp,513.0 <br>
+              ... <br>
+              10170204,1368568889000,temp,513.0<br><br>
+              Sample json request: http://cmu-sensor-network.herokuapp.com/lastest_readings_from_all_devices/temp/json<br><br>
               Sample json result: 
-              [{"timestamp":1368568896000,"sensor_type":"temp","value":513,"device_id":"10170203"}, ... 
+              [{"timestamp":1368568896000,"sensor_type":"temp","value":513,"device_id":"10170203"},<br> ... <br>
               {"timestamp":1368568889000,"sensor_type":"temp","value":513,"device_id":"10170204"}]
               </p>
             </div>
-
-
-
-
 
 
           </div>
