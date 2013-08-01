@@ -1,6 +1,6 @@
 var
   url = "",
-  interval = 3000,
+  interval = 1000,
   updateTime = 0,
   metricId = "";
 

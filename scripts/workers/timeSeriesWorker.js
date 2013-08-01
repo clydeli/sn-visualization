@@ -1,6 +1,6 @@
 var
-  url = "", 
-  interval = 3000,
+  url = "",
+  interval = 1000,
   updateTime = 0;
 
 function pollData(start_time, end_time){
@@ -10,7 +10,7 @@ function pollData(start_time, end_time){
       if (xhr.readyState == 4) {
         if (xhr.status == 200 || xhr.status ==0) { postMessage(xhr.responseText); }
         else { throw  xhr.status+xhr.responseText; }
-        setTimeout( function(){ 
+        setTimeout( function(){
           var lastUpdateTime = updateTime;
           updateTime = (new Date()).getTime();
           pollData(lastUpdateTime, updateTime);

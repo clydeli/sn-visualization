@@ -156,11 +156,10 @@ sn_visualization.timeseriesView = (function(){
 
       if(dataWorkers[deviceURI] === undefined){
         dataWorkers[deviceURI] = { metrics : [] };
-        //dataWorkers[deviceURI].metrics = [];
+        dataCache[deviceURI][metricId].data.length = 0;
         insertWorker(deviceURI);
-      }// else {
-        dataWorkers[deviceURI].metrics.push(metricId);
-      //}
+      }
+      dataWorkers[deviceURI].metrics.push(metricId);
 
     },
     remove: function(deviceURI, metricId){

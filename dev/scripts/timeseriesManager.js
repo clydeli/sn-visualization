@@ -177,6 +177,9 @@ sn_visualization.timeseriesManager = (function(){
 
       dataCache[deviceURI] = dataCache[deviceURI] || {};
       dataCache[deviceURI][metricId] = dataCache[deviceURI][metricId] || {};
+      if(dataCache[deviceURI][metricId].data){
+        dataCache[deviceURI][metricId].data.length = 0;
+      }
 
       dataWorkers[deviceURI] = dataWorkers[deviceURI] || {};
       dataWorkers[deviceURI][metricId] = dataWorkers[deviceURI][metricId] || {};
